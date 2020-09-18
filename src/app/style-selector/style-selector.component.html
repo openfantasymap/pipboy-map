@@ -1,0 +1,3 @@
+<mat-select (selectionChange)="change($event)" style="width: 150px">
+    <mat-option *ngFor="let style of styles|async" [value]="style.style">{{style.label}}</mat-option>
+</mat-select>
