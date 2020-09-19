@@ -3,7 +3,7 @@
     <h1>OpenHistoryMap</h1>
     <span class="spacer"></span>
     <ohm-style-selector (styleChange)="changeStyle($event)"></ohm-style-selector>
-    <span>{{atDate}}</span>
+    <span>{{atDate|decimaldate|date}}</span>
     <span class="spacer"></span>
     <button mat-button mat-icon-button><mat-icon>menu</mat-icon></button>
 

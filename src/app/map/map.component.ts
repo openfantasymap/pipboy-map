@@ -38,7 +38,7 @@ export class MapComponent implements OnInit {
     private l: Location
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     mapboxgl.accessToken = 'pk.eyJ1IjoiYWJyaWNrbyIsImEiOiJjanRkajJ4dzYwZGcwNDNvOGQybnZ2aWU0In0.dHeKsAVs3BmZ0biKTOi7wg';
     this.ts = this.ds.getEnv('TILESERVER');
     this.ar.params.subscribe(params => {
@@ -49,7 +49,7 @@ export class MapComponent implements OnInit {
         this.map.panTo(this.start.center);
       }
     });
-    
+
     this.atDate = this.ar.snapshot.params.year;
     this.start.center = [this.ar.snapshot.params.x, this.ar.snapshot.params.y];
     this.start.zoom = this.ar.snapshot.params.z;
@@ -68,10 +68,10 @@ export class MapComponent implements OnInit {
         if (isDevMode()) {
           nurl = nurl.replace('https://tiles.openhistorymap.org', this.ts);
         }
-        if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0 && isDevMode()) {
+        if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0) {
           return {
             url: nurl.replace('{atDate}', this.atDate.toString())
-          }
+          };
         }
       }
 
@@ -82,7 +82,7 @@ export class MapComponent implements OnInit {
     });
   }
 
-  changeUrl(ev=null){
+  changeUrl(ev = null): void{
     const c = this.map.getCenter();
     console.log(c);
     this.l.go(`/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}`);
@@ -91,7 +91,7 @@ export class MapComponent implements OnInit {
     }
   }
 
-  changeStyle(style) {
+  changeStyle(style): void  {
     this.style = style;
     console.log(style);
     this.map.setStyle(style);

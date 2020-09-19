@@ -9,12 +9,14 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapComponent } from './map/map.component';
 import { StyleSelectorComponent } from './style-selector/style-selector.component';
+import { DecimaldatePipe } from './decimaldate.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
-    StyleSelectorComponent
+    StyleSelectorComponent,
+    DecimaldatePipe
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'ohm-style-selector',
@@ -14,17 +16,21 @@ export class StyleSelectorComponent implements OnInit {
 
   styles: Observable<any[]>;
 
-  selected = 'political';
+  selected = 'political.json';
 
   constructor(
     private http: HttpClient
   ) { }
 
   ngOnInit(): void {
-    this.styles = this.http.get<any[]>(this.styleBase + 'styles.json');
+    this.styles = this.http.get<any[]>(this.styleBase + 'styles.json').pipe(tap((x: any[]) => {
+      const s = x.filter(a => a.default)[0].style;
+      this.selected = s;
+      this.styleChange.next(this.styleBase + s);
+    }) );
   }
 
-  change(ev){
+  change(ev): void{
     this.styleChange.next(this.styleBase + ev.value);
   }
 
