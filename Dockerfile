@@ -12,7 +12,7 @@ FROM nginx:alpine
 
 WORKDIR /usr/share/nginx/html/
 
-COPY --from=build /app/dist/ohm-map/ .
+COPY --from=build /app/dist/out/ .
 
 RUN chmod 777 *
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, isDevMode } from '@angular/core';
 
 import { MnDockerService } from '@modalnodes/mn-docker';
 import { HttpClient } from '@angular/common/http';
@@ -64,9 +64,13 @@ export class MapComponent implements OnInit {
       center: this.start.center, // starting position [lng, lat]
       zoom: this.start.zoom, // starting zoom
       transformRequest: (url, resourceType) => {
-        if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0) {
+        let nurl = url;
+        if (isDevMode()) {
+          nurl = nurl.replace('https://tiles.openhistorymap.org', this.ts);
+        }
+        if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0 && isDevMode()) {
           return {
-            url: url.replace('https://tiles.openhistorymap.org', this.ts).replace('{atDate}', this.atDate.toString())
+            url: nurl.replace('{atDate}', this.atDate.toString())
           }
         }
       }
@@ -82,12 +86,13 @@ export class MapComponent implements OnInit {
     const c = this.map.getCenter();
     console.log(c);
     this.l.go(`/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}`);
-    if(ev) {
-      this.map.triggerRepaint();
+    if (ev) {
+      this.map.getSource('ohm').setSourceProperty(() => {});
     }
   }
 
   changeStyle(style) {
+    this.style = style;
     console.log(style);
     this.map.setStyle(style);
   }
