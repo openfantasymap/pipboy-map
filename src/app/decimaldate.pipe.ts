@@ -36,6 +36,7 @@ export class DecimaldatePipe implements PipeTransform {
   }
 
   transform(value: number, ...args: unknown[]): Date {
+    const adbc = value / Math.abs(value);
     const y = Math.trunc(value);
     let rest = Math.abs(value - y);
     const m = Math.trunc(rest * 12);
@@ -48,8 +49,14 @@ export class DecimaldatePipe implements PipeTransform {
     rest = (rest * 60) - M;
     const S = Math.trunc(rest * 60);
     rest = (rest * 60) - S;
-    console.log(y, m, d, H, M, S, rest);
-    const ret = new Date(y, m, d, H, M, S, rest);
+    const ret = new Date();
+    ret.setFullYear(y);
+    ret.setMonth(m);
+    ret.setDate(d);
+    ret.setHours(H);
+    ret.setMinutes(M);
+    ret.setSeconds(S);
+    ret.setMilliseconds(rest);
     return ret;
   }
 

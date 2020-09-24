@@ -2,3 +2,13 @@
     height: calc(100vh - calc(4 * 64px));
     width: 100vw;
 }
+
+#visualization {
+    width: calc(100vw -1px);
+    max-height: calc(3 * 64px);
+    border: 1px solid lightgray;
+}
+
+.vis-item.politcs-rome {
+    background-color: red;
+}

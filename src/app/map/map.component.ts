@@ -1,3 +1,4 @@
+import { DecimaldatePipe } from './../decimaldate.pipe';
 import { Component, OnInit, Input, isDevMode } from '@angular/core';
 
 import { MnDockerService } from '@modalnodes/mn-docker';
@@ -6,8 +7,10 @@ import { HttpClient } from '@angular/common/http';
 import env from '../../assets/env.json';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { NicedatePipe } from '../nicedate.pipe';
 
 declare const mapboxgl;
+declare const vis;
 
 @Component({
   selector: 'app-map',
@@ -28,9 +31,11 @@ export class MapComponent implements OnInit {
   };
 
 
-  atDate = 866;
+  atDate = 866.001;
   atMacroDate = 800;
   atMicroDate = 870;
+
+  timeline;
 
   constructor(
     private ds: MnDockerService,
@@ -53,8 +58,6 @@ export class MapComponent implements OnInit {
     this.atDate = this.ar.snapshot.params.year;
     this.start.center = [this.ar.snapshot.params.x, this.ar.snapshot.params.y];
     this.start.zoom = this.ar.snapshot.params.z;
-
-    console.log(this.start);
 
     this.style = this.style;
 
@@ -80,11 +83,32 @@ export class MapComponent implements OnInit {
     this.map.on('moveend', () => {
       this.changeUrl();
     });
+
+    const container = document.getElementById('visualization');
+
+    const items = new vis.DataSet([
+      { id: 1, content: 'Rome', start: new Date(-753, 4, 21), end: new Date(476, 1, 1), className: 'politics-rome'}
+    ]);
+
+      // Create a Timeline
+    this.timeline = new vis.Timeline(container, items, {
+      showCurrentTime: false
+    });
+
+    this.timeline.addCustomTime(this.toFloatDate(this.atDate), 'atTime');
+
+    this.timeline.on('click', (properties) => {
+      this.atDate = this.toDateFloat(properties.time);
+      this.timeline.setCustomTime(this.toFloatDate(this.atDate), 'atTime');
+      this.changeUrl();
+    });
+
+    this.timeline.on('rangechanged', (properties) => {
+    });
   }
 
   changeUrl(ev = null): void{
     const c = this.map.getCenter();
-    console.log(c);
     this.l.go(`/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}`);
     if (ev) {
       this.map.getSource('ohm').setSourceProperty(() => {});
@@ -93,7 +117,21 @@ export class MapComponent implements OnInit {
 
   changeStyle(style): void  {
     this.style = style;
-    console.log(style);
     this.map.setStyle(style);
+  }
+
+  toDateFloat(date: Date): number{
+    let ret = date.getFullYear();
+    ret += (date.getMonth() + 1) / 12;
+    ret += (date.getDate()) * (1 / 12 / 30);
+    ret += (date.getHours()) * (1 / 12 / 30 / 24);
+    ret += (date.getMinutes()) * (1 / 12 / 30 / 24 / 60);
+    ret += (date.getSeconds()) * (1 / 12 / 30 / 24 / 60 / 60);
+    return ret;
+  }
+
+  toFloatDate(date: number): Date{
+    const dd = new DecimaldatePipe();
+    return dd.transform(date);
   }
 }

@@ -10,13 +10,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapComponent } from './map/map.component';
 import { StyleSelectorComponent } from './style-selector/style-selector.component';
 import { DecimaldatePipe } from './decimaldate.pipe';
+import { NicedatePipe } from './nicedate.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
     StyleSelectorComponent,
-    DecimaldatePipe
+    DecimaldatePipe,
+    NicedatePipe
   ],
   imports: [
     BrowserModule,
