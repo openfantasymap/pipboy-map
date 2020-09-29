@@ -11,6 +11,7 @@ import { MapComponent } from './map/map.component';
 import { StyleSelectorComponent } from './style-selector/style-selector.component';
 import { DecimaldatePipe } from './decimaldate.pipe';
 import { NicedatePipe } from './nicedate.pipe';
+import { DateComponent } from './date/date.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { NicedatePipe } from './nicedate.pipe';
     MapComponent,
     StyleSelectorComponent,
     DecimaldatePipe,
-    NicedatePipe
+    NicedatePipe,
+    DateComponent
   ],
   imports: [
     BrowserModule,

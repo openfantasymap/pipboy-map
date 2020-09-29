@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   { path: '', redirectTo: '866/4/43.67/1.57', pathMatch: 'full' },
   { path: ':year/:z/:y/:x', component: MapComponent },
+  { path: ':year/:z/:y/:x/:rels', component: MapComponent },
 
 ];
 

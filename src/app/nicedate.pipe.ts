@@ -6,7 +6,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class NicedatePipe implements PipeTransform {
 
   transform(value: string, ...args: unknown[]): unknown {
-    return value.replace('AD', 'CE').replace('BC', 'BCE');
+    if (value) {
+      return value.replace('AD', 'CE').replace('BC', 'BCE');
+    } else {
+      return '';
+    }
   }
 
 }

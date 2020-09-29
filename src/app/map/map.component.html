@@ -1,26 +1,38 @@
 <mat-toolbar color="primary">
-    <button mat-button mat-icon-button><mat-icon>menu</mat-icon></button>
+    <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>menu</mat-icon></button>
     <h1>OpenHistoryMap</h1>
     <span class="spacer"></span>
-    <ohm-style-selector (styleChange)="changeStyle($event)"></ohm-style-selector>
-    <span>{{atDate|decimaldate|date:'d/M/y G - hh:mm:ss'|nicedate}}</span>
     <span class="spacer"></span>
-    <button mat-button mat-icon-button><mat-icon>menu</mat-icon></button>
+    <span class="spacer"></span>
+    <span class="spacer"></span>
+    <ohm-style-selector (styleChange)="changeStyle($event)"></ohm-style-selector>
+    <button mat-button mat-icon-button (click)="info()"><mat-icon>info</mat-icon></button>
+    <span class="spacer"></span>
+    <button mat-button (click)="selectDate()">{{atDate|decimaldate|date:'d/M/y G - hh:mm:ss'|nicedate}}</button>
+    <button mat-button mat-icon-button (click)="startstop()"><mat-icon>{{startstopicon}}</mat-icon></button>
+    <button mat-button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>speed</mat-icon></button>
+
+    <span class="spacer"></span>
+    <span class="spacer"></span>
+    <span class="spacer"></span>
+    <span class="spacer"></span>
+    <button mat-button mat-icon-button (click)="rbar.toggle()"><mat-icon>menu</mat-icon></button>
 
 </mat-toolbar>
 
-<div class="row">
-    <div id="ohm_map"></div>
-</div>
-<div id="visualization"></div>
-<!--
-<mat-toolbar>
-    <mat-slider style="width:100%" thumbLabel [max]="2000" [min]="-10000" [step]="200" [tickInterval]="200" [(value)]="atMacroDate"></mat-slider>
-</mat-toolbar>
-<mat-toolbar>
-    <mat-slider style="width:100%" thumbLabel [max]="atMacroDate + 90" [min]="atMacroDate - 90" [step]="20" [tickInterval]="20" [(value)]="atMicroDate"></mat-slider>
-</mat-toolbar>
-<mat-toolbar>
-    <mat-slider (change)="changeUrl($event)" style="width:100%" thumbLabel [max]="atMicroDate + 10" [min]="atMicroDate - 10" [step]="0.001" [tickInterval]="250" [(value)]="atDate"></mat-slider>
-</mat-toolbar>
--->
+<mat-sidenav-container class="example-container">
+    <mat-sidenav class="sidebar" mode="over" #lbar></mat-sidenav>
+    <mat-sidenav class="sidebar" mode="over" #rbar position="end"></mat-sidenav>
+    <mat-sidenav-content>
+
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="setSpeed(4000)">Slow</button>
+            <button mat-menu-item (click)="setSpeed(2000)">Medium</button>
+            <button mat-menu-item (click)="setSpeed(500)">High</button>
+        </mat-menu>
+        <div class="row">
+            <div id="ohm_map"></div>
+        </div>
+        <div id="visualization"></div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
