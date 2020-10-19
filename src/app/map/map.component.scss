@@ -1,11 +1,11 @@
 #ohm_map {
-    height: calc(100vh - calc(4 * 64px));
+    height: calc(100vh - 85px - 64px - 16px - 1px);
     width: 100vw;
 }
 
 #visualization {
     width: calc(100vw -1px);
-    max-height: calc(3 * 64px);
+    max-height: 83px;
     border: 1px solid lightgray;
 }
 

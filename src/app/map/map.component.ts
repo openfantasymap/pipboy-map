@@ -28,7 +28,7 @@ export class MapComponent implements OnInit {
   startstopicons = {
     stop: 'play_arrow',
     play: 'stop'
-  }
+  };
   startstopicon = 'play_arrow';
   startstopstatus = 'stop';
   startstopInterval;
@@ -94,6 +94,21 @@ export class MapComponent implements OnInit {
 
     });
 
+
+    this.map.addSource('ohm-ephemeral', {
+      type: 'vector',
+      tiles: [
+        'https://tiles.openhistorymap.org/items/{atDate}/{z}/{y}/{x}/vector.pbf?layers=movement,event&mode=exact&form=linestring'
+      ],
+      minzoom: 0,
+      maxzoom: 22
+    });
+
+
+    this.map.on('load', () => {
+      this.showRels();
+    });
+
     this.map.on('load', () => {
       this.showOverlays();
     });
@@ -106,7 +121,7 @@ export class MapComponent implements OnInit {
     const container = document.getElementById('visualization');
 
     const items = new vis.DataSet([
-      { id: 1, content: 'Rome', start: new Date(-753, 4, 21), end: new Date(476, 1, 1), className: 'politics-rome'}
+      // { id: 1, content: 'Rome', start: new Date(-753, 4, 21), end: new Date(476, 1, 1), className: 'politics-rome'}
     ]);
 
 
@@ -116,6 +131,10 @@ export class MapComponent implements OnInit {
     });
 
     this.timeline.addCustomTime(this.toFloatDate(this.atDate), 'atTime');
+    const d = this.toFloatDate(this.atDate);
+    // tslint:disable-next-line:max-line-length
+    this.timeline.setWindow(new Date(d.getFullYear() - 10, d.getMonth(), d.getDate()), new Date(d.getFullYear() + 10, d.getMonth(), d.getDate()));
+
 
     this.timeline.on('click', (properties) => {
       this.atDate = this.toDateFloat(properties.time);
@@ -132,23 +151,22 @@ export class MapComponent implements OnInit {
     this.l.go(`/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}` + (this.rels ? '/' + this.rels : ''));
     if (ev) {
       this.map.getSource('ohm').setSourceProperty(() => { });
-      this.map.getSource('ohm-ephemeral').setSourceProperty(() => { });
+      this.map.getSource('ohm-ephemeral')?.setSourceProperty(() => { });
     }
   }
 
   changeStyle(style): void  {
     this.style = style;
     this.map.setStyle(style);
-    this.showOverlays();
   }
 
   toDateFloat(date: Date): number{
     let ret = date.getFullYear();
     ret += (date.getMonth() + 1) / 12;
-    ret += (date.getDate()) * (1 / 12 / 30);
-    ret += (date.getHours()) * (1 / 12 / 30 / 24);
-    ret += (date.getMinutes()) * (1 / 12 / 30 / 24 / 60);
-    ret += (date.getSeconds()) * (1 / 12 / 30 / 24 / 60 / 60);
+    ret += (date.getDate()) * (1 / 12 / 31);
+    ret += (date.getHours()) * (1 / 12 / 31 / 24);
+    ret += (date.getMinutes()) * (1 / 12 / 31 / 24 / 60);
+    ret += (date.getSeconds()) * (1 / 12 / 31 / 24 / 60 / 60);
     return ret;
   }
 
@@ -190,16 +208,7 @@ export class MapComponent implements OnInit {
   info() {}
 
   showOverlays() {
-    // Add Mapillary sequence layer.
-    // https://www.mapillary.com/developer/tiles-documentation/#sequence-layer
-    this.map.addSource('ohm-ephemeral', {
-      type: 'vector',
-      tiles: [
-        'https://tiles.openhistorymap.org/items/{atDate}/{z}/{y}/{x}/vector.pbf?layers=movement,event&mode=exact&form=linestring'
-      ],
-      minzoom: 0,
-      maxzoom: 22
-    });
+    console.log('run');
     this.map.addLayer({
       id: 'ships',
       type: 'circle',
@@ -222,11 +231,11 @@ export class MapComponent implements OnInit {
       'source-layer': 'movement',
       filter: [
         'all',
-        ['==', 'type', 'airplane']
+        ['==', 'type', 'aircraft']
       ],
       paint: {
         'circle-opacity': 0.6,
-        'circle-color': 'rgb(53, 175, 109)',
+        'circle-color': '#dd3333',
         'circle-radius': 2
       }
     });
@@ -245,6 +254,7 @@ export class MapComponent implements OnInit {
         'circle-radius': 2
       }
     });
+    /*
     this.map.addLayer({
       id: 'ships-labels',
       type: 'symbol',
@@ -253,21 +263,15 @@ export class MapComponent implements OnInit {
       filter: [
         'any',
         ['==', 'type', 'ship'],
-        ['==', 'type', 'airplane'],
+        ['==', 'type', 'aircraft'],
       ],
       layout: {
         'text-field': {
           stops: [
             [1, ''],
-            [2, '{name}'],
-            [
-              5,
-              '{name} - {ship:nationality}'
-            ],
-            [
-              13,
-              '{name} - {ship:nationality}'
-            ]
+            [2, '{service} {name}'],
+            [5, '{service} {name} - {ship:nationality}'],
+            [13, '{service} {name} - {ship:nationality}']
           ]
         },
         'text-size': {
@@ -279,6 +283,8 @@ export class MapComponent implements OnInit {
         'text-max-width': 12
       }
     });
+    */
+    /*
     this.map.addLayer({
       id: 'human-labels',
       type: 'symbol',
@@ -290,63 +296,95 @@ export class MapComponent implements OnInit {
       ],
       layout: {
         'text-field': '{name}',
+        'text-font': ['Open Sans Regular'],
         'text-size': 10,
-        'text-allow-overlap': true,
+        'text-allow-overlap': false,
         'text-ignore-placement': false,
         'text-offset': [0, -1],
         'text-max-width': 12
       }
     });
+    */
     this.map.addLayer({
       id: 'events',
-      type: 'symbol',
+      type: 'circle',
       source: 'ohm-ephemeral',
       'source-layer': 'event',
-      layout: {
-        'icon-image': 'butcher_11'
+      paint: {
+        'circle-opacity': 1,
+        'circle-color': '#dd3333',
+        'circle-radius': 1.5
       }
     });
+    /*
     this.map.addLayer({
       id: 'events-labels',
       type: 'symbol',
       source: 'ohm-ephemeral',
       'source-layer': 'event',
       layout: {
-        'text-field': '{type} - {name}'
-      },
-      'text-size': {
-        stops: [[6, 10], [10, 13]]
-      },
-      'text-allow-overlap': true,
-      'text-ignore-placement': false,
-      'text-offset': [0, -1],
-      'text-max-width': 12
+        'text-field': '{name}',
+        'text-font': ['Open Sans Regular'],
+        'text-size': {
+          stops: [[6, 10], [10, 13]]
+        },
+        'text-allow-overlap': true,
+        'text-ignore-placement': false,
+        'text-offset': [0, -1],
+        'text-max-width': 12
+      }
     });
+    */
+  }
 
+  showRels() {
     if (this.rels) {
+      const rc = this.rels.split('|');
+      const rels = rc.map(x => x.split(':')[0]);
+      const cols = rc.map(x => x.split(':').length > 1 ? x.split(':')[1] : '232323');
+      const wids = rc.map(x => x.split(':').length > 2 ? parseFloat(x.split(':')[2]) : 2);
+      const opas = rc.map(x => x.split(':').length > 3 ? parseFloat(x.split(':')[3]) : 0.2);
+      const zip = (arr1, arr2) => arr1.map((k, i) => [k, arr2[i]]);
+
+      const rcs = zip(rels, cols);
+
+
+      console.log(rcs);
+
       this.map.addSource('ohm-movement-rels', {
         type: 'geojson',
-        data: 'http://51.15.160.236:9034/relation/' + this.rels,
+        data: 'http://51.15.160.236:9034/relation/' + rels.join('|'),
+      });
+      rcs.forEach((irc, i) => {
+        this.map.addLayer({
+          id: 'rel-movements-' + irc[0],
+          type: 'line',
+          source: 'ohm-movement-rels',
+          filter: [
+            'all',
+            ['==', 'relation', irc[0]]
+          ],
+          paint: {
+            'line-opacity': opas[i],
+            'line-color': '#' + irc[1],
+            'line-width': wids[i],
+          }
+        });
       });
       this.map.addLayer({
-        id: 'ships-movements',
-        type: 'line',
-        source: 'ohm-movement-rels',
-        paint: {
-          'line-opacity': 0.1,
-          'line-color': '#232323',
-          'line-width': 2,
-        }
-      }, 'ships-labels');
-      this.map.addLayer({
-        id: 'ships-movements-labels',
+        id: 'rel-movements-labels',
         type: 'symbol',
         source: 'ohm-movement-rels',
         layout: {
-          'text-field': '{name}',
-          'text-size': 8
+          'text-field': {
+            stops: [
+              [1, ''],
+              [4, '{name}']
+            ]
+          },
+          'text-size': 9
         }
-      }, 'ships-labels');
+      });
     }
 
   }

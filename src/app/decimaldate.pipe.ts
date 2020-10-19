@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DecimaldatePipe implements PipeTransform {
 
-  ms = {
+  ms = (x) => 31; /*{
     1: (y) => 31,
     2: (y) => {
       let leap = false;
@@ -32,7 +32,7 @@ export class DecimaldatePipe implements PipeTransform {
     10: (y) => 31,
     11: (y) => 30,
     12: (y) => 31,
-  }
+  }*/
 
   transform(value: number, ...args: unknown[]): Date {
     const adbc = value / Math.abs(value);
@@ -40,8 +40,8 @@ export class DecimaldatePipe implements PipeTransform {
     let rest = Math.abs(value - y);
     const m = Math.trunc(rest * 12);
     rest = (rest * 12) - m;
-    const d = Math.trunc(rest * this.ms[m + 1](y));
-    rest = (rest * this.ms[m + 1](y)) - d;
+    const d = Math.trunc(rest * this.ms(y));
+    rest = (rest * this.ms(y)) - d;
     const H = Math.trunc(rest * 24);
     rest = (rest * 24) - H;
     const M = Math.trunc(rest * 60);
