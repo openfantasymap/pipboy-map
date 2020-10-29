@@ -22,7 +22,7 @@
 
 <mat-sidenav-container class="example-container">
     <mat-sidenav class="sidebar" mode="over" #lbar>
-        <div *ngIf="info" class="info" [innerHtml]="infoData.info">
+        <div *ngIf="infoData" class="info" [innerHtml]="infoData?.info">
 
         </div>
         <mat-nav-list>
