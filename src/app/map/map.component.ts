@@ -1,3 +1,4 @@
+import { OhmService } from './../ohm.service';
 import { DateComponent } from './../date/date.component';
 import { DecimaldatePipe } from './../decimaldate.pipe';
 import { Component, OnInit, Input, isDevMode } from '@angular/core';
@@ -11,6 +12,7 @@ import { Location } from '@angular/common';
 import { NicedatePipe } from '../nicedate.pipe';
 import { timeInterval } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 
 declare const mapboxgl;
 declare const vis;
@@ -37,7 +39,7 @@ export class MapComponent implements OnInit {
 
   start = {
     center: [1.57, 43.67],
-    zoom: 4
+    zoom: 3.5
   };
 
   rels;
@@ -50,14 +52,24 @@ export class MapComponent implements OnInit {
 
   speed = 2000;
 
+  events: Observable<any[]>;
+
+  infoData: any;
+
+
   constructor(
     private ds: MnDockerService,
     private ar: ActivatedRoute,
     private l: Location,
     private md: MatDialog,
+    private ohm: OhmService,
+    private http: HttpClient
   ) { }
 
   ngOnInit(): void {
+    this.http.get('assets/info.json').subscribe(data => {
+      this.infoData = data;
+    })
     mapboxgl.accessToken = 'pk.eyJ1IjoiYWJyaWNrbyIsImEiOiJjanRkajJ4dzYwZGcwNDNvOGQybnZ2aWU0In0.dHeKsAVs3BmZ0biKTOi7wg';
     this.ts = this.ds.getEnv('TILESERVER');
     this.ar.params.subscribe(params => {
@@ -84,6 +96,9 @@ export class MapComponent implements OnInit {
         let nurl = url;
         if (isDevMode()) {
           nurl = nurl.replace('https://tiles.openhistorymap.org', this.ts);
+          nurl = nurl.replace('https://a.tiles.openhistorymap.org', this.ts);
+          nurl = nurl.replace('https://b.tiles.openhistorymap.org', this.ts);
+          nurl = nurl.replace('https://c.tiles.openhistorymap.org', this.ts);
         }
         if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0) {
           return {
@@ -93,17 +108,6 @@ export class MapComponent implements OnInit {
       }
 
     });
-
-
-    this.map.addSource('ohm-ephemeral', {
-      type: 'vector',
-      tiles: [
-        'https://tiles.openhistorymap.org/items/{atDate}/{z}/{y}/{x}/vector.pbf?layers=movement,event&mode=exact&form=linestring'
-      ],
-      minzoom: 0,
-      maxzoom: 22
-    });
-
 
     this.map.on('load', () => {
       this.showRels();
@@ -120,9 +124,7 @@ export class MapComponent implements OnInit {
 
     const container = document.getElementById('visualization');
 
-    const items = new vis.DataSet([
-      // { id: 1, content: 'Rome', start: new Date(-753, 4, 21), end: new Date(476, 1, 1), className: 'politics-rome'}
-    ]);
+    const items = new vis.DataSet([]);
 
 
       // Create a Timeline
@@ -151,8 +153,11 @@ export class MapComponent implements OnInit {
     this.l.go(`/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}` + (this.rels ? '/' + this.rels : ''));
     if (ev) {
       this.map.getSource('ohm').setSourceProperty(() => { });
+      this.map.getSource('ohm-boundaries')?.setSourceProperty(() => { });
       this.map.getSource('ohm-ephemeral')?.setSourceProperty(() => { });
+      this.map.getSource('ohm-transportation')?.setSourceProperty(() => { });
     }
+    this.events = this.ohm.getEvents(ev);
   }
 
   changeStyle(style): void  {
@@ -335,6 +340,10 @@ export class MapComponent implements OnInit {
       }
     });
     */
+  }
+
+  goTimeSpace(time: number, space: any): void  {
+    this.l.go(`/${time}/${this.map.getZoom()}/${space.coordinates[0]}/${space.coordinates[1]}` + (this.rels ? '/' + this.rels : ''));
   }
 
   showRels() {

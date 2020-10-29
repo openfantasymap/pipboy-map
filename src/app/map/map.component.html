@@ -1,28 +1,46 @@
 <mat-toolbar color="primary">
-    <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>menu</mat-icon></button>
+    <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>info</mat-icon></button>
     <h1>OpenHistoryMap</h1>
     <span class="spacer"></span>
     <span class="spacer"></span>
     <span class="spacer"></span>
     <span class="spacer"></span>
     <ohm-style-selector (styleChange)="changeStyle($event)"></ohm-style-selector>
-    <button mat-button mat-icon-button (click)="info()"><mat-icon>info</mat-icon></button>
+    <button mat-button mat-icon-button class="hidesmall" (click)="info()"><mat-icon>help</mat-icon></button>
     <span class="spacer"></span>
-    <button mat-button (click)="selectDate()">{{atDate|decimaldate|date:'d/M/y G - hh:mm:ss'|nicedate}}</button>
-    <button mat-button mat-icon-button (click)="startstop()"><mat-icon>{{startstopicon}}</mat-icon></button>
-    <button mat-button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>speed</mat-icon></button>
+    <button mat-button class="hidesmall" (click)="selectDate()">{{atDate|decimaldate|date:'d/M/y G - hh:mm:ss'|nicedate}}</button>
+    <button mat-button class="hidesmall" mat-icon-button (click)="startstop()"><mat-icon>{{startstopicon}}</mat-icon></button>
+    <button mat-button class="hidesmall" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>speed</mat-icon></button>
 
-    <span class="spacer"></span>
-    <span class="spacer"></span>
-    <span class="spacer"></span>
-    <span class="spacer"></span>
-    <button mat-button mat-icon-button (click)="rbar.toggle()"><mat-icon>menu</mat-icon></button>
+    <span class="spacer hidesmall"></span>
+    <span class="spacer hidesmall"></span>
+    <span class="spacer hidesmall"></span>
+    <span class="spacer hidesmall"></span>
+    <button mat-button mat-icon-button (click)="rbar.toggle()" class="hidesmall"><mat-icon>menu</mat-icon></button>
 
 </mat-toolbar>
 
 <mat-sidenav-container class="example-container">
-    <mat-sidenav class="sidebar" mode="over" #lbar></mat-sidenav>
-    <mat-sidenav class="sidebar" mode="over" #rbar position="end"></mat-sidenav>
+    <mat-sidenav class="sidebar" mode="over" #lbar>
+        <div *ngIf="info" class="info" [innerHtml]="infoData.info">
+
+        </div>
+        <mat-nav-list>
+            <mat-list-item>About</mat-list-item>
+            <mat-list-item>How to join</mat-list-item>
+            <mat-list-item>How to help</mat-list-item>
+            <mat-list-item>Donate</mat-list-item>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav class="sidebar" mode="over" #rbar position="end">
+        <mat-toolbar color="primary">
+            <h1>Events</h1>
+        </mat-toolbar>
+
+        <mat-list *ngFor="let event of (events|async)">
+            <a mat-list-item (click)="goTimeSpace(event.ohm_from, event.geom)">{{event.properties.name}}</a>
+        </mat-list>
+    </mat-sidenav>
     <mat-sidenav-content>
 
         <mat-menu #menu="matMenu">
@@ -36,3 +54,4 @@
         <div id="visualization"></div>
     </mat-sidenav-content>
 </mat-sidenav-container>
+<div></div>
