@@ -12,6 +12,7 @@ import { StyleSelectorComponent } from './style-selector/style-selector.componen
 import { DecimaldatePipe } from './decimaldate.pipe';
 import { NicedatePipe } from './nicedate.pipe';
 import { DateComponent } from './date/date.component';
+import { TimelinesComponent } from './timelines/timelines.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { DateComponent } from './date/date.component';
     StyleSelectorComponent,
     DecimaldatePipe,
     NicedatePipe,
-    DateComponent
+    DateComponent,
+    TimelinesComponent
   ],
   imports: [
     BrowserModule,

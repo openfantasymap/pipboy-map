@@ -48,6 +48,8 @@ export class MapComponent implements OnInit {
   atMacroDate = 800;
   atMicroDate = 870;
 
+  tl: string;
+
   timeline;
 
   speed = 2000;
@@ -76,6 +78,7 @@ export class MapComponent implements OnInit {
       this.atDate = params.year;
       this.start.center = [params.x, params.y];
       this.start.zoom = params.z;
+      this.tl = params.timeline;
       if (this.map) {
         this.map.panTo(this.start.center);
       }
@@ -95,10 +98,10 @@ export class MapComponent implements OnInit {
       transformRequest: (url, resourceType) => {
         let nurl = url;
         if (isDevMode()) {
-          nurl = nurl.replace('https://tiles.openhistorymap.org', this.ts);
-          nurl = nurl.replace('https://a.tiles.openhistorymap.org', this.ts);
-          nurl = nurl.replace('https://b.tiles.openhistorymap.org', this.ts);
-          nurl = nurl.replace('https://c.tiles.openhistorymap.org', this.ts);
+          nurl = nurl.replace('https://tiles.openhistorymap.org/'+this.tl, this.ts);
+          nurl = nurl.replace('https://a.tiles.openhistorymap.org/'+this.tl, this.ts);
+          nurl = nurl.replace('https://b.tiles.openhistorymap.org/'+this.tl, this.ts);
+          nurl = nurl.replace('https://c.tiles.openhistorymap.org/'+this.tl, this.ts);
         }
         if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0) {
           return {
@@ -150,7 +153,7 @@ export class MapComponent implements OnInit {
 
   changeUrl(ev = null): void{
     const c = this.map.getCenter();
-    this.l.go(`/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}` + (this.rels ? '/' + this.rels : ''));
+    this.l.go(`/${this.tl}/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}` + (this.rels ? '/' + this.rels : ''));
     if (ev) {
       this.map.getSource('ohm').setSourceProperty(() => { });
       this.map.getSource('ohm-boundaries')?.setSourceProperty(() => { });
@@ -343,7 +346,7 @@ export class MapComponent implements OnInit {
   }
 
   goTimeSpace(time: number, space: any): void  {
-    this.l.go(`/${time}/${this.map.getZoom()}/${space.coordinates[0]}/${space.coordinates[1]}` + (this.rels ? '/' + this.rels : ''));
+    this.l.go(`${this.tl}/${time}/${this.map.getZoom()}/${space.coordinates[0]}/${space.coordinates[1]}` + (this.rels ? '/' + this.rels : ''));
   }
 
   showRels() {

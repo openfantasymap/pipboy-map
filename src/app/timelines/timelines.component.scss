@@ -1,0 +1,24 @@
+mat-toolbar{
+    background-color: rgb(109, 62, 0);
+    color: white;
+}
+
+#ohm_map {
+    height: calc(100vh - 64px - 16px - 1px);
+    width: 100vw;
+}
+
+mat-grid-list{
+    width: 800px;
+    margin-left:auto;
+    margin-right:auto;
+}
+mat-grid-tile {
+    background: lightblue;
+  }
+  .sidebar {
+      width: 256px;
+      background-color: rgb(109, 62, 0);
+      color: white;
+  }
+  
