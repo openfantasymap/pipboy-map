@@ -1,4 +1,5 @@
 import { OhmService } from './../ohm.service';
+import { OfmService } from './../ofm.service';
 import { DateComponent } from './../date/date.component';
 import { DecimaldatePipe } from './../decimaldate.pipe';
 import { Component, OnInit, Input, isDevMode } from '@angular/core';
@@ -58,6 +59,8 @@ export class MapComponent implements OnInit {
 
   infoData: any;
 
+  title;
+
 
   constructor(
     private ds: MnDockerService,
@@ -65,6 +68,7 @@ export class MapComponent implements OnInit {
     private l: Location,
     private md: MatDialog,
     private ohm: OhmService,
+    private ofm: OfmService,
     private http: HttpClient
   ) { }
 
@@ -90,18 +94,22 @@ export class MapComponent implements OnInit {
     this.rels = this.ar.snapshot.params.rels;
     this.style = this.style;
 
+   this.ofm.getMap(this.ar.snapshot.params.timeline).subscribe( (data: any) => {
+     this.title = data.name;
+   });
+
     this.map = new mapboxgl.Map({
       container: 'ohm_map',
-      style: this.style, // stylesheet location
+      style: 'https://static.fantasymaps.org/' + this.ar.snapshot.params.timeline + '/map.json', // stylesheet location
       center: this.start.center, // starting position [lng, lat]
       zoom: this.start.zoom, // starting zoom
       transformRequest: (url, resourceType) => {
         let nurl = url;
         if (isDevMode()) {
-          nurl = nurl.replace('https://tiles.openhistorymap.org/'+this.tl, this.ts);
-          nurl = nurl.replace('https://a.tiles.openhistorymap.org/'+this.tl, this.ts);
-          nurl = nurl.replace('https://b.tiles.openhistorymap.org/'+this.tl, this.ts);
-          nurl = nurl.replace('https://c.tiles.openhistorymap.org/'+this.tl, this.ts);
+          nurl = nurl.replace('https://tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+          nurl = nurl.replace('https://a.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+          nurl = nurl.replace('https://b.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+          nurl = nurl.replace('https://c.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
         }
         if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0) {
           return {

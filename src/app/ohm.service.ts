@@ -8,10 +8,11 @@ import { Observable } from 'rxjs';
 export class OhmService {
 
   constructor(
-    private http: HttpClient
+    protected http: HttpClient
   ) { }
 
   getEvents(date, amount = 20): Observable<any> {
     return this.http.get('http://51.15.160.236:9034/events/' + date + '?limit=' + amount);
   }
+s
 }

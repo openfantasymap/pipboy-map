@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TimelinesComponent implements OnInit {
 
+infoData;
+events;
+
   constructor() { }
 
   ngOnInit(): void {
