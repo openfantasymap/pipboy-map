@@ -126,12 +126,22 @@ export class MapComponent implements OnInit {
 
     this.map.on('load', () => {
       this.showOverlays();
+      //this.map.setTerrain({source:'dem', 'exaggeration': 1.2})
+      //this.map.addLauer({
+      //  'id': 'sky',
+      //  'type': 'sky',
+      //  'paint': {
+      //  'sky-type': 'atmosphere',
+      //  'sky-atmosphere-sun': [0.0, 0.0],
+      //  'sky-atmosphere-sun-intensity': 15
+      //  }});
     });
 
 
     this.map.on('moveend', () => {
       this.changeUrl();
     });
+
 
     const container = document.getElementById('visualization');
 
@@ -163,10 +173,10 @@ export class MapComponent implements OnInit {
     const c = this.map.getCenter();
     this.l.go(`/${this.tl}/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}` + (this.rels ? '/' + this.rels : ''));
     if (ev) {
-      this.map.getSource('ohm').setSourceProperty(() => { });
-      this.map.getSource('ohm-boundaries')?.setSourceProperty(() => { });
-      this.map.getSource('ohm-ephemeral')?.setSourceProperty(() => { });
-      this.map.getSource('ohm-transportation')?.setSourceProperty(() => { });
+      try { this.map.getSource('ohm').setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
+      try { this.map.getSource('ohm-boundaries')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
+      try { this.map.getSource('ohm-ephemeral')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
+      try { this.map.getSource('ohm-transportation')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
     }
     this.events = this.ohm.getEvents(ev);
   }
@@ -225,7 +235,7 @@ export class MapComponent implements OnInit {
 
   showOverlays() {
     console.log('run');
-    this.map.addLayer({
+    /*this.map.addLayer({
       id: 'ships',
       type: 'circle',
       source: 'ohm-ephemeral',
@@ -321,7 +331,7 @@ export class MapComponent implements OnInit {
       }
     });
     */
-    this.map.addLayer({
+    /*this.map.addLayer({
       id: 'events',
       type: 'circle',
       source: 'ohm-ephemeral',
