@@ -175,7 +175,7 @@ export class MapComponent implements OnInit {
     if (ev) {
       try { this.map.getSource('ohm').setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
       try { this.map.getSource('ohm-boundaries')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
-      try { this.map.getSource('ohm-ephemeral')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
+      //try { this.map.getSource('ohm-ephemeral')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
       try { this.map.getSource('ohm-transportation')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
     }
     this.events = this.ohm.getEvents(ev);
