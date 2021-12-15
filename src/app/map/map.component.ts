@@ -67,7 +67,7 @@ export class MapComponent implements OnInit {
     private ar: ActivatedRoute,
     private l: Location,
     private md: MatDialog,
-    private ohm: OhmService,
+    private ohm: OfmService,
     private ofm: OfmService,
     private http: HttpClient
   ) { }
