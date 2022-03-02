@@ -51,9 +51,7 @@
         <div class="row">
             <div id="ohm_map">
                 <mat-grid-list cols="8" rowHeight="1:1">
-                    <mat-grid-tile colspan="4" rowspan="4" routerLink="/toril">Toril</mat-grid-tile>
-                    <mat-grid-tile colspan="2" rowspan="2" routerLink="/vicecity">Vice City</mat-grid-tile>
-                    <mat-grid-tile colspan="3" rowspan="3" routerLink="/hyrule">Hyrule</mat-grid-tile>
+                    <mat-grid-tile *ngFor="let tl of timelines" [colspan]="tl.size" [rowspan]="tl.size" [routerLink]="tl.url">{{tl.name}}</mat-grid-tile>
                 </mat-grid-list>
                   
             </div>
