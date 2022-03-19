@@ -103,6 +103,7 @@ export class MapComponent implements OnInit {
       style: 'https://static.fantasymaps.org/' + this.ar.snapshot.params.timeline + '/map.json', // stylesheet location
       center: this.start.center, // starting position [lng, lat]
       zoom: this.start.zoom, // starting zoom
+      projection: 'equirectangular',
       transformRequest: (url, resourceType) => {
         let nurl = url;
         if (isDevMode()) {
