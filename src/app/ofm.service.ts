@@ -14,6 +14,10 @@ export class OfmService extends OhmService{
     super(http);
   }
 
+  getTimelines(){
+    return this.http.get('//static.fantasymaps.org/timelines.json');
+  }
+
   getEvents(name: string, date: any, amount?: number): Observable<any> {
     return this.http.get('//static.fantasymaps.org/'+name+'/events.json?around='+date+"&n="+amount)
   }

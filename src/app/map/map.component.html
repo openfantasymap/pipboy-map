@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-    <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>info</mat-icon></button>
+    <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>keyboard_arrow_left</mat-icon></button>
     <h1>OpenFantasyMap - {{title}}</h1>
     <span class="spacer"></span>
     <span class="spacer"></span>
@@ -26,9 +26,7 @@
 
         </div>
         <mat-nav-list>
-            <a target="_blank" href=".." mat-list-item>All fantasy worlds</a>
-
-            <a target="_blank" href="https://www.openhistorymap.org/" mat-list-item>About OHM</a>
+            <a href=".." mat-list-item>All fantasy worlds</a>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav class="sidebar" mode="over" #rbar position="end">
