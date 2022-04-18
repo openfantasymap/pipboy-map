@@ -3,9 +3,9 @@ mat-toolbar{
     color: white;
 }
 
-#ohm_map {
-    height: calc(100vh - 64px - 16px - 1px);
-    width: 100vw;
+#ohm_timelines {
+    height: calc(100vh - 64px - 16px - 1px - 20px);
+    width: calc(100vw - 20px);
 }
 
 mat-grid-list{

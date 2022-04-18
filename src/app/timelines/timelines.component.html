@@ -42,21 +42,13 @@
         </mat-list>
     </mat-sidenav>
     <mat-sidenav-content>
-
-        <!--<mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="setSpeed(4000)">Slow</button>
-            <button mat-menu-item (click)="setSpeed(2000)">Medium</button>
-            <button mat-menu-item (click)="setSpeed(500)">High</button>
-        </mat-menu>-->
         <div class="row">
-            <div id="ohm_map">
+            <div id="ohm_timelines">
                 <mat-grid-list cols="8" rowHeight="1:1">
-                    <mat-grid-tile *ngFor="let tl of timelines" [colspan]="tl.size" [rowspan]="tl.size" [routerLink]="tl.url">{{tl.name}}</mat-grid-tile>
+                    <mat-grid-tile target="_blank" *ngFor="let tl of timelines" [colspan]="tl.size" [rowspan]="tl.size" [routerLink]="[tl.url, tl.date, tl.base.zoom, tl.base.lat, tl.base.lng]">{{tl.name}}</mat-grid-tile>
                 </mat-grid-list>
-                  
             </div>
         </div>
-        <div id="visualization"></div>
     </mat-sidenav-content>
 </mat-sidenav-container>
 <div></div>

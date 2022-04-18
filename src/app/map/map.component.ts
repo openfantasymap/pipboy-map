@@ -2,7 +2,7 @@ import { OhmService } from './../ohm.service';
 import { OfmService } from './../ofm.service';
 import { DateComponent } from './../date/date.component';
 import { DecimaldatePipe } from './../decimaldate.pipe';
-import { Component, OnInit, Input, isDevMode } from '@angular/core';
+import { Component, OnInit, Input, isDevMode, AfterContentInit } from '@angular/core';
 
 import { MnDockerService } from '@modalnodes/mn-docker';
 import { HttpClient } from '@angular/common/http';
@@ -23,7 +23,7 @@ declare const vis;
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, AfterContentInit{
   map;
   ts;
 
@@ -72,12 +72,81 @@ export class MapComponent implements OnInit {
     private http: HttpClient
   ) { }
 
+ngAfterContentInit(): void {
+  
+
+   this.map = new mapboxgl.Map({
+     container: 'ohm_map',
+     style: 'https://static.fantasymaps.org/' + this.ar.snapshot.params.timeline + '/map.json', // stylesheet location
+     center: this.start.center, // starting position [lng, lat]
+     zoom: this.start.zoom, // starting zoom
+     projection: 'equirectangular',
+     transformRequest: (url, resourceType) => {
+       let nurl = url;
+       if (isDevMode()) {
+         nurl = nurl.replace('https://tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+         nurl = nurl.replace('https://a.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+         nurl = nurl.replace('https://b.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+         nurl = nurl.replace('https://c.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+       }
+       if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0) {
+         return {
+           url: nurl.replace('{atDate}', this.atDate.toString())
+         };
+       }
+     }
+
+   });
+
+   console.log(this.map);
+
+   this.map.on('load', () => {
+     this.showRels();
+   });
+
+
+   this.map.on('load', () => {
+     this.showOverlays();
+     //this.map.setTerrain({source:'dem', 'exaggeration': 1.2})
+     //this.map.addLauer({
+     //  'id': 'sky',
+     //  'type': 'sky',
+     //  'paint': {
+     //  'sky-type': 'atmosphere',
+     //  'sky-atmosphere-sun': [0.0, 0.0],
+     //  'sky-atmosphere-sun-intensity': 15
+     //  }});
+   });
+
+
+   this.map.on('moveend', () => {
+     this.changeUrl();
+   });
+
+}
+  
   ngOnInit(): void {
     this.http.get('assets/info.json').subscribe(data => {
       this.infoData = data;
     })
     mapboxgl.accessToken = 'pk.eyJ1IjoiYWJyaWNrbyIsImEiOiJjanRkajJ4dzYwZGcwNDNvOGQybnZ2aWU0In0.dHeKsAVs3BmZ0biKTOi7wg';
     this.ts = this.ds.getEnv('TILESERVER');
+
+    this.atDate = this.ar.snapshot.params.year;
+    this.start.center = [this.ar.snapshot.params.x, this.ar.snapshot.params.y];
+    this.start.zoom = this.ar.snapshot.params.z;
+    this.rels = this.ar.snapshot.params.rels;
+    this.style = this.style;
+
+  
+    this.ofm.getMap(this.ar.snapshot.params.timeline).subscribe( (data: any) => {
+      this.title = data.name;
+    });
+
+    const container = document.getElementById('visualization');
+
+    const items = new vis.DataSet([]);
+
     this.ar.params.subscribe(params => {
       this.atDate = params.year;
       this.start.center = [params.x, params.y];
@@ -87,67 +156,6 @@ export class MapComponent implements OnInit {
         this.map.panTo(this.start.center);
       }
     });
-
-    this.atDate = this.ar.snapshot.params.year;
-    this.start.center = [this.ar.snapshot.params.x, this.ar.snapshot.params.y];
-    this.start.zoom = this.ar.snapshot.params.z;
-    this.rels = this.ar.snapshot.params.rels;
-    this.style = this.style;
-
-   this.ofm.getMap(this.ar.snapshot.params.timeline).subscribe( (data: any) => {
-     this.title = data.name;
-   });
-
-    this.map = new mapboxgl.Map({
-      container: 'ohm_map',
-      style: 'https://static.fantasymaps.org/' + this.ar.snapshot.params.timeline + '/map.json', // stylesheet location
-      center: this.start.center, // starting position [lng, lat]
-      zoom: this.start.zoom, // starting zoom
-      projection: 'equirectangular',
-      transformRequest: (url, resourceType) => {
-        let nurl = url;
-        if (isDevMode()) {
-          nurl = nurl.replace('https://tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-          nurl = nurl.replace('https://a.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-          nurl = nurl.replace('https://b.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-          nurl = nurl.replace('https://c.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-        }
-        if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0) {
-          return {
-            url: nurl.replace('{atDate}', this.atDate.toString())
-          };
-        }
-      }
-
-    });
-
-    this.map.on('load', () => {
-      this.showRels();
-    });
-
-    this.map.on('load', () => {
-      this.showOverlays();
-      //this.map.setTerrain({source:'dem', 'exaggeration': 1.2})
-      //this.map.addLauer({
-      //  'id': 'sky',
-      //  'type': 'sky',
-      //  'paint': {
-      //  'sky-type': 'atmosphere',
-      //  'sky-atmosphere-sun': [0.0, 0.0],
-      //  'sky-atmosphere-sun-intensity': 15
-      //  }});
-    });
-
-
-    this.map.on('moveend', () => {
-      this.changeUrl();
-    });
-
-
-    const container = document.getElementById('visualization');
-
-    const items = new vis.DataSet([]);
-
 
       // Create a Timeline
     this.timeline = new vis.Timeline(container, items, {
@@ -179,7 +187,7 @@ export class MapComponent implements OnInit {
       //try { this.map.getSource('ohm-ephemeral')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
       try { this.map.getSource('ohm-transportation')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
     }
-    this.events = this.ohm.getEvents(ev);
+    this.events = this.ohm.getEvents(this.tl, this.atDate, 10);
   }
 
   changeStyle(style): void  {

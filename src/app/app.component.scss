@@ -1,4 +1,15 @@
 router-outlet {
-    height: calc(100vh - calc(4 * 64px));
+    height: calc(100vh - 50px);
     width: 100vw;
+}
+
+footer{
+    width: 100%;
+    color: white;
+    font-size: 11px;
+    height: 20px;
+    text-align: center;
+    a{
+        color:white;
+    }
 }
