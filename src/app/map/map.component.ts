@@ -43,6 +43,8 @@ export class MapComponent implements OnInit, AfterContentInit{
     zoom: 3.5
   };
 
+  relateds = [];
+
   rels;
 
   atDate = 866.001;
@@ -141,6 +143,7 @@ ngAfterContentInit(): void {
   
     this.ofm.getMap(this.ar.snapshot.params.timeline).subscribe( (data: any) => {
       this.title = data.name;
+      this.relateds = data.related_maps;
     });
 
     const container = document.getElementById('visualization');
