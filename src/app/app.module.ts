@@ -13,6 +13,7 @@ import { DecimaldatePipe } from './decimaldate.pipe';
 import { NicedatePipe } from './nicedate.pipe';
 import { DateComponent } from './date/date.component';
 import { TimelinesComponent } from './timelines/timelines.component';
+import { ShareDirective } from './share.directive';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { TimelinesComponent } from './timelines/timelines.component';
     DecimaldatePipe,
     NicedatePipe,
     DateComponent,
-    TimelinesComponent
+    TimelinesComponent,
+    ShareDirective
   ],
   imports: [
     BrowserModule,

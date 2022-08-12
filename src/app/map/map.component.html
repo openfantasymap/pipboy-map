@@ -16,6 +16,7 @@
     <span class="spacer hidesmall"></span>
     <span class="spacer hidesmall"></span>
     <span class="spacer hidesmall"></span>
+    <button mat-button mat-icon-button (click)="copy_url()" class="hidesmall"><mat-icon>share</mat-icon></button>
     <button mat-button mat-icon-button (click)="rbar.toggle()" class="hidesmall"><mat-icon>menu</mat-icon></button>
 
 </mat-toolbar>
@@ -25,8 +26,11 @@
         <div *ngIf="infoData" class="info" [innerHtml]="infoData?.info">
 
         </div>
+        <h1>Related Maps</h1>
+
         <mat-nav-list>
-            <a href=".." mat-list-item>All fantasy worlds</a>
+            <a *ngFor="let r of relateds" mat-list-item href="{{r.url}}">{{r.title}}</a>
+            <a mat-list-item href="..">All fantasy worlds</a>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav class="sidebar" mode="over" #rbar position="end">
@@ -38,7 +42,22 @@
             <a mat-list-item (click)="goTimeSpace(event.ohm_from, event.geom)">{{event.properties.name}}</a>
         </mat-list>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav class="sidebar" mode="over" #sharebar position="end">
+        <mat-toolbar color="primary">
+            <h1>Sharing</h1>
+            <span class="spacer"></span>
+            <button mat-button mat-icon-button (click)="sharebar.close()" class="hidesmall"><mat-icon>close</mat-icon></button>
+        </mat-toolbar>
+
+        <mat-list>
+            <a share="https://www.facebook.com/sharer/sharer.php?u={{share_link}}" mat-list-item><mat-icon>facebook</mat-icon> Share on Facebook</a>
+            <a share="" mat-list-item><mat-icon>twitter</mat-icon> Share on Twitter</a>
+            <a share="" mat-list-item><mat-icon></mat-icon> Share on Linkedin</a>
+            <a share="" mat-list-item><mat-icon>class</mat-icon> Share on Classroom</a>
+        </mat-list>
+
+    </mat-sidenav>
+    <mat-sidenav-content #screen>
         <mat-menu #menu="matMenu">
             <!--
             <button mat-menu-item (click)="setSpeed(4000)">Slow</button>

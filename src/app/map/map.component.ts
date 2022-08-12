@@ -2,7 +2,7 @@ import { OhmService } from './../ohm.service';
 import { OfmService } from './../ofm.service';
 import { DateComponent } from './../date/date.component';
 import { DecimaldatePipe } from './../decimaldate.pipe';
-import { Component, OnInit, Input, isDevMode, AfterContentInit } from '@angular/core';
+import { Component, OnInit, Input, isDevMode, AfterContentInit, ViewChild } from '@angular/core';
 
 import { MnDockerService } from '@modalnodes/mn-docker';
 import { HttpClient } from '@angular/common/http';
@@ -14,6 +14,10 @@ import { NicedatePipe } from '../nicedate.pipe';
 import { timeInterval } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgxCaptureService } from 'ngx-capture';
+import { MatSidenav } from '@angular/material/sidenav';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 declare const mapboxgl;
 declare const vis;
@@ -63,6 +67,11 @@ export class MapComponent implements OnInit, AfterContentInit{
 
   title;
 
+  @ViewChild('ibar') ibar: MatSidenav;
+  @ViewChild('sharebar') sharebar: MatSidenav;
+  @ViewChild('screen') screen: any;
+
+  share_link: string;
 
   constructor(
     private ds: MnDockerService,
@@ -71,7 +80,10 @@ export class MapComponent implements OnInit, AfterContentInit{
     private md: MatDialog,
     private ohm: OfmService,
     private ofm: OfmService,
-    private http: HttpClient
+    private http: HttpClient,
+    private _snackBar: MatSnackBar,
+    private clipboard: Clipboard,
+    private capture: NgxCaptureService
   ) { }
 
 ngAfterContentInit(): void {
@@ -373,6 +385,19 @@ ngAfterContentInit(): void {
       }
     });
     */
+  }
+
+  copy_url(){
+    this.capture.getImage(this.screen.elementRef.nativeElement, true).subscribe(img=>{
+      this.ohm.su(window.location.href, img).subscribe(data =>{
+        this.clipboard.copy(data);
+        this.share_link = data;
+        this.sharebar.open();
+        this._snackBar.open('Address ready to share','Close', {
+          duration: 1000
+        });
+      });
+    })
   }
 
   goTimeSpace(time: number, space: any): void  {
