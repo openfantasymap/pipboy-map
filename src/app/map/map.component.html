@@ -16,6 +16,8 @@
     <span class="spacer hidesmall"></span>
     <span class="spacer hidesmall"></span>
     <span class="spacer hidesmall"></span>
+    <a href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive" mat-button mat-icon-button ><mat-icon><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
+    <a href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT" mat-button mat-icon-button ><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
     <button mat-button mat-icon-button (click)="copy_url()" class="hidesmall"><mat-icon>share</mat-icon></button>
     <button mat-button mat-icon-button (click)="rbar.toggle()" class="hidesmall"><mat-icon>menu</mat-icon></button>
 
@@ -50,10 +52,9 @@
         </mat-toolbar>
 
         <mat-list>
+            <a href="https://profile.fantasymaps.org/?use={{share_link}}"><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon>Use on FoundryVTT</a>
             <a share="https://www.facebook.com/sharer/sharer.php?u={{share_link}}" mat-list-item><mat-icon>facebook</mat-icon> Share on Facebook</a>
             <a share="" mat-list-item><mat-icon>twitter</mat-icon> Share on Twitter</a>
-            <a share="" mat-list-item><mat-icon></mat-icon> Share on Linkedin</a>
-            <a share="" mat-list-item><mat-icon>class</mat-icon> Share on Classroom</a>
         </mat-list>
 
     </mat-sidenav>
