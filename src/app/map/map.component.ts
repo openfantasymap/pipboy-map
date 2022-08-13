@@ -95,6 +95,7 @@ ngAfterContentInit(): void {
      center: this.start.center, // starting position [lng, lat]
      zoom: this.start.zoom, // starting zoom
      projection: 'equirectangular',
+     preserveDrawingBuffer: true,
      transformRequest: (url, resourceType) => {
        let nurl = url;
        if (isDevMode()) {
