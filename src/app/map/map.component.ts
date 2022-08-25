@@ -19,7 +19,8 @@ import { NgxCaptureService } from 'ngx-capture';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Clipboard } from '@angular/cdk/clipboard';
 
-declare const mapboxgl;
+//declare const mapboxgl;
+declare const maplibregl;
 declare const vis;
 
 @Component({
@@ -89,7 +90,7 @@ export class MapComponent implements OnInit, AfterContentInit{
 ngAfterContentInit(): void {
   
 
-   this.map = new mapboxgl.Map({
+   this.map = new maplibregl.Map({
      container: 'ohm_map',
      style: 'https://static.fantasymaps.org/' + this.ar.snapshot.params.timeline + '/map.json', // stylesheet location
      center: this.start.center, // starting position [lng, lat]
@@ -144,7 +145,7 @@ ngAfterContentInit(): void {
     this.http.get('assets/info.json').subscribe(data => {
       this.infoData = data;
     })
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYWJyaWNrbyIsImEiOiJjanRkajJ4dzYwZGcwNDNvOGQybnZ2aWU0In0.dHeKsAVs3BmZ0biKTOi7wg';
+    maplibregl.accessToken = 'pk.eyJ1IjoiYWJyaWNrbyIsImEiOiJjanRkajJ4dzYwZGcwNDNvOGQybnZ2aWU0In0.dHeKsAVs3BmZ0biKTOi7wg';
     this.ts = this.ds.getEnv('TILESERVER');
 
     this.atDate = this.ar.snapshot.params.year;
