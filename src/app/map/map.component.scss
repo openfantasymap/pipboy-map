@@ -22,3 +22,15 @@
 .info{
     padding: 16px;
 }
+
+#ofm_attribution{
+    position:absolute;
+    bottom:85px;
+    right: 0;
+    text-align: right;
+    background-color: rgba(200,200,200,0.5);
+    font-size: x-small;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-radius: 3px;
+}

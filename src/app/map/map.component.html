@@ -25,14 +25,18 @@
 
 <mat-sidenav-container class="example-container">
     <mat-sidenav class="sidebar" mode="over" #lbar>
-        <div *ngIf="infoData" class="info" [innerHtml]="infoData?.info">
-
-        </div>
-        <h1>Related Maps</h1>
-
+        <div *ngIf="infoData" class="info" [innerHtml]="infoData?.info"></div>
+        <a mat-list-item href="..">All fantasy worlds</a>
+        <h1>Sources</h1>
         <mat-nav-list>
-            <a *ngFor="let r of relateds" mat-list-item href="{{r.url}}">{{r.title}}</a>
-            <a mat-list-item href="..">All fantasy worlds</a>
+            <mat-list-item *ngFor="let r of ofm_meta.sources">
+                <a matListItemLine target="_blank" href="{{r.url}}">{{r.label}}</a>
+                <div matListItemLine>{{r.attribution}}</div>
+            </mat-list-item>
+        </mat-nav-list>
+        <h1>Related Maps</h1>
+        <mat-nav-list>
+            <a *ngFor="let r of ofm_meta.relateds" mat-list-item href="{{r.url}}">{{r.title}}</a>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav class="sidebar" mode="over" #rbar position="end">
@@ -68,6 +72,7 @@
         </mat-menu>
         <div class="row">
             <div id="ohm_map"></div>
+            <div id="ofm_attribution" [innerHTML]="ofm_meta.copyright"></div>
         </div>
         <div id="visualization"></div>
     </mat-sidenav-content>

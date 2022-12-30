@@ -43,12 +43,12 @@ export class MapComponent implements OnInit, AfterContentInit{
 
   @Input() style;
 
+  ofm_meta: any;
+
   start = {
     center: [1.57, 43.67],
     zoom: 3.5
   };
-
-  relateds = [];
 
   rels;
 
@@ -96,6 +96,7 @@ ngAfterContentInit(): void {
      center: this.start.center, // starting position [lng, lat]
      zoom: this.start.zoom, // starting zoom
      projection: 'equirectangular',
+     attributionControl:false,
      preserveDrawingBuffer: true,
      transformRequest: (url, resourceType) => {
        let nurl = url;
@@ -157,7 +158,7 @@ ngAfterContentInit(): void {
   
     this.ofm.getMap(this.ar.snapshot.params.timeline).subscribe( (data: any) => {
       this.title = data.name;
-      this.relateds = data.related_maps;
+      this.ofm_meta = data.metadata.ofm;
     });
 
     const container = document.getElementById('visualization');
