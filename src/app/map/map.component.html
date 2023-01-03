@@ -1,21 +1,7 @@
-<mat-toolbar color="primary">
-    <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+<mat-toolbar color="secondary">
+    <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>map</mat-icon></button>
     <h1>OpenFantasyMap - {{title}}</h1>
     <span class="spacer"></span>
-    <span class="spacer"></span>
-    <span class="spacer"></span>
-    <span class="spacer"></span>
-    <!--<ohm-style-selector (styleChange)="changeStyle($event)"></ohm-style-selector>
-    <button mat-button mat-icon-button class="hidesmall" (click)="info()"><mat-icon>help</mat-icon></button>-->
-    <span class="spacer"></span>
-    <button mat-button class="hidesmall" (click)="selectDate()">{{atDate|decimaldate|date:'d/M/y G - hh:mm:ss'|nicedate}}</button>
-    <button mat-button class="hidesmall" mat-icon-button (click)="startstop()"><mat-icon>{{startstopicon}}</mat-icon></button>
-    <button mat-button class="hidesmall" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>speed</mat-icon></button>
-
-    <span class="spacer hidesmall"></span>
-    <span class="spacer hidesmall"></span>
-    <span class="spacer hidesmall"></span>
-    <span class="spacer hidesmall"></span>
     <a href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive" mat-button mat-icon-button ><mat-icon><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
     <a href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT" mat-button mat-icon-button ><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
     <button mat-button mat-icon-button (click)="copy_url()" class="hidesmall"><mat-icon>share</mat-icon></button>
@@ -26,16 +12,15 @@
 <mat-sidenav-container class="example-container">
     <mat-sidenav class="sidebar" mode="over" #lbar>
         <div *ngIf="infoData" class="info" [innerHtml]="infoData?.info"></div>
-        <a mat-list-item href="..">All fantasy worlds</a>
-        <h1>Sources</h1>
+        
         <mat-nav-list>
+            <a mat-list-item href="..">All fantasy worlds</a>
+            <div mat-subheader>Sources</div>
             <mat-list-item *ngFor="let r of ofm_meta.sources">
                 <a matListItemLine target="_blank" href="{{r.url}}">{{r.label}}</a>
                 <div matListItemLine>{{r.attribution}}</div>
             </mat-list-item>
-        </mat-nav-list>
-        <h1>Related Maps</h1>
-        <mat-nav-list>
+            <h1 mat-subheader>Related Maps</h1>
             <a *ngFor="let r of ofm_meta.relateds" mat-list-item href="{{r.url}}">{{r.title}}</a>
         </mat-nav-list>
     </mat-sidenav>
@@ -56,7 +41,7 @@
         </mat-toolbar>
 
         <mat-list>
-            <a href="https://profile.fantasymaps.org/?use={{share_link}}"><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon>Use on FoundryVTT</a>
+            <a mat-list-item href="https://profile.fantasymaps.org/?use={{share_link}}"><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon>Use on FoundryVTT</a>
             <a share="https://www.facebook.com/sharer/sharer.php?u={{share_link}}" mat-list-item><mat-icon>facebook</mat-icon> Share on Facebook</a>
             <a share="" mat-list-item><mat-icon>twitter</mat-icon> Share on Twitter</a>
         </mat-list>
@@ -73,6 +58,12 @@
         <div class="row">
             <div id="ohm_map"></div>
             <div id="ofm_attribution" [innerHTML]="ofm_meta.copyright"></div>
+        </div>
+        
+        <div id="timebar">
+            <button mat-button class="hidesmall" (click)="selectDate()">{{atDate|decimaldate|date:'d/M/y G - hh:mm:ss'|nicedate}}</button>
+            <button mat-button class="hidesmall" mat-icon-button (click)="startstop()"><mat-icon>{{startstopicon}}</mat-icon></button>
+            <button mat-button class="hidesmall" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>speed</mat-icon></button>
         </div>
         <div id="visualization"></div>
     </mat-sidenav-content>

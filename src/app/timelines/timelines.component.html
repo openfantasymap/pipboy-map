@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar color="secondary">
     <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>info</mat-icon></button>
     <h1>OpenFantasyMap</h1>
     <span class="spacer"></span>
@@ -20,7 +20,7 @@
         <div class="row">
             <div id="ohm_timelines">
                 <mat-grid-list cols="8" rowHeight="1:1">
-                    <mat-grid-tile target="_blank" *ngFor="let tl of timelines" [colspan]="tl.size" [rowspan]="tl.size" [routerLink]="[tl.url, tl.date, tl.base.zoom, tl.base.lat, tl.base.lng]">{{tl.name}}</mat-grid-tile>
+                    <mat-grid-tile target="_blank" *ngFor="let tl of timelines" [style.background]="tl.bg" [style.color]="tl.color" [style.background-image]="tl.bgimg" [colspan]="tl.size" [rowspan]="tl.size" [routerLink]="[tl.url, tl.date, tl.base.zoom, tl.base.lat, tl.base.lng]">{{tl.name}}</mat-grid-tile>
                 </mat-grid-list>
             </div>
         </div>

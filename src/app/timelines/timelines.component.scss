@@ -1,7 +1,3 @@
-mat-toolbar{
-    background-color: rgb(109, 62, 0);
-    color: white;
-}
 
 #ohm_timelines {
     height: calc(100vh - 64px - 16px - 1px - 20px);
@@ -14,11 +10,11 @@ mat-grid-list{
     margin-right:auto;
 }
 mat-grid-tile {
-    background: lightblue;
+    background: darkred;
   }
   .sidebar {
       width: 256px;
-      background-color: rgb(109, 62, 0);
+      //background-color: rgb(109, 62, 0);
       color: white;
   }
   

@@ -1,5 +1,5 @@
 router-outlet {
-    height: calc(100vh - 50px);
+    height: calc(100vh - 20px);
     width: 100vw;
     overflow: hidden;
 }
@@ -10,6 +10,8 @@ footer{
     font-size: 11px;
     height: 20px;
     text-align: center;
+    position:absolute;
+    bottom: 0;
     a{
         color:white;
     }
