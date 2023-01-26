@@ -1,6 +1,6 @@
 #ohm_map {
-    height: calc(100vh - 85px - 64px - 2px - 19px);
-    width: 100vw;
+    height: calc(100vh - 85px - 64px - 2px - 19px - 58px);
+    width: calc(100vw - 120px);
 }
 
 #visualization {
@@ -12,6 +12,9 @@
 .vis-item.politcs-rome {
     background-color: red;
 }
+button{
+    border: 0;
+}
 
 .sidebar {
     width: 256px;
@@ -21,6 +24,7 @@
 
 .info{
     padding: 16px;
+    text-transform: uppercase;
 }
 
 #ofm_attribution{
@@ -56,5 +60,6 @@
 }
 
 mat-sidenav-container{
-    height: calc(100vh - 84px);
+    top: 80px;
+    height: calc(100vh - 200px);
 }

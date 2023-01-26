@@ -1,11 +1,21 @@
-<mat-toolbar color="secondary">
-    <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>info</mat-icon></button>
-    <h1>OpenFantasyMap</h1>
-    <span class="spacer"></span>
+<div id="header" class="lcars-row header">
 
-    <button mat-button (click)="disabled()" class="hidesmall"><mat-icon>person</mat-icon>Login</button>
+    <!-- ELBOW -->
+    <div class="lcars-elbow left-bottom lcars-blue-bell-bg "></div>
 
-</mat-toolbar>
+    <!-- BAR WITH TITLE -->
+    <div class="lcars-bar horizontal lcars-blue-bell-bg ">
+        <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>map</mat-icon></button>
+        <div class="lcars-title lcars-text right">OpenFantasyMap</div>
+        <span class="spacer"></span>
+        <a href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive" mat-button mat-icon-button ><mat-icon><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
+        <a href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT" mat-button mat-icon-button ><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
+    </div>
+
+    <!-- ROUNDED EDGE DECORATED -->
+    <div class="lcars-bar horizontal right-end decorated">
+    </div>
+</div>
 
 <mat-sidenav-container class="example-container">
     <mat-sidenav class="sidebar" mode="over" #lbar>
@@ -17,11 +27,13 @@
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
-        <div class="row">
+        <div class="lcars-column">
             <div id="ohm_timelines">
+                <div class="lcars-bracket top hollow"></div>
                 <mat-grid-list cols="8" rowHeight="1:1">
                     <mat-grid-tile target="_blank" *ngFor="let tl of timelines" [style.background]="tl.bg" [style.color]="tl.color" [style.background-image]="tl.bgimg" [colspan]="tl.size" [rowspan]="tl.size" [routerLink]="[tl.url, tl.date, tl.base.zoom, tl.base.lat, tl.base.lng]">{{tl.name}}</mat-grid-tile>
                 </mat-grid-list>
+                <div class="lcars-bracket bottom hollow"></div>
             </div>
         </div>
     </mat-sidenav-content>

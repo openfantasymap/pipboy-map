@@ -1,16 +1,28 @@
-<mat-toolbar color="secondary">
-    <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>map</mat-icon></button>
-    <h1>OpenFantasyMap - {{title}}</h1>
-    <span class="spacer"></span>
-    <a href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive" mat-button mat-icon-button ><mat-icon><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
-    <a href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT" mat-button mat-icon-button ><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
-    <button mat-button mat-icon-button (click)="copy_url()" class="hidesmall"><mat-icon>share</mat-icon></button>
-    <button mat-button mat-icon-button (click)="rbar.toggle()" class="hidesmall"><mat-icon>menu</mat-icon></button>
+<!-- HEADER ==================================================== -->
+<div class="lcars-column">
 
-</mat-toolbar>
+<div id="header" class="lcars-row header">
 
-<mat-sidenav-container class="example-container">
-    <mat-sidenav class="sidebar" mode="over" #lbar>
+    <!-- ELBOW -->
+    <div class="lcars-elbow left-bottom lcars-blue-bell-bg"></div>
+
+    <!-- BAR WITH TITLE -->
+    <div class="lcars-bar horizontal lcars-blue-bell-bg">
+        <div class="lcars-title lcars-text right">OpenFantasyMap - {{title}}</div>
+    </div>
+
+    <!-- ROUNDED EDGE DECORATED -->
+    <div class="lcars-bar horizontal right-end decorated lcars-blue-bell-bg"></div>
+</div>
+<!--
+    <mat-sidenav-container class="example-container lcars-row">
+        <mat-sidenav class="lcars-column start-space lcars-u-1 lcars-tan-bg" mode="over" #lbar>
+            <button mat-button mat-icon-button (click)="rbar.toggle()" class="hidesmall"><mat-icon>menu</mat-icon></button>
+            
+        <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>map</mat-icon></button>
+        <a href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive" mat-button mat-icon-button ><mat-icon><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
+        <a href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT" mat-button mat-icon-button ><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
+        <button mat-button mat-icon-button (click)="copy_url()" class="hidesmall"><mat-icon>share</mat-icon></button>
         <div *ngIf="infoData" class="info" [innerHtml]="infoData?.info"></div>
         
         <mat-nav-list>
@@ -24,7 +36,7 @@
             <a *ngFor="let r of ofm_meta.relateds" mat-list-item href="{{r.url}}">{{r.title}}</a>
         </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav class="sidebar" mode="over" #rbar position="end">
+    <mat-sidenav class="s" mode="over" #rbar position="end">
         <mat-toolbar color="primary">
             <h1>Events</h1>
         </mat-toolbar>
@@ -53,19 +65,35 @@
             <button mat-menu-item (click)="setSpeed(4000)">Slow</button>
             <button mat-menu-item (click)="setSpeed(2000)">Medium</button>
             <button mat-menu-item (click)="setSpeed(500)">High</button>
-        -->
         </mat-menu>
-        <div class="row">
-            <div id="ohm_map"></div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+-->
+
+<div class="lcars-row" style="position:relative; top: 72px;">
+    <div class="lcars-column lcars-u-1">
+            
+        <div *ngIf="infoData" class="info lcars-element lcars-blue-bell-bg lcars-text lcars-u-1-4" [innerHtml]="infoData?.info"></div>
+        <button class="lcars-element lcars-text lcars-blue-bell-bg button" [routerLink]="['/']">ALL MAPS</button>
+        <button class="lcars-element lcars-blue-bell-bg lcars-text button" (click)="copy_url()" >SHARE</button>
+        <a class="lcars-element lcars-text lcars-blue-bell-bg button" href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive"  ><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></a>
+        <a class="lcars-element lcars-text lcars-blue-bell-bg button" href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT"  ><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></a>
+        
+        <div class="lcars-bar  fill lcars-blue-bell-bg"></div>
+        <div class="lcars-bar  spacer"></div>
+    </div>
+    <div class="lcars-column lcars-u-15">
+        <div class="lcars-row">
+            <div id="ohm_map" class="lcars-u-15"></div>
             <div id="ofm_attribution" [innerHTML]="ofm_meta.copyright"></div>
         </div>
         
-        <div id="timebar">
+        <div id="timebar" class="lcars-row">
             <button mat-button class="hidesmall" (click)="selectDate()">{{atDate|decimaldate|date:'d/M/y G - hh:mm:ss'|nicedate}}</button>
             <button mat-button class="hidesmall" mat-icon-button (click)="startstop()"><mat-icon>{{startstopicon}}</mat-icon></button>
-            <button mat-button class="hidesmall" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>speed</mat-icon></button>
+            <!--<button mat-button class="hidesmall" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>speed</mat-icon></button>-->
         </div>
         <div id="visualization"></div>
-    </mat-sidenav-content>
-</mat-sidenav-container>
-<div></div>
+    </div>
+</div>
+</div>
