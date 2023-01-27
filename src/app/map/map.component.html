@@ -4,15 +4,19 @@
 <div id="header" class="lcars-row header">
 
     <!-- ELBOW -->
-    <div class="lcars-elbow left-bottom lcars-blue-bell-bg"></div>
+    <div class="lcars-elbow left-bottom lcars-golden-tanoi-bg"></div>
 
+    <div class="lcars-bar horizontal lcars-golden-tanoi-bg">
+        <div class="lcars-title lcars-text"><a (click)="null">INFO</a></div>
+        <div class="lcars-title lcars-text"><a (click)="null">INFO</a></div>
+    </div>
     <!-- BAR WITH TITLE -->
-    <div class="lcars-bar horizontal lcars-blue-bell-bg">
+    <div class="lcars-bar horizontal lcars-golden-tanoi-bg">
         <div class="lcars-title lcars-text right">OpenFantasyMap - {{title}}</div>
     </div>
 
     <!-- ROUNDED EDGE DECORATED -->
-    <div class="lcars-bar horizontal right-end decorated lcars-blue-bell-bg"></div>
+    <div class="lcars-bar horizontal right-end decorated lcars-golden-tanoi-bg"></div>
 </div>
 <!--
     <mat-sidenav-container class="example-container lcars-row">
@@ -73,13 +77,13 @@
 <div class="lcars-row" style="position:relative; top: 72px;">
     <div class="lcars-column lcars-u-1">
             
-        <div *ngIf="infoData" class="info lcars-element lcars-blue-bell-bg lcars-text lcars-u-1-4" [innerHtml]="infoData?.info"></div>
-        <button class="lcars-element lcars-text lcars-blue-bell-bg button" [routerLink]="['/']">ALL MAPS</button>
-        <button class="lcars-element lcars-blue-bell-bg lcars-text button" (click)="copy_url()" >SHARE</button>
-        <a class="lcars-element lcars-text lcars-blue-bell-bg button" href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive"  ><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></a>
-        <a class="lcars-element lcars-text lcars-blue-bell-bg button" href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT"  ><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></a>
+        <div *ngIf="infoData" class="info lcars-element lcars-golden-tanoi-bg lcars-text lcars-u-1-4" [innerHtml]="infoData?.info"></div>
+        <button class="lcars-element lcars-text lcars-lilac-bg button" [routerLink]="['/']">ALL MAPS</button>
+        <button class="lcars-element lcars-lilac-bg lcars-text button" (click)="copy_url()" >SHARE</button>
+        <a class="lcars-element lcars-text lcars-indigo-bg button" href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive"  ><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></a>
+        <a class="lcars-element lcars-text lcars-indigo-bg button" href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT"  ><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></a>
         
-        <div class="lcars-bar  fill lcars-blue-bell-bg"></div>
+        <div class="lcars-bar  fill lcars-indigo-bg"></div>
         <div class="lcars-bar  spacer"></div>
     </div>
     <div class="lcars-column lcars-u-15">

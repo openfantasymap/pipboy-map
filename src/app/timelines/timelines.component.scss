@@ -1,8 +1,14 @@
 
-#ohm_timelines {
-    height: calc(100vh - 64px - 16px - 1px - 20px - 56px);
-    width: calc(100vw - 20px);
+#padder {
+    padding-left:25px;
 }
+#ohm_timelines {
+    width: 100%;
+    height: calc(100vh - 72px - 72px - 5px);
+    overflow: auto;
+    
+}
+
 
 mat-grid-list{
     width: 800px;
@@ -21,4 +27,9 @@ mat-grid-tile {
 
 .info{
     padding: 15px;
+}
+
+button{
+    border: 0;
+    text-transform: uppercase;
 }

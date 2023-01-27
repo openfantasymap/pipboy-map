@@ -1,41 +1,53 @@
 <div id="header" class="lcars-row header">
 
-    <!-- ELBOW -->
-    <div class="lcars-elbow left-bottom lcars-blue-bell-bg "></div>
+  <!-- ELBOW -->
+  <div class="lcars-elbow left-bottom lcars-periwinkle-bg "></div>
 
-    <!-- BAR WITH TITLE -->
-    <div class="lcars-bar horizontal lcars-blue-bell-bg ">
-        <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>map</mat-icon></button>
-        <div class="lcars-title lcars-text right">OpenFantasyMap</div>
-        <span class="spacer"></span>
-        <a href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive" mat-button mat-icon-button ><mat-icon><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
-        <a href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT" mat-button mat-icon-button ><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
-    </div>
+  <!-- BAR WITH TITLE -->
+  <div class="lcars-bar horizontal lcars-periwinkle-bg ">
+    <div class="lcars-title lcars-text right">OpenFantasyMap</div>
+  </div>
 
-    <!-- ROUNDED EDGE DECORATED -->
-    <div class="lcars-bar horizontal right-end decorated">
-    </div>
+  <!-- ROUNDED EDGE DECORATED -->
+  <div class="lcars-bar horizontal lcars-periwinkle-bg right-end decorated">
+  </div>
+
 </div>
+<div class="lcars-row" style="position:relative; top: 72px; margin-top: 5px">
+  <div class="lcars-column lcars-u-1">
+    <div class="info lcars-element lcars-u-1-6 lcars-text lcars-atomic-tangerine-bg">
+      OpenFantasyMap and FantasyMaps are a projects developed by OpenHistoryMap to create a non conventional use case
+      for Digital Humanities and Public History.
+    </div>
+    <a class="lcars-element lcars-text lcars-cosmic-bg lcars-white-color" href="https://www.fantasymaps.org">MORE INFO</a>
+    <a class="lcars-element lcars-text lcars-indigo-bg button" href="https://www.patreon.com/openfantasymap"
+      target="_blank" title="Help us keep this project alive"><img
+        src="/assets/images/Digital-Patreon-Logo_FieryCoral.png"
+        style="width:36px; left:-6px; top: -6px; position: relative;"></a>
+    <a class="lcars-element lcars-text lcars-indigo-bg button" href="https://foundryvtt.com/packages/ofm-map-canvas"
+      target="_blank" title="Use this and other OFM maps on FoundryVTT"><img src="/assets/images/fvtt-solid-512.png"
+        style="width:36px; left:-6px; top: -6px; position: relative;"></a>
 
-<mat-sidenav-container class="example-container">
-    <mat-sidenav class="sidebar" mode="over" #lbar>
-        <div class="info">
-            OpenFantasyMap and FantasyMaps are a projects developed by OpenHistoryMap to create a non conventional use case for Digital Humanities and Public History.
-        </div>
-        <mat-nav-list>
-            <a mat-list-item href="https://www.fantasymaps.org">More info</a>
-        </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content>
-        <div class="lcars-column">
-            <div id="ohm_timelines">
-                <div class="lcars-bracket top hollow"></div>
-                <mat-grid-list cols="8" rowHeight="1:1">
-                    <mat-grid-tile target="_blank" *ngFor="let tl of timelines" [style.background]="tl.bg" [style.color]="tl.color" [style.background-image]="tl.bgimg" [colspan]="tl.size" [rowspan]="tl.size" [routerLink]="[tl.url, tl.date, tl.base.zoom, tl.base.lat, tl.base.lng]">{{tl.name}}</mat-grid-tile>
-                </mat-grid-list>
-                <div class="lcars-bracket bottom hollow"></div>
+    <div class="lcars-bar  fill lcars-atomic-tangerine-bg decorated"></div>
+    <div class="lcars-bar vertical spacer"></div>
+  </div>
+  <div class="lcars-column lcars-u-15">
+    <div id="padder" class="lcars-row">
+
+      <div class="lcars-row">
+          <div id="ohm_timelines">
+              <div class="lcars-column" style="margin-bottom: 10px">
+                  <div class="lcars-row"  *ngFor="let tl of timelines" >
+                  <div class="lcars-bracket lcars-periwinkle-bg left"></div>
+            <button class="lcars-element button lcars-text lcars-{{tl.color}}-bg lcars-black-color lcars-u-2-2"
+              target="_blank" [style.display]="block" [style.background]="tl.bg"
+              [style.color]="tl.color" [style.background-image]="tl.bgimg" [colspan]="tl.size" [rowspan]="tl.size"
+              [routerLink]="[tl.url, tl.date, tl.base.zoom, tl.base.lat, tl.base.lng]">{{tl.name}}</button>
+              <div class="lcars-bracket lcars-periwinkle-bg right hollow"></div>
             </div>
+          </div>
         </div>
-    </mat-sidenav-content>
-</mat-sidenav-container>
-<div></div>
+      </div>
+    </div>
+  </div>
+</div>
