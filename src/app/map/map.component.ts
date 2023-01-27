@@ -88,57 +88,72 @@ export class MapComponent implements OnInit, AfterContentInit{
   ) { }
 
 ngAfterContentInit(): void {
+  this.ar.params.subscribe(params=>{
+
+    this.map = new maplibregl.Map({
+      container: 'ohm_map',
+      style: 'https://static.fantasymaps.org/' + params.timeline + '/map.json', // stylesheet location
+      center: this.start.center, // starting position [lng, lat]
+      zoom: this.start.zoom, // starting zoom
+      projection: 'equirectangular',
+      attributionControl:false,
+      preserveDrawingBuffer: true,
+      transformRequest: (url, resourceType) => {
+        let nurl = url;
+        if (isDevMode()) {
+          nurl = nurl.replace('https://tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+          nurl = nurl.replace('https://a.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+          nurl = nurl.replace('https://b.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+          nurl = nurl.replace('https://c.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+        }
+        if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0) {
+          return {
+            url: nurl.replace('{atDate}', this.atDate.toString())
+          };
+        }
+      }
+ 
+    });
+ 
+    console.log(this.map);
+ 
+    this.map.on('load', () => {
+      this.showRels();
+ 
+      
+     this.map.on('zoomend', () =>{
+       if (this.map.getZoom()  == 22 && this.ofm_meta.relatedLayers){
+         const features = this.map.queryRenderedFeatures({ layers: this.ofm_meta?.relatedLayers });
+         if (features.length == 1){
+           const move_to = this.ar.snapshot.params.timeline + "-" + features[0].properties.name.toLowerCase();
+           this.warpTo(this.atDate, move_to, null);
+         } 
+       }
+     })
+ 
+    });
+ 
+ 
+    this.map.on('load', () => {
+      this.showOverlays();
+      //this.map.setTerrain({source:'dem', 'exaggeration': 1.2})
+      //this.map.addLauer({
+      //  'id': 'sky',
+      //  'type': 'sky',
+      //  'paint': {
+      //  'sky-type': 'atmosphere',
+      //  'sky-atmosphere-sun': [0.0, 0.0],
+      //  'sky-atmosphere-sun-intensity': 15
+      //  }});
+    });
+ 
+ 
+    this.map.on('moveend', () => {
+      this.changeUrl();
+    });
+  })
   
 
-   this.map = new maplibregl.Map({
-     container: 'ohm_map',
-     style: 'https://static.fantasymaps.org/' + this.ar.snapshot.params.timeline + '/map.json', // stylesheet location
-     center: this.start.center, // starting position [lng, lat]
-     zoom: this.start.zoom, // starting zoom
-     projection: 'equirectangular',
-     attributionControl:false,
-     preserveDrawingBuffer: true,
-     transformRequest: (url, resourceType) => {
-       let nurl = url;
-       if (isDevMode()) {
-         nurl = nurl.replace('https://tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-         nurl = nurl.replace('https://a.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-         nurl = nurl.replace('https://b.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-         nurl = nurl.replace('https://c.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-       }
-       if (resourceType === 'Tile' && url.indexOf('openhistory') >= 0) {
-         return {
-           url: nurl.replace('{atDate}', this.atDate.toString())
-         };
-       }
-     }
-
-   });
-
-   console.log(this.map);
-
-   this.map.on('load', () => {
-     this.showRels();
-   });
-
-
-   this.map.on('load', () => {
-     this.showOverlays();
-     //this.map.setTerrain({source:'dem', 'exaggeration': 1.2})
-     //this.map.addLauer({
-     //  'id': 'sky',
-     //  'type': 'sky',
-     //  'paint': {
-     //  'sky-type': 'atmosphere',
-     //  'sky-atmosphere-sun': [0.0, 0.0],
-     //  'sky-atmosphere-sun-intensity': 15
-     //  }});
-   });
-
-
-   this.map.on('moveend', () => {
-     this.changeUrl();
-   });
 
 }
   
@@ -194,6 +209,7 @@ ngAfterContentInit(): void {
 
     this.timeline.on('rangechanged', (properties) => {
     });
+
   }
 
   changeUrl(ev = null): void{
@@ -404,7 +420,14 @@ ngAfterContentInit(): void {
   }
 
   goTimeSpace(time: number, space: any): void  {
-    this.l.go(`${this.tl}/${time}/${this.map.getZoom()}/${space.coordinates[0]}/${space.coordinates[1]}` + (this.rels ? '/' + this.rels : ''));
+    this.l.go(`/${this.tl}/${time}/${this.map.getZoom()}/${space.coordinates[0]}/${space.coordinates[1]}` + (this.rels ? '/' + this.rels : ''));
+  }
+
+  warpTo(time: number, timeline: string, space: any): void  {
+    setTimeout(()=>{
+      this.l.go(`/${timeline}/${time}/2/0/0/` + (this.rels ? '/' + this.rels : ''));
+      window.location.reload();
+    }, 100);
   }
 
   showRels() {
