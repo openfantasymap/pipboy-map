@@ -125,7 +125,7 @@ ngAfterContentInit(): void {
        if (this.map.getZoom()  == 22 && this.ofm_meta.relatedLayers){
          const features = this.map.queryRenderedFeatures({ layers: this.ofm_meta?.relatedLayers });
          if (features.length == 1){
-           const move_to = this.ar.snapshot.params.timeline + "-" + features[0].properties.name.toLowerCase();
+           const move_to = this.ar.snapshot.params.timeline + "-" + features[0].properties[this.ofm_meta.relatedField].toLowerCase();
            this.warpTo(this.atDate, move_to, null);
          } 
        }
