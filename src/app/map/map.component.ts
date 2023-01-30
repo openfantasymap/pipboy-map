@@ -126,8 +126,10 @@ ngAfterContentInit(): void {
          const features = this.map.queryRenderedFeatures({ layers: this.ofm_meta?.relatedLayers });
          if (features.length == 1){
            const move_to = this.ar.snapshot.params.timeline + "-" + features[0].properties[this.ofm_meta.relatedField].toLowerCase();
-           this.warpTo(this.atDate, move_to, null);
+           this.warpTo(this.atDate, move_to);
          } 
+       } else if(this.map.getZoom() < 1 && this.ofm_meta.parentMap){
+        this.warpTo(this.atDate, this.ofm_meta.parentMap, 20, this.ofm_meta.parentLocation);
        }
      })
  
@@ -423,9 +425,9 @@ ngAfterContentInit(): void {
     this.l.go(`/${this.tl}/${time}/${this.map.getZoom()}/${space.coordinates[0]}/${space.coordinates[1]}` + (this.rels ? '/' + this.rels : ''));
   }
 
-  warpTo(time: number, timeline: string, space: any): void  {
+  warpTo(time: number, timeline: string, zoom: number = 2, space: any = [0,0]): void  {
     setTimeout(()=>{
-      this.l.go(`/${timeline}/${time}/2/0/0/` + (this.rels ? '/' + this.rels : ''));
+      this.l.go(`/${timeline}/${time}/${zoom}/${space[0]}/${space[1]}/` + (this.rels ? '/' + this.rels : ''));
       window.location.reload();
     }, 100);
   }
