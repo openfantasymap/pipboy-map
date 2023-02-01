@@ -7,8 +7,9 @@
     <div class="lcars-elbow left-bottom lcars-golden-tanoi-bg"></div>
 
     <div class="lcars-bar horizontal lcars-golden-tanoi-bg">
-        <div class="lcars-title lcars-text"><a (click)="null">INFO</a></div>
-        <div class="lcars-title lcars-text"><a (click)="null">INFO</a></div>
+        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-color':showSearch}"><a (click)="showInfo=false; showLegend=false; showSearch=!showSearch;">SEARCH</a></div>
+        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-color':showInfo}" (click)=" showSearch=false; showLegend=false; showInfo = !showInfo"><a >INFO</a></div>
+        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-color':showLegend}" (click)=" showSearch=false; showInfo=false; showLegend = !showLegend"><a >LEGEND</a></div>
     </div>
     <!-- BAR WITH TITLE -->
     <div class="lcars-bar horizontal lcars-golden-tanoi-bg">
@@ -89,7 +90,7 @@
     <div class="lcars-column lcars-u-15">
         <div class="lcars-row">
             <div id="ohm_map" class="lcars-u-15"></div>
-            <div id="ofm_attribution" [innerHTML]="ofm_meta.copyright"></div>
+            <div id="ofm_attribution" [innerHTML]="ofm_meta?.copyright"></div>
         </div>
         
         <div id="timebar" class="lcars-row">
@@ -100,4 +101,53 @@
         <div id="visualization"></div>
     </div>
 </div>
+</div>
+
+<div id="infobox" class="lcars-row" [ngClass]="{'hidden':!showInfo}" #infobox *ngIf="p">
+    <div class="lcars-bracket left hollow"></div>
+    <div class="lcars-column">
+        <div class="lcars-row">
+            <div class="lcars-element lcars-text lcars-u-2-1 right-rounded">{{p.name}}</div>
+        </div>
+        <div class="lcars-row" *ngIf="p.st_wiki">
+            <a class="lcars-element lcars-text lcars-u-2-1 lcars-black-color right-rounded button" target="_blank" href="{{p.st_wiki}}">MEMORY ALPHA</a>
+        </div>
+        <div class="lcars-row" *ngIf="p.wiki">
+            <a class="lcars-element lcars-text lcars-u-2-1 lcars-black-color right-rounded button" target="_blank" href="{{p.wiki}}">WIKIPEDIA</a>
+        </div>
+    </div>
+</div>
+
+
+<div id="searchbox" class="lcars-row" [ngClass]="{'hidden':!showSearch}" #infobox>
+    <div class="lcars-column">
+        <div class="lcars-row">
+            <div class="lcars-element  lcars-text lcars-u-2-1">
+                <input type="text" placeholder="Search" #query>
+            </div> 
+            <button class="lcars-element button lcars-text right-rounded" (click)="search(query.value)">SEARCH</button>
+        </div>
+        <div class="lcars-column">
+            <div class="lcars-row" *ngFor="let row of searchResults">
+                <div class="lcars-element lcars-text lcars-u-2-1">{{row.name}}</div>
+                <button class="lcars-element lcars-text button right-rounded" (click)="panTo(row.coordinates)">GO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="legendbox" class="lcars-row" [ngClass]="{'hidden':!showLegend}" #infobox>
+    <div class="lcars-column">
+        <div class="lcars-row">
+            <div class="lcars-element  lcars-text lcars-u-2-2">
+            </div> 
+        </div>
+        <div class="lcars-column">
+            <div class="lcars-row" *ngFor="let row of searchResults">
+                <div class="lcars-element lcars- lcars-text lcars-u-2-1">{{row.properties.name}}</div>
+                <button class="lcars-element lcars-text button right-rounded" (click)="panTo(row.geometry.coordinates)">GO</button>
+            </div>
+        </div>
+    </div>
 </div>

@@ -74,6 +74,13 @@ export class MapComponent implements OnInit, AfterContentInit{
 
   share_link: string;
 
+  showInfo = false;
+  showSearch = false;
+  searchResults = []
+  showLegend = false;
+
+  p = null;
+
   constructor(
     private ds: MnDockerService,
     private ar: ActivatedRoute,
@@ -86,6 +93,14 @@ export class MapComponent implements OnInit, AfterContentInit{
     private clipboard: Clipboard,
     private capture: NgxCaptureService
   ) { }
+
+  toggleInfo(){}
+
+  search(query){
+    this.ofm.search(this.tl, query).subscribe((data:any)=>{
+      this.searchResults=data.features;
+    })
+  }
 
 ngAfterContentInit(): void {
   this.ar.params.subscribe(params=>{
@@ -147,16 +162,38 @@ ngAfterContentInit(): void {
       //  'sky-atmosphere-sun': [0.0, 0.0],
       //  'sky-atmosphere-sun-intensity': 15
       //  }});
+
+      
+      for (let layer of this.ofm_meta.clickLayers){
+        this.map.on('click', layer, (e)=>{
+          console.log(e);
+          this.p = e.features[0].properties;
+          this.showInfo = true;
+        });
+        this.map.on('mouseenter', layer, () => {
+          this.map.getCanvas().style.cursor = 'pointer';
+          });
+           
+          // Change it back to a pointer when it leaves.
+          this.map.on('mouseleave', layer, () => {
+            this.map.getCanvas().style.cursor = '';
+          });
+      }
     });
  
  
     this.map.on('moveend', () => {
       this.changeUrl();
     });
+
   })
   
 
 
+}
+
+panTo(coords){
+  this.map.panTo(coords);
 }
   
   ngOnInit(): void {
@@ -176,6 +213,7 @@ ngAfterContentInit(): void {
     this.ofm.getMap(this.ar.snapshot.params.timeline).subscribe( (data: any) => {
       this.title = data.name;
       this.ofm_meta = data.metadata.ofm;
+      
     });
 
     const container = document.getElementById('visualization');

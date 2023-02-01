@@ -8,6 +8,9 @@ import { OhmService } from './ohm.service';
   providedIn: 'root'
 })
 export class OfmService extends OhmService{
+  search(name, query: any) {
+    return this.http.get('//static.fantasymaps.org/'+name+'/search?q='+query);
+  }
 
   constructor(
     http: HttpClient
