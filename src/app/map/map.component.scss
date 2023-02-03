@@ -8,14 +8,14 @@
     top: 36px;
     left: 133px;
     z-index: 200;
-    width: 276px
+    width: 450px;
 }
 #searchbox{
     position: absolute;
     top: 36px;
     left: 133px;
     z-index: 200;
-    width: 276px
+    width: 450px
     
 }
 #legendbox{
@@ -23,7 +23,15 @@
     top: 36px;
     left: 133px;
     z-index: 200;
-    width: 276px
+    width: 450px
+    
+}
+#toolbox{
+    position: absolute;
+    top: 36px;
+    left: 133px;
+    z-index: 200;
+    width: 450px
     
 }
 
@@ -107,4 +115,12 @@ mat-sidenav-container{
 
 .hidden{
     display: none;
+}
+
+.circle{
+    display: block;
+    border-radius: 100%;
+    width: 15px;
+    height: 15px;
+    margin: 1px;
 }

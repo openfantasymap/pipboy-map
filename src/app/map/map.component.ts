@@ -32,7 +32,7 @@ export class MapComponent implements OnInit, AfterContentInit{
   map;
   ts;
 
-  layers;
+  layers = {};
   startstopicons = {
     stop: 'play_arrow',
     play: 'stop'
@@ -78,6 +78,17 @@ export class MapComponent implements OnInit, AfterContentInit{
   showSearch = false;
   searchResults = []
   showLegend = false;
+  showTools = false;
+  showShare = false;
+
+  
+  hideAll(){
+    this.showInfo = false;
+    this.showSearch = false;
+    this.showLegend = false;
+    this.showTools = false;
+    this.showShare = false;
+  }
 
   p = null;
 
@@ -168,7 +179,7 @@ ngAfterContentInit(): void {
       
       for (let layer of this.ofm_meta.clickLayers){
         this.map.on('click', layer, (e)=>{
-          console.log(e);
+          this.hideAll();
           this.p = e.features[0].properties;
           this.showInfo = true;
         });
@@ -449,16 +460,24 @@ panTo(coords){
   }
 
   copy_url(){
-    this.capture.getImage(this.screen.elementRef.nativeElement, true).subscribe(img=>{
-      this.ohm.su(window.location.href, img).subscribe(data =>{
-        this.clipboard.copy(data);
-        this.share_link = data;
-        this.sharebar.open();
-        this._snackBar.open('Address ready to share','Close', {
-          duration: 1000
+    try{
+      this.capture.getImage(this.screen, true).subscribe(img=>{
+        this.hideAll();
+        this.ohm.su(window.location.href, img).subscribe(data =>{
+          this.clipboard.copy(data);
+          this.share_link = data;
+          this.showShare=true;
+          this._snackBar.open('Address ready to share','Close', {
+            duration: 1000
+          });
         });
+      })
+    } catch(ex) {
+      this.clipboard.copy(window.location.href);
+      this._snackBar.open('Address ready to share','Close', {
+        duration: 1000
       });
-    })
+    }
   }
 
   goTimeSpace(time: number, space: any): void  {
@@ -470,6 +489,17 @@ panTo(coords){
       this.l.go(`/${timeline}/${time}/${zoom}/${space[0]}/${space[1]}/` + (this.rels ? '/' + this.rels : ''));
       window.location.reload();
     }, 100);
+  }
+
+  toggleLayer(name){
+    if(Object.keys(this.layers).indexOf(name) >= 0){
+      this.layers[name] = !this.layers[name];
+      for(let l of this.ofm_meta.togglable.filter(x=>x.name === name)[0].layers){
+        this.map.setLayoutProperty(l, 'visibility', this.layers[name]?'visible':'none');
+      }
+    }
+    else
+    this.layers[name] = true;
   }
 
   showRels() {

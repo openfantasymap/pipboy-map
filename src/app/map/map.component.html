@@ -7,9 +7,10 @@
     <div class="lcars-elbow left-bottom lcars-golden-tanoi-bg"></div>
 
     <div class="lcars-bar horizontal lcars-golden-tanoi-bg">
-        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-color':showSearch}"><a (click)="showInfo=false; showLegend=false; showSearch=!showSearch;">SEARCH</a></div>
-        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-color':showInfo}" (click)=" showSearch=false; showLegend=false; showInfo = !showInfo"><a >INFO</a></div>
-        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-color':showLegend}" (click)=" showSearch=false; showInfo=false; showLegend = !showLegend"><a >LEGEND</a></div>
+        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-bg':showSearch}"><a (click)="showInfo=false; showTools=false; showLegend=false; showSearch=!showSearch;">SEARCH</a></div>
+        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-bg':showInfo}" (click)=" showSearch=false; showTools=false; showLegend=false; showInfo = !showInfo"><a >INFO</a></div>
+        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-bg':showLegend}" (click)=" showSearch=false; showTools=false; showInfo=false; showLegend = !showLegend"><a >LEGEND</a></div>
+        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-bg':showTools}" (click)=" showSearch=false; showLegend=false; showInfo=false; showTools = !showTools"><a >TOOLS</a></div>
     </div>
     <!-- BAR WITH TITLE -->
     <div class="lcars-bar horizontal lcars-golden-tanoi-bg">
@@ -89,7 +90,7 @@
     </div>
     <div class="lcars-column lcars-u-15">
         <div class="lcars-row">
-            <div id="ohm_map" class="lcars-u-15"></div>
+            <div id="ohm_map" class="lcars-u-15" #screen></div>
             <div id="ofm_attribution" [innerHTML]="ofm_meta?.copyright"></div>
         </div>
         
@@ -104,10 +105,10 @@
 </div>
 
 <div id="infobox" class="lcars-row" [ngClass]="{'hidden':!showInfo}" #infobox *ngIf="p">
-    <div class="lcars-bracket left hollow"></div>
+    <div class="lcars-bracket left lcars-danub-border hollow"></div>
     <div class="lcars-column">
         <div class="lcars-row">
-            <div class="lcars-element lcars-text lcars-u-2-1 right-rounded">{{p.name}}</div>
+            <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1 right-rounded">{{p.name}}</div>
         </div>
         <div class="lcars-row" *ngIf="p.st_wiki">
             <a class="lcars-element lcars-text lcars-u-2-1 lcars-black-color right-rounded button" target="_blank" href="{{p.st_wiki}}">MEMORY ALPHA</a>
@@ -120,9 +121,9 @@
 
 
 <div id="searchbox" class="lcars-row" [ngClass]="{'hidden':!showSearch}" #infobox>
-    <div class="lcars-column">
+    <div class="lcars-bracket left hollow"></div>
         <div class="lcars-row">
-            <div class="lcars-element left-rounded  lcars-text lcars-u-2-1">
+            <div class="lcars-element  lcars-text lcars-u-2-1">
                 <input type="text" placeholder="Search" #query>
             </div> 
             <button class="lcars-element button lcars-text right-rounded" (click)="search(query.value)">SEARCH</button>
@@ -132,17 +133,56 @@
                 <div class="lcars-element lcars-text lcars-u-2-1">{{row.name}}</div>
                 <button class="lcars-element lcars-text button right-rounded" (click)="panTo(row.coordinates)">GO</button>
             </div>
-        </div>
     </div>
 </div>
 
 
 <div id="legendbox" class="lcars-row" [ngClass]="{'hidden':!showLegend}" #infobox>
-    <div class="lcars-bracket left hollow"></div>
+    <div class="lcars-bracket left hollow lcars-danub-border "></div>
     <div class="lcars-column">
         <div class="lcars-row">
-            <div class="lcars-element lcars-text lcars-u-2-1">Legend</div>
+            <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">legend</div>
+        </div>
+        <div class="lcars-row" *ngFor="let t of ofm_meta.togglable">
+            <div (click)="toggleLayer(t.name)" [ngClass]="{'lcars-periwinkle-bg':!layers[t.name], 'lcars-u-1-1':t.legend, 'lcars-u-2-1':!t.legend}" class="lcars-element button lcars-text ">{{t.label}}</div>
+            <div *ngIf="t.legend" class="lcars-element lcars-white-bg lcars-text lcars-u-1-{{t.height}}">
+                <div class="lcars-column">
+                    <div class="lcars-row" *ngFor="let r of t.legend">
+                        {{r[0]}} : <div class="circle" [ngStyle]="{'background-color':r[1]}"> </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
+    </div>
+</div>
+
+
+<div id="toolbox" class="lcars-row" [ngClass]="{'hidden':!showTools}" #infobox>
+    <div class="lcars-bracket lcars-danub-border left hollow"></div>
+    <div class="lcars-column">
+            <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">TOOLS</div>
+            <div class="lcars-row">
+                <div class="lcars-element lcars-text button lcars-u-1-3">DISTANCE</div>
+                <div class="lcars-column">
+                <div class="lcars-element lcars-text lcars-u-1-1"></div>
+                <div class="lcars-element lcars-text lcars-u-1-2"></div>
+                </div>
+            </div>
+    </div>
+</div>
+
+
+<div id="sharebox" class="lcars-row" [ngClass]="{'hidden':!showShare}" #infobox>
+    <div class="lcars-bracket lcars-danub-border left hollow"></div>
+    <div class="lcars-column">
+            <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">TOOLS</div>
+            <div class="lcars-row">
+                <div class="lcars-element lcars-text button lcars-u-1-3">DISTANCE</div>
+                <div class="lcars-column">
+                <div class="lcars-element lcars-text lcars-u-1-1"></div>
+                <div class="lcars-element lcars-text lcars-u-1-2"></div>
+                </div>
+            </div>
     </div>
 </div>
