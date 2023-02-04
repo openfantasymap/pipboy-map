@@ -148,7 +148,7 @@
             <div *ngIf="t.legend" class="lcars-element lcars-white-bg lcars-text lcars-u-1-{{t.height}}">
                 <div class="lcars-column">
                     <div class="lcars-row" *ngFor="let r of t.legend">
-                        {{r[0]}} : <div class="circle" [ngStyle]="{'background-color':r[1]}"> </div>
+                        <div class="label">{{r[0]}}</div> : <div class="circle" [ngStyle]="{'background-color':r[1]}"> </div>
                     </div>
                 </div>
             </div>

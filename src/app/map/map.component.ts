@@ -226,6 +226,10 @@ panTo(coords){
     this.ofm.getMap(this.ar.snapshot.params.timeline).subscribe( (data: any) => {
       this.title = data.name;
       this.ofm_meta = data.metadata.ofm;
+
+      for(let l of this.ofm_meta.togglable){
+        this.layers[l.name]=true;
+      }
       
     });
 
