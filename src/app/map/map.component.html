@@ -108,7 +108,8 @@
     <div class="lcars-bracket left lcars-danub-border hollow"></div>
     <div class="lcars-column">
         <div class="lcars-row">
-            <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1 right-rounded">{{p.name}}</div>
+            <div class="lcars-element lcars-danub-bg lcars-text lcars-u-1-1">{{p.name}}</div>
+            <div (click)="warpTo(atDate,tl+'-'+p.name.toLowerCase())" class="lcars-element button lcars-text lcars-u-1-1 right-rounded">GO</div>
         </div>
         <div class="lcars-row" *ngIf="p.st_wiki">
             <a class="lcars-element lcars-text lcars-u-2-1 lcars-black-color right-rounded button" target="_blank" href="{{p.st_wiki}}">MEMORY ALPHA</a>
