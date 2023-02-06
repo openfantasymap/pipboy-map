@@ -275,7 +275,7 @@ panTo(coords){
         const s = this.map.getSource(tm.source);
         console.log(s);
         if (s.type === 'geojson'){
-          this.http.get(s._data.replace('{atDate}', this.atDate)).subscribe(data =>{
+          this.http.get(s._options.data.replace('{atDate}', this.atDate)).subscribe(data =>{
             try { s.setData(data); } catch (ex) { console.log(ex); }
           })
         }
