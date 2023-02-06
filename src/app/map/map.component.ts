@@ -272,7 +272,13 @@ panTo(coords){
     this.l.go(`/${this.tl}/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}` + (this.rels ? '/' + this.rels : ''));
     if (ev) {
       for (let tm of this.ofm_meta.timed){
-        try { this.map.getSource(tm).setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
+        const s = this.map.getSource(tm);
+        console.log(s);
+        if (s.type === 'geojson'){
+          this.http.get(s._data.replace('{atDate}', this.atDate)).subscribe(data =>{
+            try { s.setData(data); } catch (ex) { console.log(ex); }
+          })
+        }
       }
     }
     this.events = this.ohm.getEvents(this.tl, this.atDate, 10);
