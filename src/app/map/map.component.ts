@@ -272,7 +272,7 @@ panTo(coords){
     this.l.go(`/${this.tl}/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}` + (this.rels ? '/' + this.rels : ''));
     if (ev) {
       for (let tm of this.ofm_meta.timed){
-        const s = this.map.getSource(tm);
+        const s = this.map.getSource(tm.source);
         console.log(s);
         if (s.type === 'geojson'){
           this.http.get(s._data.replace('{atDate}', this.atDate)).subscribe(data =>{
