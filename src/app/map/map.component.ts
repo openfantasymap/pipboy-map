@@ -271,10 +271,9 @@ panTo(coords){
     const c = this.map.getCenter();
     this.l.go(`/${this.tl}/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}` + (this.rels ? '/' + this.rels : ''));
     if (ev) {
-      try { this.map.getSource('ohm').setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
-      try { this.map.getSource('ohm-boundaries')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
-      //try { this.map.getSource('ohm-ephemeral')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
-      try { this.map.getSource('ohm-transportation')?.setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
+      for (let tm of this.ofm_meta.timed){
+        try { this.map.getSource(tm).setSourceProperty(() => { }); } catch (ex) { console.log(ex); }
+      }
     }
     this.events = this.ohm.getEvents(this.tl, this.atDate, 10);
   }
