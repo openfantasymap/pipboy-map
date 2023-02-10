@@ -131,8 +131,8 @@
                 <button class="lcars-element button lcars-text right-rounded" (click)="search(query.value)">SEARCH</button>
             </div>
             <div class="lcars-column">
-                <div class="lcars-row" *ngFor="let row of searchResults?.features">
-                    <div class="lcars-element lcars-text lcars-u-2-1">{{row.porperties.name}}</div>
+                <div class="lcars-row" *ngFor="let row of searchResults">
+                    <div class="lcars-element lcars-text lcars-u-2-1">{{row.properties.name}}</div>
                     <button class="lcars-element lcars-text button right-rounded" (click)="panTo(row.geometry.coordinates)">GO</button>
                 </div>
             </div>
