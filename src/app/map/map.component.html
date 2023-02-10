@@ -169,7 +169,7 @@
                 <button (click)="clearDistance()" class="lcars-element lcars-text lcars-u-1-1">CLEAR</button>
             </div>
             <div class="lcars-row">
-                <button (click)="startDistance()" class="lcars-element lcars-text button lcars-u-1-4">DISTANCE</button>
+                <button (click)="startDistance()" [ngClass]="{'lcars-neon-carrot-bg':measuring, 'lcars-golden-tanoi-bg':!measuring}" class="lcars-element lcars-text button lcars-u-1-4">DISTANCE</button>
                 <div class="lcars-column">
                 <div class="lcars-element lcars-text lcars-u-1-1">{{measured}}</div>
                 <div class="lcars-element lcars-text lcars-u-1-3">

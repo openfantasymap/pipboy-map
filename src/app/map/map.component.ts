@@ -137,6 +137,20 @@ export class MapComponent implements OnInit, AfterContentInit {
   measured = "";
   times = [];
 
+
+  
+  geojson = {
+    'type': 'FeatureCollection',
+    'features': []
+  };
+  linestring = {
+    'type': 'Feature',
+    'geometry': {
+    'type': 'LineString',
+    'coordinates': []
+    }
+    };
+
   constructor(
     private ds: MnDockerService,
     private ar: ActivatedRoute,
@@ -237,6 +251,40 @@ export class MapComponent implements OnInit, AfterContentInit {
             this.map.getCanvas().style.cursor = '';
           });
         }
+
+        
+        this.map.addSource('geojson', {
+          'type': 'geojson',
+          'data': this.geojson
+        });
+
+        // Add styles to the map
+        this.map.addLayer({
+          id: 'measure-points',
+          type: 'circle',
+          source: 'geojson',
+          paint: {
+            'circle-radius': 4,
+            'circle-color': 'rgba(245,245,245,0.5)'
+          },
+          filter: ['in', '$type', 'Point']
+        });
+        this.map.addLayer({
+          id: 'measure-lines',
+          type: 'line',
+          source: 'geojson',
+          layout: {
+            'line-cap': 'round',
+            'line-join': 'round'
+          },
+          paint: {
+            'line-color': 'rgba(245,245,245,0.5)',
+            'line-width': 2.5,
+            'line-dasharray': [2,2]
+          },
+          filter: ['in', '$type', 'LineString']
+        });
+
       });
 
 
@@ -614,54 +662,27 @@ export class MapComponent implements OnInit, AfterContentInit {
 
   clearDistance() {
     this.measuring = false;
-    this.map.removeSource('geojson');
-  }
-
-  startDistance() {
-    this.measuring = !this.measuring;
-    var geojson = {
+    this.measured = '';
+    this.times = [];
+    this.geojson = {
       'type': 'FeatureCollection',
       'features': []
     };
-    var linestring = {
+    this.linestring = {
       'type': 'Feature',
       'geometry': {
       'type': 'LineString',
       'coordinates': []
       }
-      };
-    this.map.addSource('geojson', {
-      'type': 'geojson',
-      'data': geojson
-    });
+    };
+      
+    this.map.getSource('geojson').setData(this.geojson);
 
-    // Add styles to the map
-    this.map.addLayer({
-      id: 'measure-points',
-      type: 'circle',
-      source: 'geojson',
-      paint: {
-        'circle-radius': 5,
-        'circle-color': '#000'
-      },
-      filter: ['in', '$type', 'Point']
-    });
-    this.map.addLayer({
-      id: 'measure-lines',
-      type: 'line',
-      source: 'geojson',
-      layout: {
-        'line-cap': 'round',
-        'line-join': 'round'
-      },
-      paint: {
-        'line-color': 'rgba(245,245,245,0.5)',
-        'line-width': 2.5,
-        'line-dasharray': [2,2]
-      },
-      filter: ['in', '$type', 'LineString']
-    });
+  }
 
+  startDistance() {
+    this.measuring = !this.measuring;
+    
 
   //  this.map.on('mousemove', (e) => {
   //    var features = this.map.queryRenderedFeatures(e.point, {
@@ -674,18 +695,19 @@ export class MapComponent implements OnInit, AfterContentInit {
   //  });
 
     this.map.on('click', (e)=>{
+      if(this.measuring){
       var features = this.map.queryRenderedFeatures(e.point, {
         layers: ['measure-points']
       });
 
       // Remove the linestring from the group
       // So we can redraw it based on the points collection
-      if (geojson.features.length > 1) geojson.features.pop();
+      if (this.geojson.features.length > 1) this.geojson.features.pop();
 
       // If a feature was clicked, remove it from the map
       if (features.length) {
         var id = features[0].properties.id;
-        geojson.features = geojson.features.filter(function (point) {
+        this.geojson.features = this.geojson.features.filter((point) => {
           return point.properties.id !== id;
         });
       } else {
@@ -700,19 +722,19 @@ export class MapComponent implements OnInit, AfterContentInit {
           }
         };
 
-        geojson.features.push(point);
+        this.geojson.features.push(point);
       }
 
-      if (geojson.features.length > 1) {
-        linestring.geometry.coordinates = geojson.features.map(
+      if (this.geojson.features.length > 1) {
+        this.linestring.geometry.coordinates = this.geojson.features.map(
           function (point) {
             return point.geometry.coordinates;
           }
         );
 
-        geojson.features.push(linestring);
+        this.geojson.features.push(this.linestring);
 
-        const ll = turf.length(linestring)*this.ofm_meta.distance_multiplier;
+        const ll = turf.length(this.linestring)*this.ofm_meta.distance_multiplier;
         // Populate the distanceContainer with total distance
         const value = '' +
           (ll).toFixed(1) + ' ' +
@@ -747,7 +769,8 @@ export class MapComponent implements OnInit, AfterContentInit {
         }
       }
 
-      this.map.getSource('geojson').setData(geojson);
+      this.map.getSource('geojson').setData(this.geojson);
+    }
     });
   }
 }
