@@ -1,34 +1,74 @@
-import { OhmService } from './../ohm.service';
-import { OfmService } from './../ofm.service';
-import { DateComponent } from './../date/date.component';
-import { DecimaldatePipe } from './../decimaldate.pipe';
-import { Component, OnInit, Input, isDevMode, AfterContentInit, ViewChild } from '@angular/core';
+import {
+  OhmService
+} from './../ohm.service';
+import {
+  OfmService
+} from './../ofm.service';
+import {
+  DateComponent
+} from './../date/date.component';
+import {
+  DecimaldatePipe
+} from './../decimaldate.pipe';
+import {
+  Component,
+  OnInit,
+  Input,
+  isDevMode,
+  AfterContentInit,
+  ViewChild
+} from '@angular/core';
 
-import { MnDockerService } from '@modalnodes/mn-docker';
-import { HttpClient } from '@angular/common/http';
+import {
+  MnDockerService
+} from '@modalnodes/mn-docker';
+import {
+  HttpClient
+} from '@angular/common/http';
 
 import env from '../../assets/env.json';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
-import { NicedatePipe } from '../nicedate.pipe';
-import { timeInterval } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgxCaptureService } from 'ngx-capture';
-import { MatSidenav } from '@angular/material/sidenav';
-import { Clipboard } from '@angular/cdk/clipboard';
+import {
+  ActivatedRoute
+} from '@angular/router';
+import {
+  Location
+} from '@angular/common';
+import {
+  NicedatePipe
+} from '../nicedate.pipe';
+import {
+  timeInterval
+} from 'rxjs/operators';
+import {
+  MatDialog
+} from '@angular/material/dialog';
+import {
+  Observable
+} from 'rxjs';
+import {
+  MatSnackBar
+} from '@angular/material/snack-bar';
+import {
+  NgxCaptureService
+} from 'ngx-capture';
+import {
+  MatSidenav
+} from '@angular/material/sidenav';
+import {
+  Clipboard
+} from '@angular/cdk/clipboard';
 
 //declare const mapboxgl;
 declare const maplibregl;
 declare const vis;
+declare const turf;
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit, AfterContentInit{
+export class MapComponent implements OnInit, AfterContentInit {
   map;
   ts;
 
@@ -62,7 +102,7 @@ export class MapComponent implements OnInit, AfterContentInit{
 
   speed = 2000;
 
-  events: Observable<any[]>;
+  events: Observable < any[] > ;
 
   infoData: any;
 
@@ -81,8 +121,8 @@ export class MapComponent implements OnInit, AfterContentInit{
   showTools = false;
   showShare = false;
 
-  
-  hideAll(){
+
+  hideAll() {
     this.showInfo = false;
     this.showSearch = false;
     this.showLegend = false;
@@ -91,6 +131,11 @@ export class MapComponent implements OnInit, AfterContentInit{
   }
 
   p = null;
+
+  measuring = false;
+
+  measured = "";
+  times = [];
 
   constructor(
     private ds: MnDockerService,
@@ -103,110 +148,112 @@ export class MapComponent implements OnInit, AfterContentInit{
     private _snackBar: MatSnackBar,
     private clipboard: Clipboard,
     private capture: NgxCaptureService
-  ) { }
+  ) {}
 
-  toggleInfo(){}
+  toggleInfo() {}
 
-  search(query){
-    this.ofm.search(this.tl, query).subscribe((data:any)=>{
-      this.searchResults=data.features;
+  search(query) {
+    this.ofm.search(this.tl, query).subscribe((data: any) => {
+      this.searchResults = data.features;
     })
   }
 
-ngAfterContentInit(): void {
-  this.ar.params.subscribe(params=>{
+  ngAfterContentInit(): void {
+    this.ar.params.subscribe(params => {
 
-    this.map = new maplibregl.Map({
-      container: 'ohm_map',
-      style: 'https://static.fantasymaps.org/' + params.timeline + '/map.json', // stylesheet location
-      center: this.start.center, // starting position [lng, lat]
-      zoom: this.start.zoom, // starting zoom
-      projection: 'equirectangular',
-      minPitch: 0,
-      maxPitch: 85,
-      attributionControl:false,
-      preserveDrawingBuffer: true,
-      transformRequest: (url, resourceType) => {
-        let nurl = url;
-        if (isDevMode()) {
-          nurl = nurl.replace('https://tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-          nurl = nurl.replace('https://a.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-          nurl = nurl.replace('https://b.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
-          nurl = nurl.replace('https://c.tiles.fantasymaps.org/'+this.tl, this.ts+this.tl);
+      this.map = new maplibregl.Map({
+        container: 'ohm_map',
+        style: 'https://static.fantasymaps.org/' + params.timeline + '/map.json', // stylesheet location
+        center: this.start.center, // starting position [lng, lat]
+        zoom: this.start.zoom, // starting zoom
+        projection: 'equirectangular',
+        minPitch: 0,
+        maxPitch: 85,
+        attributionControl: false,
+        preserveDrawingBuffer: true,
+        transformRequest: (url, resourceType) => {
+          let nurl = url;
+          if (isDevMode()) {
+            nurl = nurl.replace('https://tiles.fantasymaps.org/' + this.tl, this.ts + this.tl);
+            nurl = nurl.replace('https://a.tiles.fantasymaps.org/' + this.tl, this.ts + this.tl);
+            nurl = nurl.replace('https://b.tiles.fantasymaps.org/' + this.tl, this.ts + this.tl);
+            nurl = nurl.replace('https://c.tiles.fantasymaps.org/' + this.tl, this.ts + this.tl);
+          }
+          return {
+            url: nurl.replace('{atDate}', this.atDate.toString()).replace('%7BatDate%7D', this.atDate.toString())
+          };
         }
-        return {
-          url: nurl.replace('{atDate}', this.atDate.toString()).replace('%7BatDate%7D', this.atDate.toString())
-        };
-      }
- 
-    });
- 
-    console.log(this.map);
- 
-    this.map.on('load', () => {
-      this.showRels();
- 
-      
-     this.map.on('zoomend', () =>{
-       if (this.map.getZoom()  == 22 && this.ofm_meta.relatedLayers){
-         const features = this.map.queryRenderedFeatures({ layers: this.ofm_meta?.relatedLayers });
-         if (features.length == 1){
-           const move_to = this.ar.snapshot.params.timeline + "-" + features[0].properties[this.ofm_meta.relatedField].toLowerCase();
-           this.warpTo(this.atDate, move_to);
-         } 
-       } else if(this.map.getZoom() < 1 && this.ofm_meta.parentMap){
-        this.warpTo(this.atDate, this.ofm_meta.parentMap, 20, this.ofm_meta.parentLocation);
-       }
-     })
- 
-    });
- 
- 
-    this.map.on('load', () => {
-      this.showOverlays();
-      //this.map.setTerrain({source:'dem', 'exaggeration': 1.2})
-      //this.map.addLauer({
-      //  'id': 'sky',
-      //  'type': 'sky',
-      //  'paint': {
-      //  'sky-type': 'atmosphere',
-      //  'sky-atmosphere-sun': [0.0, 0.0],
-      //  'sky-atmosphere-sun-intensity': 15
-      //  }});
 
-      
-      for (let layer of this.ofm_meta.clickLayers){
-        this.map.on('click', layer, (e)=>{
-          this.hideAll();
-          this.p = e.features[0].properties;
-          this.showInfo = true;
-        });
-        this.map.on('mouseenter', layer, () => {
-          this.map.getCanvas().style.cursor = 'pointer';
+      });
+
+      console.log(this.map);
+
+      this.map.on('load', () => {
+        this.showRels();
+
+
+        this.map.on('zoomend', () => {
+          if (this.map.getZoom() == 22 && this.ofm_meta.relatedLayers) {
+            const features = this.map.queryRenderedFeatures({
+              layers: this.ofm_meta?.relatedLayers
+            });
+            if (features.length == 1) {
+              const move_to = this.ar.snapshot.params.timeline + "-" + features[0].properties[this.ofm_meta.relatedField].toLowerCase();
+              this.warpTo(this.atDate, move_to);
+            }
+          } else if (this.map.getZoom() < 1 && this.ofm_meta.parentMap) {
+            this.warpTo(this.atDate, this.ofm_meta.parentMap, 20, this.ofm_meta.parentLocation);
+          }
+        })
+
+      });
+
+
+      this.map.on('load', () => {
+        this.showOverlays();
+        //this.map.setTerrain({source:'dem', 'exaggeration': 1.2})
+        //this.map.addLauer({
+        //  'id': 'sky',
+        //  'type': 'sky',
+        //  'paint': {
+        //  'sky-type': 'atmosphere',
+        //  'sky-atmosphere-sun': [0.0, 0.0],
+        //  'sky-atmosphere-sun-intensity': 15
+        //  }});
+
+
+        for (let layer of this.ofm_meta.clickLayers) {
+          this.map.on('click', layer, (e) => {
+            this.hideAll();
+            this.p = e.features[0].properties;
+            this.showInfo = true;
           });
-           
+          this.map.on('mouseenter', layer, () => {
+            this.map.getCanvas().style.cursor = this.measuring ? 'crosshair' : 'pointer';
+          });
+
           // Change it back to a pointer when it leaves.
           this.map.on('mouseleave', layer, () => {
             this.map.getCanvas().style.cursor = '';
           });
-      }
-    });
- 
- 
-    this.map.on('moveend', () => {
-      this.changeUrl();
-    });
-
-  })
-  
+        }
+      });
 
 
-}
+      this.map.on('moveend', () => {
+        this.changeUrl();
+      });
 
-panTo(coords){
-  this.map.panTo(coords);
-}
-  
+    })
+
+
+
+  }
+
+  panTo(coords) {
+    this.map.panTo(coords);
+  }
+
   ngOnInit(): void {
     this.http.get('assets/info.json').subscribe(data => {
       this.infoData = data;
@@ -220,15 +267,15 @@ panTo(coords){
     this.rels = this.ar.snapshot.params.rels;
     this.style = this.style;
 
-  
-    this.ofm.getMap(this.ar.snapshot.params.timeline).subscribe( (data: any) => {
+
+    this.ofm.getMap(this.ar.snapshot.params.timeline).subscribe((data: any) => {
       this.title = data.name;
       this.ofm_meta = data.metadata.ofm;
 
-      for(let l of this.ofm_meta.togglable){
-        this.layers[l.name]=true;
+      for (let l of this.ofm_meta.togglable) {
+        this.layers[l.name] = true;
       }
-      
+
     });
 
     const container = document.getElementById('visualization');
@@ -245,7 +292,7 @@ panTo(coords){
       }
     });
 
-      // Create a Timeline
+    // Create a Timeline
     this.timeline = new vis.Timeline(container, items, {
       showCurrentTime: false
     });
@@ -262,21 +309,24 @@ panTo(coords){
       this.changeUrl(this.atDate);
     });
 
-    this.timeline.on('rangechanged', (properties) => {
-    });
+    this.timeline.on('rangechanged', (properties) => {});
 
   }
 
-  changeUrl(ev = null): void{
+  changeUrl(ev = null): void {
     const c = this.map.getCenter();
     this.l.go(`/${this.tl}/${this.atDate}/${this.map.getZoom()}/${c.lat}/${c.lng}` + (this.rels ? '/' + this.rels : ''));
     if (ev) {
-      for (let tm of this.ofm_meta.timed){
+      for (let tm of this.ofm_meta.timed) {
         const s = this.map.getSource(tm.source);
         console.log(s);
-        if (s.type === 'geojson'){
-          this.http.get(s._options.data.replace('{atDate}', this.atDate)).subscribe(data =>{
-            try { s.setData(data); } catch (ex) { console.log(ex); }
+        if (s.type === 'geojson') {
+          this.http.get(s._options.data.replace('{atDate}', this.atDate)).subscribe(data => {
+            try {
+              s.setData(data);
+            } catch (ex) {
+              console.log(ex);
+            }
           })
         }
       }
@@ -284,12 +334,12 @@ panTo(coords){
     this.events = this.ohm.getEvents(this.tl, this.atDate, 10);
   }
 
-  changeStyle(style): void  {
+  changeStyle(style): void {
     this.style = style;
     this.map.setStyle(style);
   }
 
-  toDateFloat(date: Date): number{
+  toDateFloat(date: Date): number {
     let ret = date.getFullYear();
     ret += (date.getMonth() + 1) / 12;
     ret += (date.getDate()) * (1 / 12 / 31);
@@ -299,7 +349,7 @@ panTo(coords){
     return ret;
   }
 
-  toFloatDate(date: number): Date{
+  toFloatDate(date: number): Date {
     const dd = new DecimaldatePipe();
     return dd.transform(date);
   }
@@ -320,7 +370,9 @@ panTo(coords){
   }
 
   selectDate() {
-    const ref = this.md.open(DateComponent, { data: this.atDate });
+    const ref = this.md.open(DateComponent, {
+      data: this.atDate
+    });
     ref.afterClosed().subscribe(date => {
       this.atDate = date;
     });
@@ -466,47 +518,46 @@ panTo(coords){
     */
   }
 
-  copy_url(){
-    try{
-      this.capture.getImage(this.screen, true).subscribe(img=>{
+  copy_url() {
+    try {
+      this.capture.getImage(this.screen, true).subscribe(img => {
         this.hideAll();
-        this.ohm.su(window.location.href, img).subscribe(data =>{
+        this.ohm.su(window.location.href, img).subscribe(data => {
           this.clipboard.copy(data);
           this.share_link = data;
-          this.showShare=true;
-          this._snackBar.open('Address ready to share','Close', {
+          this.showShare = true;
+          this._snackBar.open('Address ready to share', 'Close', {
             duration: 1000
           });
         });
       })
-    } catch(ex) {
+    } catch (ex) {
       this.clipboard.copy(window.location.href);
-      this._snackBar.open('Address ready to share','Close', {
+      this._snackBar.open('Address ready to share', 'Close', {
         duration: 1000
       });
     }
   }
 
-  goTimeSpace(time: number, space: any): void  {
+  goTimeSpace(time: number, space: any): void {
     this.l.go(`/${this.tl}/${time}/${this.map.getZoom()}/${space.coordinates[0]}/${space.coordinates[1]}` + (this.rels ? '/' + this.rels : ''));
   }
 
-  warpTo(time: number, timeline: string, zoom: number = 2, space: any = [0,0]): void  {
-    setTimeout(()=>{
+  warpTo(time: number, timeline: string, zoom: number = 2, space: any = [0, 0]): void {
+    setTimeout(() => {
       this.l.go(`/${timeline}/${time}/${zoom}/${space[0]}/${space[1]}/` + (this.rels ? '/' + this.rels : ''));
       window.location.reload();
     }, 100);
   }
 
-  toggleLayer(name){
-    if(Object.keys(this.layers).indexOf(name) >= 0){
+  toggleLayer(name) {
+    if (Object.keys(this.layers).indexOf(name) >= 0) {
       this.layers[name] = !this.layers[name];
-      for(let l of this.ofm_meta.togglable.filter(x=>x.name === name)[0].layers){
-        this.map.setLayoutProperty(l, 'visibility', this.layers[name]?'visible':'none');
+      for (let l of this.ofm_meta.togglable.filter(x => x.name === name)[0].layers) {
+        this.map.setLayoutProperty(l, 'visibility', this.layers[name] ? 'visible' : 'none');
       }
-    }
-    else
-    this.layers[name] = true;
+    } else
+      this.layers[name] = true;
   }
 
   showRels() {
@@ -559,5 +610,144 @@ panTo(coords){
       });
     }
 
+  }
+
+  clearDistance() {
+    this.measuring = false;
+    this.map.removeSource('geojson');
+  }
+
+  startDistance() {
+    this.measuring = !this.measuring;
+    var geojson = {
+      'type': 'FeatureCollection',
+      'features': []
+    };
+    var linestring = {
+      'type': 'Feature',
+      'geometry': {
+      'type': 'LineString',
+      'coordinates': []
+      }
+      };
+    this.map.addSource('geojson', {
+      'type': 'geojson',
+      'data': geojson
+    });
+
+    // Add styles to the map
+    this.map.addLayer({
+      id: 'measure-points',
+      type: 'circle',
+      source: 'geojson',
+      paint: {
+        'circle-radius': 5,
+        'circle-color': '#000'
+      },
+      filter: ['in', '$type', 'Point']
+    });
+    this.map.addLayer({
+      id: 'measure-lines',
+      type: 'line',
+      source: 'geojson',
+      layout: {
+        'line-cap': 'round',
+        'line-join': 'round'
+      },
+      paint: {
+        'line-color': 'rgba(245,245,245,0.5)',
+        'line-width': 2.5,
+        'line-dasharray': [2,2]
+      },
+      filter: ['in', '$type', 'LineString']
+    });
+
+
+  //  this.map.on('mousemove', (e) => {
+  //    var features = this.map.queryRenderedFeatures(e.point, {
+  //      layers: ['measure-points']
+  //    });
+  //    // UI indicator for clicking/hovering a point on the map
+  //    this.map.getCanvas().style.cursor = features.length ?
+  //      'pointer' :
+  //      'crosshair';
+  //  });
+
+    this.map.on('click', (e)=>{
+      var features = this.map.queryRenderedFeatures(e.point, {
+        layers: ['measure-points']
+      });
+
+      // Remove the linestring from the group
+      // So we can redraw it based on the points collection
+      if (geojson.features.length > 1) geojson.features.pop();
+
+      // If a feature was clicked, remove it from the map
+      if (features.length) {
+        var id = features[0].properties.id;
+        geojson.features = geojson.features.filter(function (point) {
+          return point.properties.id !== id;
+        });
+      } else {
+        var point = {
+          'type': 'Feature',
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [e.lngLat.lng, e.lngLat.lat]
+          },
+          'properties': {
+            'id': String(new Date().getTime())
+          }
+        };
+
+        geojson.features.push(point);
+      }
+
+      if (geojson.features.length > 1) {
+        linestring.geometry.coordinates = geojson.features.map(
+          function (point) {
+            return point.geometry.coordinates;
+          }
+        );
+
+        geojson.features.push(linestring);
+
+        const ll = turf.length(linestring)*this.ofm_meta.distance_multiplier;
+        // Populate the distanceContainer with total distance
+        const value = '' +
+          (ll).toFixed(1) + ' ' +
+          this.ofm_meta.distance_unit;
+        this.measured = value;
+        this.times = [];
+        const units = {
+          "s":60, 
+          "min": 60, 
+          "h": 24, 
+          "d": 30, 
+          "mo": 12, 
+          "y": 1
+        };
+        for(let t of this.ofm_meta.speeds){
+          let ms = ll*9.461e+15/(299792458*Math.pow(t.multiplier,10/3));
+          let cuu = "s";
+          for(let u of Object.keys(units)){
+            ms = ms/units[u];
+            if (ms >= 1){
+              cuu = u;
+            } else {
+              ms = ms*units[u];
+              break;
+            }
+          }
+          this.times.push({
+            v: t.multiplier == 1?ll.toFixed(2):(ms).toFixed(2),
+            u: cuu,
+            l: t.label,
+          })
+        }
+      }
+
+      this.map.getSource('geojson').setData(geojson);
+    });
   }
 }

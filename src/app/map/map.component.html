@@ -162,12 +162,21 @@
 <div id="toolbox" class="lcars-row" [ngClass]="{'hidden':!showTools}" #infobox>
     <div class="lcars-bracket lcars-danub-border left hollow"></div>
     <div class="lcars-column">
-            <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">TOOLS</div>
             <div class="lcars-row">
-                <div class="lcars-element lcars-text button lcars-u-1-3">DISTANCE</div>
+                <div class="lcars-element lcars-danub-bg lcars-text lcars-u-1-1">TOOLS</div>
+                <button (click)="clearDistance()" class="lcars-element lcars-text lcars-u-1-1">CLEAR</button>
+            </div>
+            <div class="lcars-row">
+                <button (click)="startDistance()" class="lcars-element lcars-text button lcars-u-1-4">DISTANCE</button>
                 <div class="lcars-column">
-                <div class="lcars-element lcars-text lcars-u-1-1"></div>
-                <div class="lcars-element lcars-text lcars-u-1-2"></div>
+                <div class="lcars-element lcars-text lcars-u-1-1">{{measured}}</div>
+                <div class="lcars-element lcars-text lcars-u-1-3">
+                    <div class="lcars-column">
+                        <div class="lcars-row" *ngFor="let r of times">
+                            <div class="label">{{r.l}}</div> : <span>{{r.v}}</span><span>{{r.u}}</span>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
     </div>
