@@ -341,9 +341,14 @@ export class MapComponent implements OnInit, AfterContentInit {
     });
 
     // Create a Timeline
-    this.timeline = new vis.Timeline(container, items, {
+    const timeconf = {
       showCurrentTime: false
-    });
+    };
+    //if (this.ofm_meta.timeline){
+    //  timeconf["end"] = this.ofm_meta.timeline[1];
+    //  timeconf["start"] = this.ofm_meta.timeline[0];
+    //}
+    this.timeline = new vis.Timeline(container, items, timeconf);
 
     this.timeline.addCustomTime(this.toFloatDate(this.atDate), 'atTime');
     const d = this.toFloatDate(this.atDate);
