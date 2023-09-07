@@ -3,6 +3,16 @@
     width: calc(100vw - 120px);
 }
 
+#deckbox{
+    position: absolute;
+    left: 132px;
+    top: 200px;
+    background: black;
+    width: 151px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
 #infobox{
     position: absolute;
     top: 36px;

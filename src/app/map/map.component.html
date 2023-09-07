@@ -81,6 +81,9 @@
             
         <div *ngIf="infoData" class="info lcars-element lcars-golden-tanoi-bg lcars-text lcars-u-1-4" [innerHtml]="infoData?.info"></div>
         <button class="lcars-element lcars-text lcars-lilac-bg button" [routerLink]="['/']">ALL MAPS</button>
+        <div *ngIf="ofm_meta.type === 'starbase'" class="lcars-element lcars-text lcars-dodger-blue-bg" (click)="showDecks=!showDecks;">Decks</div>
+            
+                
         <button class="lcars-element lcars-lilac-bg lcars-text button" (click)="copy_url()" >SHARE</button>
         <a class="lcars-element lcars-text lcars-indigo-bg button" href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive"  ><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></a>
         <a class="lcars-element lcars-text lcars-indigo-bg button" href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT"  ><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></a>
@@ -102,6 +105,16 @@
         <div id="visualization"></div>
     </div>
 </div>
+</div>
+
+<div id="deckbox" class="lcars-row" [ngClass]="{'hidden':!showDecks}">
+    <div class="lcars-bracket left"></div>
+
+    <div class="lcars-column">
+        <button class="lcars-element lcars-text lcars-dodger-blue-bg button" *ngFor="let o of ofm_meta.decks|keyvalue" (click)="setDeck(o.key)">
+            {{o.value.name}}
+        </button>
+    </div>
 </div>
 
 <div id="infobox" class="lcars-row" [ngClass]="{'hidden':!showInfo}" #infobox *ngIf="p">

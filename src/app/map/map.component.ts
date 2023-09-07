@@ -120,7 +120,7 @@ export class MapComponent implements OnInit, AfterContentInit {
   showLegend = false;
   showTools = false;
   showShare = false;
-
+  showDecks = false;
 
   hideAll() {
     this.showInfo = false;
@@ -128,6 +128,7 @@ export class MapComponent implements OnInit, AfterContentInit {
     this.showLegend = false;
     this.showTools = false;
     this.showShare = false;
+    this.showDecks = false;
   }
 
   p = null;
@@ -172,6 +173,12 @@ export class MapComponent implements OnInit, AfterContentInit {
     })
   }
 
+  currentDeck="d1";
+
+  setDeck(deck){
+    this.currentDeck=deck;
+    this.changeUrl('deck');
+  }
   ngAfterContentInit(): void {
     this.ar.params.subscribe(params => {
 
@@ -181,6 +188,7 @@ export class MapComponent implements OnInit, AfterContentInit {
         center: this.start.center, // starting position [lng, lat]
         zoom: this.start.zoom, // starting zoom
         projection: 'equirectangular',
+        maxZoom:25,
         minPitch: 0,
         maxPitch: 85,
         attributionControl: false,
@@ -194,8 +202,8 @@ export class MapComponent implements OnInit, AfterContentInit {
             nurl = nurl.replace('https://c.tiles.fantasymaps.org/' + this.tl, this.ts + this.tl);
           }
           return {
-            url: nurl.replace('{atDate}', this.atDate.toString()).replace('%7BatDate%7D', this.atDate.toString())
-          };
+            url: nurl.replace('{atDate}', this.atDate.toString()).replace('%7BatDate%7D', this.atDate.toString()).replace('{deck}', this.currentDeck).replace('%7Bdeck%7D', this.currentDeck)
+         };
         }
 
       });
@@ -381,6 +389,25 @@ export class MapComponent implements OnInit, AfterContentInit {
               console.log(ex);
             }
           })
+        }
+      }
+
+      if(this.ofm_meta.type === "starbase"){
+        for (let tm of [{"source":"base"}, {"source": "walls"}, {"source": "areas"}]) {
+
+          const s = this.map.getSource(tm.source);
+          console.log(s);
+          
+          if (s.type === 'geojson') {
+            this.http.get(s._options.data.replace('{deck}', this.currentDeck)).subscribe(data => {
+              try {
+                s.setData(data);
+              } catch (ex) {
+                console.log(ex);
+              }
+            })
+          }        
+          this.map.style.getSource('base').load();
         }
       }
     }
