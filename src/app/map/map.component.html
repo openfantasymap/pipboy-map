@@ -1,213 +1,339 @@
 <!-- HEADER ==================================================== -->
 <div class="lcars-column">
-
-<div id="header" class="lcars-row header">
-
-    <!-- ELBOW -->
-    <div class="lcars-elbow left-bottom lcars-golden-tanoi-bg"></div>
-
-    <div class="lcars-bar horizontal lcars-golden-tanoi-bg">
-        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-bg':showSearch}"><a (click)="showInfo=false; showTools=false; showLegend=false; showSearch=!showSearch;">SEARCH</a></div>
-        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-bg':showInfo}" (click)=" showSearch=false; showTools=false; showLegend=false; showInfo = !showInfo"><a >INFO</a></div>
-        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-bg':showLegend}" (click)=" showSearch=false; showTools=false; showInfo=false; showLegend = !showLegend"><a >LEGEND</a></div>
-        <div class="lcars-title decorated lcars-text" [ngClass]="{'lcars-rust-bg':showTools}" (click)=" showSearch=false; showLegend=false; showInfo=false; showTools = !showTools"><a >TOOLS</a></div>
-    </div>
+  <div id="header" class="lcars-row header">
     <!-- BAR WITH TITLE -->
-    <div class="lcars-bar horizontal lcars-golden-tanoi-bg">
-        <div class="lcars-title lcars-text right">OpenFantasyMap - {{title}}</div>
+    <div class="lcars-bar horizontal lcars-black-bg">
+      <div class="lcars-title lcars-text right"><span [ngClass]="{'glitch':title!== null, 'layers': title !== null}" [attr.data-text]="'OpenFantasyMap - ' + title">
+        OpenFantasyMap - {{ title }}
+    </span>
+      </div>
     </div>
 
     <!-- ROUNDED EDGE DECORATED -->
-    <div class="lcars-bar horizontal right-end decorated lcars-golden-tanoi-bg"></div>
-</div>
-<!--
-    <mat-sidenav-container class="example-container lcars-row">
-        <mat-sidenav class="lcars-column start-space lcars-u-1 lcars-tan-bg" mode="over" #lbar>
-            <button mat-button mat-icon-button (click)="rbar.toggle()" class="hidesmall"><mat-icon>menu</mat-icon></button>
-            
-        <button mat-button mat-icon-button (click)="lbar.toggle()"><mat-icon>map</mat-icon></button>
-        <a href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive" mat-button mat-icon-button ><mat-icon><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
-        <a href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT" mat-button mat-icon-button ><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon></a>
-        <button mat-button mat-icon-button (click)="copy_url()" class="hidesmall"><mat-icon>share</mat-icon></button>
-        <div *ngIf="infoData" class="info" [innerHtml]="infoData?.info"></div>
-        
-        <mat-nav-list>
-            <a mat-list-item href="..">All fantasy worlds</a>
-            <div mat-subheader>Sources</div>
-            <mat-list-item *ngFor="let r of ofm_meta.sources">
-                <a matListItemLine target="_blank" href="{{r.url}}">{{r.label}}</a>
-                <div matListItemLine>{{r.attribution}}</div>
-            </mat-list-item>
-            <h1 mat-subheader>Related Maps</h1>
-            <a *ngFor="let r of ofm_meta.relateds" mat-list-item href="{{r.url}}">{{r.title}}</a>
-        </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav class="s" mode="over" #rbar position="end">
-        <mat-toolbar color="primary">
-            <h1>Events</h1>
-        </mat-toolbar>
+    <div class="lcars-bar horizontal right-end decorated lcars-black-bg"></div>
+  </div>
 
-        <mat-list *ngFor="let event of (events|async)">
-            <a mat-list-item (click)="goTimeSpace(event.ohm_from, event.geom)">{{event.properties.name}}</a>
-        </mat-list>
-    </mat-sidenav>
-    <mat-sidenav class="sidebar" mode="over" #sharebar position="end">
-        <mat-toolbar color="primary">
-            <h1>Sharing</h1>
-            <span class="spacer"></span>
-            <button mat-button mat-icon-button (click)="sharebar.close()" class="hidesmall"><mat-icon>close</mat-icon></button>
-        </mat-toolbar>
+  <div class="lcars-row" style="position: relative; top: 24px; width: 100vw">
+    <div class="lcars-column lcars-u-2">
+      <div
+        *ngIf="infoData"
+        class="info lcars-element lcars-black-bg lcars-golden-tanoi-color decorated lcars-text lcars-u-2-3"
+        [innerHtml]="infoData?.info"
+      ></div>
 
-        <mat-list>
-            <a mat-list-item href="https://profile.fantasymaps.org/?use={{share_link}}"><mat-icon><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></mat-icon>Use on FoundryVTT</a>
-            <a share="https://www.facebook.com/sharer/sharer.php?u={{share_link}}" mat-list-item><mat-icon>facebook</mat-icon> Share on Facebook</a>
-            <a share="" mat-list-item><mat-icon>twitter</mat-icon> Share on Twitter</a>
-        </mat-list>
+      <div class="lcars-row lcars-black-bg">
+        <a
+          class="lcars-element lcars-text lcars-indigo-bg button"
+          href="https://www.patreon.com/openfantasymap"
+          target="_blank"
+          title="Help us keep this project alive"
+          ><img
+            src="/assets/images/Digital-Patreon-Logo_FieryCoral.png"
+            style="width: 36px; left: -6px; top: -6px; position: relative"
+        /></a>
+        <a
+          class="lcars-element lcars-text lcars-indigo-bg button"
+          href="https://foundryvtt.com/packages/ofm-map-canvas"
+          target="_blank"
+          title="Use this and other OFM maps on FoundryVTT"
+          ><img
+            src="/assets/images/fvtt-solid-512.png"
+            style="width: 36px; left: -6px; top: -6px; position: relative"
+        /></a>
+      </div>
 
-    </mat-sidenav>
-    <mat-sidenav-content #screen>
-        <mat-menu #menu="matMenu">
-            <!--
-            <button mat-menu-item (click)="setSpeed(4000)">Slow</button>
-            <button mat-menu-item (click)="setSpeed(2000)">Medium</button>
-            <button mat-menu-item (click)="setSpeed(500)">High</button>
-        </mat-menu>
-    </mat-sidenav-content>
-</mat-sidenav-container>
--->
-
-<div class="lcars-row" style="position:relative; top: 72px; width:100vw">
-    <div class="lcars-column lcars-u-1">
-            
-        <div *ngIf="infoData" class="info lcars-element lcars-golden-tanoi-bg lcars-text lcars-u-1-4" [innerHtml]="infoData?.info"></div>
-        <button class="lcars-element lcars-text lcars-lilac-bg button" [routerLink]="['/']">ALL MAPS</button>
-        <div *ngIf="ofm_meta.type === 'starbase'" class="lcars-element lcars-text lcars-dodger-blue-bg" (click)="showDecks=!showDecks;">Decks</div>
-            
-                
-        <button class="lcars-element lcars-lilac-bg lcars-text button" (click)="copy_url()" >SHARE</button>
-        <a class="lcars-element lcars-text lcars-indigo-bg button" href="https://www.patreon.com/openfantasymap" target="_blank" title="Help us keep this project alive"  ><img src="/assets/images/Digital-Patreon-Logo_FieryCoral.png" style="width:36px; left:-6px; top: -6px; position: relative;"></a>
-        <a class="lcars-element lcars-text lcars-indigo-bg button" href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" title="Use this and other OFM maps on FoundryVTT"  ><img src="/assets/images/fvtt-solid-512.png" style="width:36px; left:-6px; top: -6px; position: relative;"></a>
-        
-        <div class="lcars-bar  fill lcars-indigo-bg"></div>
-        <div class="lcars-bar  spacer"></div>
-    </div>
-    <div class="lcars-column lcars-u-15">
-        <div class="lcars-row">
-            <div id="ohm_map" class="lcars-u-15" #screen></div>
-            <div id="ofm_attribution" [innerHTML]="ofm_meta?.copyright"></div>
-        </div>
-        
-        <div id="timebar" class="lcars-row">
-            <button mat-button class="hidesmall" (click)="selectDate()">{{atDate|decimaldate|date:'d/M/y G - hh:mm:ss'|nicedate}}</button>
-            <button mat-button class="hidesmall" mat-icon-button (click)="startstop()"><mat-icon>{{startstopicon}}</mat-icon></button>
-            <!--<button mat-button class="hidesmall" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>speed</mat-icon></button>-->
-        </div>
-        <div id="visualization"></div>
-    </div>
-</div>
-</div>
-
-<div id="deckbox" class="lcars-row" [ngClass]="{'hidden':!showDecks}">
-    <div class="lcars-bracket left"></div>
-
-    <div class="lcars-column">
-        <button class="lcars-element lcars-text lcars-dodger-blue-bg button" *ngFor="let o of ofm_meta.decks|keyvalue" (click)="setDeck(o.key)">
-            {{o.value.name}}
+      <div class="lcars-row lcars-black-bg">
+        <button
+          class="lcars-element lcars-u-1-1 lcars-text lcars-lilac-bg button"
+          [routerLink]="['/']"
+        >
+          ALL MAPS
         </button>
+        <div
+          *ngIf="ofm_meta.type === 'starbase'"
+          class="lcars-element lcars-u-1-1 lcars-dodger-blue-bg"
+          (click)="showDecks = !showDecks"
+        >
+          Decks
+        </div>
+      </div>
+      <div class="lcars-row lcars-black-bg">
+        <button
+          class="lcars-element lcars-lilac-bg lcars-text button"
+          (click)="copy_url()"
+        >
+          SHARE
+        </button>
+      </div>
+      <div class="lcars-row lcars-black-bg">
+        <div
+          class="lcars-element lcars-text lcars-u-1-1"
+          [ngClass]="{ 'lcars-rust-bg': showSearch }"
+          (click)="
+            showInfo = false;
+            showTools = false;
+            showLegend = false;
+            showSearch = !showSearch
+          "
+        >
+          SEARCH
+        </div>
+        <div
+          class="lcars-element lcars-text lcars-u-1-1"
+          [ngClass]="{ 'lcars-rust-bg': showInfo }"
+          (click)="
+            showSearch = false;
+            showTools = false;
+            showLegend = false;
+            showInfo = !showInfo
+          "
+        >
+          INFO
+        </div>
+      </div>
+      <div class="lcars-row lcars-black-bg">
+        <div
+          class="lcars-element lcars-text lcars-u-1-1"
+          [ngClass]="{ 'lcars-rust-bg': showLegend }"
+          (click)="
+            showSearch = false;
+            showTools = false;
+            showInfo = false;
+            showLegend = !showLegend
+          "
+        >
+          LEGEND
+        </div>
+        <div
+          class="lcars-element lcars-text lcars-u-1-1"
+          [ngClass]="{ 'lcars-rust-bg': showTools }"
+          (click)="
+            showSearch = false;
+            showLegend = false;
+            showInfo = false;
+            showTools = !showTools
+          "
+        >
+          TOOLS
+        </div>
+      </div>
     </div>
+
+    <div class="lcars-bar fill lcars-indigo-bg"></div>
+    <div class="lcars-bar spacer"></div>
+  </div>
+  <div class="lcars-column lcars-u-15">
+    <div class="lcars-row">
+      <div id="ohm_map" class="lcars-u-15" #screen></div>
+      <div id="ofm_attribution" [innerHTML]="ofm_meta?.copyright"></div>
+    </div>
+
+    <div id="timebar" class="lcars-row">
+      <button mat-button class="hidesmall" (click)="selectDate()">
+        {{ atDate | decimaldate | date : "d/M/y G - hh:mm:ss" | nicedate }}
+      </button>
+      <button
+        mat-button
+        class="hidesmall"
+        mat-icon-button
+        (click)="startstop()"
+      >
+        <mat-icon>{{ startstopicon }}</mat-icon>
+      </button>
+      <!--<button mat-button class="hidesmall" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>speed</mat-icon></button>-->
+    </div>
+    <div id="visualization"></div>
+  </div>
 </div>
 
-<div id="infobox" class="lcars-row" [ngClass]="{'hidden':!showInfo}" #infobox *ngIf="p">
-    <div class="lcars-bracket left lcars-danub-border hollow"></div>
+<div id="deckbox" class="lcars-row" [ngClass]="{ hidden: !showDecks }">
+  <div class="lcars-bracket left"></div>
+
+  <div class="lcars-column">
+    <button
+      class="lcars-element lcars-text lcars-dodger-blue-bg button"
+      *ngFor="let o of ofm_meta.decks | keyvalue"
+      (click)="setDeck(o.key)"
+    >
+      {{ o.value.name }}
+    </button>
+  </div>
+</div>
+
+<div
+  id="infobox"
+  class="lcars-row"
+  [ngClass]="{ hidden: !showInfo }"
+  #infobox
+  *ngIf="p"
+>
+  <div class="lcars-column">
+    <div class="lcars-row">
+      <div class="lcars-element lcars-danub-bg lcars-text lcars-u-1-1">
+        {{ p.name }}
+      </div>
+      <div
+        (click)="warpTo(atDate, tl + '-' + p.name.toLowerCase())"
+        class="lcars-element button lcars-text lcars-u-1-1"
+      >
+        GO
+      </div>
+    </div>
+    <div class="lcars-row" *ngIf="p.st_wiki">
+      <a
+        class="lcars-element lcars-text lcars-u-2-1 lcars-black-color  button"
+        target="_blank"
+        href="{{ p.st_wiki }}"
+        >MEMORY ALPHA</a
+      >
+    </div>
+    <div class="lcars-row" *ngIf="p.wiki">
+      <a
+        class="lcars-element lcars-text lcars-u-2-1 lcars-black-color button"
+        target="_blank"
+        href="{{ p.wiki }}"
+        >WIKIPEDIA</a
+      >
+    </div>
+  </div>
+</div>
+
+<div
+  id="searchbox"
+  class="lcars-row"
+  [ngClass]="{ hidden: !showSearch }"
+  #infobox
+>
+  <div class="lcars-column">
+    <div class="lcars-row">
+      <div class="lcars-element lcars-text lcars-u-1-1">
+        <input type="text" placeholder="Search" #query />
+      </div>
+      <button
+        class="lcars-element button lcars-text"
+        (click)="search(query.value)"
+      >
+        SEARCH
+      </button>
+    </div>
     <div class="lcars-column">
-        <div class="lcars-row">
-            <div class="lcars-element lcars-danub-bg lcars-text lcars-u-1-1">{{p.name}}</div>
-            <div (click)="warpTo(atDate,tl+'-'+p.name.toLowerCase())" class="lcars-element button lcars-text lcars-u-1-1 right-rounded">GO</div>
+      <div class="lcars-row" *ngFor="let row of searchResults">
+        <div class="lcars-element lcars-text lcars-u-2-1">
+          {{ row.properties.name }}
         </div>
-        <div class="lcars-row" *ngIf="p.st_wiki">
-            <a class="lcars-element lcars-text lcars-u-2-1 lcars-black-color right-rounded button" target="_blank" href="{{p.st_wiki}}">MEMORY ALPHA</a>
-        </div>
-        <div class="lcars-row" *ngIf="p.wiki">
-            <a class="lcars-element lcars-text lcars-u-2-1 lcars-black-color right-rounded button" target="_blank" href="{{p.wiki}}">WIKIPEDIA</a>
-        </div>
+        <button
+          class="lcars-element lcars-text button right-rounded"
+          (click)="panTo(row.geometry.coordinates)"
+        >
+          GO
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
-
-<div id="searchbox" class="lcars-row" [ngClass]="{'hidden':!showSearch}" #infobox>
-    <div class="lcars-bracket left hollow"></div>
+<div
+  id="legendbox"
+  class="lcars-row"
+  [ngClass]="{ hidden: !showLegend }"
+  #infobox
+>
+  <div class="lcars-column">
+    <div class="lcars-row">
+      <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">
+        legend
+      </div>
+    </div>
+    <div class="lcars-row" *ngFor="let t of ofm_meta.togglable">
+      <div
+        (click)="toggleLayer(t.name)"
+        [ngClass]="{
+          'lcars-periwinkle-bg': !layers[t.name],
+          'lcars-u-1-1': t.legend,
+          'lcars-u-2-1': !t.legend
+        }"
+        class="lcars-element button lcars-text"
+      >
+        {{ t.label }}
+      </div>
+      <div
+        *ngIf="t.legend"
+        class="lcars-element lcars-white-bg lcars-text lcars-u-1-{{ t.height }}"
+      >
         <div class="lcars-column">
-            <div class="lcars-row">
-                <div class="lcars-element  lcars-text lcars-u-2-1">
-                    <input type="text" placeholder="Search" #query>
-                </div> 
-                <button class="lcars-element button lcars-text right-rounded" (click)="search(query.value)">SEARCH</button>
-            </div>
-            <div class="lcars-column">
-                <div class="lcars-row" *ngFor="let row of searchResults">
-                    <div class="lcars-element lcars-text lcars-u-2-1">{{row.properties.name}}</div>
-                    <button class="lcars-element lcars-text button right-rounded" (click)="panTo(row.geometry.coordinates)">GO</button>
-                </div>
-            </div>
+          <div class="lcars-row" *ngFor="let r of t.legend">
+            <div class="label">{{ r[0] }}</div>
+            :
+            <div class="circle" [ngStyle]="{ 'background-color': r[1] }"></div>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-
-<div id="legendbox" class="lcars-row" [ngClass]="{'hidden':!showLegend}" #infobox>
-    <div class="lcars-bracket left hollow lcars-danub-border "></div>
-    <div class="lcars-column">
-        <div class="lcars-row">
-            <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">legend</div>
-        </div>
-        <div class="lcars-row" *ngFor="let t of ofm_meta.togglable">
-            <div (click)="toggleLayer(t.name)" [ngClass]="{'lcars-periwinkle-bg':!layers[t.name], 'lcars-u-1-1':t.legend, 'lcars-u-2-1':!t.legend}" class="lcars-element button lcars-text ">{{t.label}}</div>
-            <div *ngIf="t.legend" class="lcars-element lcars-white-bg lcars-text lcars-u-1-{{t.height}}">
-                <div class="lcars-column">
-                    <div class="lcars-row" *ngFor="let r of t.legend">
-                        <div class="label">{{r[0]}}</div> : <div class="circle" [ngStyle]="{'background-color':r[1]}"> </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
+<div id="toolbox" class="lcars-row" [ngClass]="{ hidden: !showTools }" #infobox>
+  <div class="lcars-column">
+    <div class="lcars-row">
+      <div class="lcars-element lcars-text lcars-u-1-1">
+        TOOLS
+      </div>
+      <button
+        (click)="clearDistance()"
+        class="lcars-element lcars-text lcars-u-1-1"
+      >
+        CLEAR
+      </button>
     </div>
+    <div class="lcars-row">
+        <div class="lcars-element lcars-text lcars-u-1" (click)="toggleScanlines('#222');">
+            SCANLINES BLACK
+        </div>
+        <div class="lcars-element lcars-text lcars-u-1" (click)="toggleScanlines('#d22');">
+            SCANLINES RED
+        </div>
+    </div>
+    <div class="lcars-row">
+      <button
+        (click)="startDistance()"
+        [ngClass]="{
+          'lcars-neon-carrot-bg': measuring,
+          'lcars-black-bg': !measuring
+        }"
+        class="lcars-element lcars-text button lcars-u-1-4"
+      >
+        DISTANCE
+      </button>
+      <div class="lcars-column">
+        <div class="lcars-element lcars-text lcars-u-1-1">{{ measured }}</div>
+        <div class="lcars-element lcars-text lcars-u-1-3">
+          <div class="lcars-column">
+            <div class="lcars-row" *ngFor="let r of times">
+              <div class="label">{{ r.l }}</div>
+              : <span>{{ r.v }}</span
+              ><span>{{ r.u }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-
-<div id="toolbox" class="lcars-row" [ngClass]="{'hidden':!showTools}" #infobox>
-    <div class="lcars-bracket lcars-danub-border left hollow"></div>
-    <div class="lcars-column">
-            <div class="lcars-row">
-                <div class="lcars-element lcars-danub-bg lcars-text lcars-u-1-1">TOOLS</div>
-                <button (click)="clearDistance()" class="lcars-element lcars-text lcars-u-1-1">CLEAR</button>
-            </div>
-            <div class="lcars-row">
-                <button (click)="startDistance()" [ngClass]="{'lcars-neon-carrot-bg':measuring, 'lcars-golden-tanoi-bg':!measuring}" class="lcars-element lcars-text button lcars-u-1-4">DISTANCE</button>
-                <div class="lcars-column">
-                <div class="lcars-element lcars-text lcars-u-1-1">{{measured}}</div>
-                <div class="lcars-element lcars-text lcars-u-1-3">
-                    <div class="lcars-column">
-                        <div class="lcars-row" *ngFor="let r of times">
-                            <div class="label">{{r.l}}</div> : <span>{{r.v}}</span><span>{{r.u}}</span>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
+<div
+  id="sharebox"
+  class="lcars-row"
+  [ngClass]="{ hidden: !showShare }"
+  #infobox
+>
+  <div class="lcars-column">
+    <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">TOOLS</div>
+    <div class="lcars-row">
+      <div class="lcars-element lcars-text button lcars-u-1-3">DISTANCE</div>
+      <div class="lcars-column">
+        <div class="lcars-element lcars-text lcars-u-1-1"></div>
+        <div class="lcars-element lcars-text lcars-u-1-2"></div>
+      </div>
     </div>
-</div>
-
-
-<div id="sharebox" class="lcars-row" [ngClass]="{'hidden':!showShare}" #infobox>
-    <div class="lcars-bracket lcars-danub-border left hollow"></div>
-    <div class="lcars-column">
-            <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">TOOLS</div>
-            <div class="lcars-row">
-                <div class="lcars-element lcars-text button lcars-u-1-3">DISTANCE</div>
-                <div class="lcars-column">
-                <div class="lcars-element lcars-text lcars-u-1-1"></div>
-                <div class="lcars-element lcars-text lcars-u-1-2"></div>
-                </div>
-            </div>
-    </div>
+  </div>
 </div>

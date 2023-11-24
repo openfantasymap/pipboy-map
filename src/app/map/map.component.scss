@@ -1,12 +1,21 @@
 #ohm_map {
+    position: absolute;
+    top: 38px;
+    left: 256px;
     height: calc(100vh - 85px - 64px - 2px - 19px - 58px);
-    width: calc(100vw - 120px);
+    width: calc(100vw - 268px);
+}
+
+#header{
+    border-bottom: 2px solid #fcee0a;
+    left: 250px;
+    width: calc(100vw - 265px);
 }
 
 #deckbox{
     position: absolute;
-    left: 132px;
-    top: 200px;
+    left: 256px;
+    top: 184px;
     background: black;
     width: 151px;
     padding-top: 3px;
@@ -15,33 +24,33 @@
 
 #infobox{
     position: absolute;
-    top: 36px;
-    left: 133px;
+    top: 457px;
+    left: 8px;
     z-index: 200;
     width: 276px;
 }
 #searchbox{
     position: absolute;
-    top: 36px;
-    left: 133px;
+    top: 457px;
+    left: 8px;
     z-index: 200;
-    width: 450px
+    width: 276px;
     
 }
 #legendbox{
     position: absolute;
-    top: 36px;
-    left: 133px;
+    top: 457px;
+    left: 8px;
     z-index: 200;
-    width: 276px
+    width: 276px;
     
 }
 #toolbox{
     position: absolute;
-    top: 36px;
-    left: 133px;
+    top: 457px;
+    left: 8px;
     z-index: 200;
-    width: 276px
+    width: 276px;
     
 }
 
@@ -63,9 +72,13 @@ input:focus{
 }
 
 #visualization {
-    width: calc(100vw - 5px);
+    width: calc(100vw - 271px);
     max-height: 83px;
     border: 1px solid lightgray;
+    position: absolute !important;
+    top: 848px;
+    z-index: 1000;
+    left: 254px;
 }
 
 .vis-item.politcs-rome {
@@ -87,8 +100,8 @@ button{
 }
 
 #ofm_attribution{
-    position:absolute;
-    bottom:86px;
+    position:absolute;    
+    bottom: 142px;
     right: 0;
     text-align: right;
     background-color: rgba(200,200,200,0.5);

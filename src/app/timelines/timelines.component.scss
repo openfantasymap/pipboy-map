@@ -1,12 +1,19 @@
 
 #padder {
-    padding-left:25px;
+    padding-left:5;
+    padding-top: 5px;
 }
 #ohm_timelines {
     width: 100%;
     height: calc(100vh - 72px - 72px - 5px);
     overflow: auto;
     
+}
+
+#header{
+    border-bottom: 2px solid #fcee0a;
+    left: 250px;
+    width: calc(100vw - 265px);
 }
 
 

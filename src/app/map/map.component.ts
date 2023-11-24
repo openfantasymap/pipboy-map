@@ -58,6 +58,8 @@ import {
   Clipboard
 } from '@angular/cdk/clipboard';
 
+import { CbrpnkService } from '../cbrpnk.service';
+
 //declare const mapboxgl;
 declare const maplibregl;
 declare const vis;
@@ -150,7 +152,15 @@ export class MapComponent implements OnInit, AfterContentInit {
     'type': 'LineString',
     'coordinates': []
     }
-    };
+    
+  };
+
+  scanlines = true;
+  public toggleScanlines(color){
+    document.documentElement.style.setProperty('--scan-base', color);
+    this.scanlines = !this.scanlines;
+    this.cbrpnk.setScanlines(this.scanlines);
+  }
 
   constructor(
     private ds: MnDockerService,
@@ -162,7 +172,8 @@ export class MapComponent implements OnInit, AfterContentInit {
     private http: HttpClient,
     private _snackBar: MatSnackBar,
     private clipboard: Clipboard,
-    private capture: NgxCaptureService
+    private capture: NgxCaptureService,
+    private cbrpnk: CbrpnkService  
   ) {}
 
   toggleInfo() {}
