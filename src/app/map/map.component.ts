@@ -400,6 +400,8 @@ export class MapComponent implements OnInit, AfterContentInit {
               console.log(ex);
             }
           })
+        } else {
+          this.map.getSource(tm.source).setSourceProperty(() => { });
         }
       }
 
