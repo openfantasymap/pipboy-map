@@ -5,7 +5,8 @@ body {
     height: 100%;
     background-color: #000000;
     margin: 0;
-    font-family: "Pixelify Sans", "Helvetica Neue", sans-serif;
+    font-family: "Roboto Condensed", "Helvetica Neue", sans-serif;
+    font-weight: 700;
 }
 
 @media screen and (max-width:768px)
@@ -16,173 +17,173 @@ body {
 .lcars-text{
     
     margin: 0;
-    font-family: "Pixelify Sans", "Helvetica Neue", sans-serif;
+    font-family: "Roboto Condensed", "Helvetica Neue", sans-serif;
     text-transform: uppercase;
-  color: #fcee0a;
+    font-weight: 700;;
+  color: #00e600;
     
-  text-shadow: 1px 1px 0 #02d7f2;
 }
 
 .title{
   
-  font-family: "Splash", "Helvetica Neue", sans-serif;
-  color: #fcee0a;
-  text-shadow: 4px 4px 0 #02d7f2;
-}
-
-
-.lcars-element::before{
-  content: '';
-  top: 0;
-  left: 0;
-  width:0px;
-  position: absolute;
-  height: 0px; 
-  border-right: 28px solid #fcee0a;
-  border-top: 28px solid black;
+  font-family: "Roboto Condensed", "Helvetica Neue", sans-serif;
+  font-weight: 700;
+  color: #00e600;
 }
 
 .lcars-element{
-  border-right: 2px solid #fcee0a;
-  border-bottom: 2px solid #fcee0a;
+  border-right: 2px solid #00e600;
+  border-bottom: 2px solid #00e600;
+  border-left: 0;
+  border-top: 2px solid #00e600;
+  color: #00e600;
+  
 }
 
+button{
+  border-right: 2px solid #00e600 !important;
+  border-bottom: 2px solid #00e600 !important;
+  border-left: 0 !important;
+  border-top: 2px solid #00e600 !important;
+  color: #00e600 !important;
+  
+}
 
   .lcars-gray-bg.lcars-gray-bg {
-    background-color: #234;
-    fill: #234;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-white-bg.lcars-white-bg {
-    background-color: #fff;
-    fill: #fff;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-black-bg.lcars-black-bg {
     background-color: #000;
     fill: #000;
   }
   .lcars-pale-canary-bg.lcars-pale-canary-bg {
-    background-color: #ff9;
-    fill: #ff9;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-golden-tanoi-bg.lcars-golden-tanoi-bg {
-    background-color: #fc6;
-    fill: #fc6;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-neon-carrot-bg.lcars-neon-carrot-bg {
-    background-color: #f93;
-    fill: #f93;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-eggplant-bg.lcars-eggplant-bg {
-    background-color: #646;
-    fill: #646;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-lilac-bg.lcars-lilac-bg {
-    background-color: #c9c;
-    fill: #c9c;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-anakiwa-bg.lcars-anakiwa-bg {
-    background-color: #9cf;
-    fill: #9cf;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-mariner-bg.lcars-mariner-bg {
-    background-color: #36c;
-    fill: #36c;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-bahama-blue-bg.lcars-bahama-blue-bg {
-    background-color: #069;
-    fill: #069;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-red-alert-bg.lcars-red-alert-bg {
-    background-color: #e10;
-    fill: #e10;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-blue-bell-bg.lcars-blue-bell-bg {
-    background-color: #99c;
-    fill: #99c;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-melrose-bg.lcars-melrose-bg {
-    background-color: #99f;
-    fill: #99f;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-hopbush-bg.lcars-hopbush-bg {
-    background-color: #c69;
-    fill: #c69;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-chestnut-rose-bg.lcars-chestnut-rose-bg {
-    background-color: #c66;
-    fill: #c66;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-orange-peel-bg.lcars-orange-peel-bg {
-    background-color: #f96;
-    fill: #f96;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-atomic-tangerine-bg.lcars-atomic-tangerine-bg {
-    background-color: #f90;
-    fill: #f90;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-danub-bg.lcars-danub-bg {
-    background-color: #68c;
-    fill: #68c;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-indigo-bg.lcars-indigo-bg {
-    background-color: #45b;
-    fill: #45b;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-lavender-purple-bg.lcars-lavender-purple-bg {
-    background-color: #97a;
-    fill: #97a;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-cosmic-bg.lcars-cosmic-bg {
-    background-color: #746;
-    fill: #746;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-red-damask-bg.lcars-red-damask-bg {
-    background-color: #d64;
-    fill: #d64;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-medium-carmine-bg.lcars-medium-carmine-bg {
-    background-color: #a53;
-    fill: #a53;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-bourbon-bg.lcars-bourbon-bg {
-    background-color: #b62;
-    fill: #b62;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-sandy-brown-bg.lcars-sandy-brown-bg {
-    background-color: #e95;
-    fill: #e95;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-periwinkle-bg.lcars-periwinkle-bg {
-    background-color: #cdf;
-    fill: #cdf;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-dodger-blue-bg.lcars-dodger-blue-bg {
-    background-color: #59f;
-    fill: #59f;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-dodger-blue-alt-bg.lcars-dodger-blue-alt-bg {
-    background-color: #36f;
-    fill: #36f;
+    background-color: #000000;
+    fill: #000000;
   }
   .lcars-blue-bg.lcars-blue-bg {
-    background-color: #01e;
-    fill: #01e;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-navy-blue-bg.lcars-navy-blue-bg {
-    background-color: #008;
-    fill: #008;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-husk-bg.lcars-husk-bg {
-    background-color: #ba5;
-    fill: #ba5;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-rust-bg.lcars-rust-bg {
-    background-color: #b41;
+    background-color: #000;
     fill: #b41;
   }
   .lcars-tamarillo-bg.lcars-tamarillo-bg {
-    background-color: #821;
-    fill: #821;
+    background-color: #000;
+    fill: #000;
   }
   .lcars-gray-border.lcars-gray-border {
     border-color: #234 !important;
@@ -194,7 +195,7 @@ body {
     border-color: #000  !important;
   }
   .lcars-pale-canary-border.lcars-pale-canary-border {
-    border-color: #ff9  !important;
+    border-color: #00e600  !important;
   }
   .lcars-golden-tanoi-border.lcars-golden-tanoi-border {
     border-color: #fc6  !important;
@@ -206,7 +207,7 @@ body {
     border-color: #646  !important;
   }
   .lcars-lilac-border.lcars-lilac-border {
-    border-color: #c9c  !important;
+    border-color: #000  !important;
   }
   .lcars-anakiwa-border.lcars-anakiwa-border {
     border-color: #9cf  !important;
@@ -287,118 +288,113 @@ body {
     border-color: #821  !important;
   }
   .lcars-gray-color.lcars-gray-color {
-    color: #234;
+    color: #00e600;
   }
   .lcars-white-color.lcars-white-color {
-    color: #fff;
+    color: #00e600;
   }
   .lcars-black-color.lcars-black-color {
-    color: #000;
+    color: #00e600;
   }
   .lcars-pale-canary-color.lcars-pale-canary-color {
-    color: #ff9;
+    color: #00e600;
   }
   .lcars-golden-tanoi-color.lcars-golden-tanoi-color {
-    color: #fc6;
+    color: #00e600;
   }
   .lcars-neon-carrot-color.lcars-neon-carrot-color {
-    color: #f93;
+    color: #00e600;
   }
   .lcars-eggplant-color.lcars-eggplant-color {
-    color: #646;
+    color: #00e600;
   }
   .lcars-lilac-color.lcars-lilac-color {
-    color: #c9c;
+    color: #00e600;
   }
   .lcars-anakiwa-color.lcars-anakiwa-color {
-    color: #9cf;
+    color: #00e600;
   }
   .lcars-mariner-color.lcars-mariner-color {
-    color: #36c;
+    color: #00e600;
   }
   .lcars-bahama-blue-color.lcars-bahama-blue-color {
-    color: #069;
+    color: #00e600;
   }
   .lcars-red-alert-color.lcars-red-alert-color {
-    color: #e10;
+    color: #00e600;
   }
   .lcars-blue-bell-color.lcars-blue-bell-color {
-    color: #99c;
+    color: #00e600;
   }
   .lcars-melrose-color.lcars-melrose-color {
-    color: #99f;
+    color: #00e600;
   }
   .lcars-hopbush-color.lcars-hopbush-color {
-    color: #c69;
+    color: #00e600;
   }
   .lcars-chestnut-rose-color.lcars-chestnut-rose-color {
-    color: #c66;
+    color: #00e600;
   }
   .lcars-orange-peel-color.lcars-orange-peel-color {
-    color: #f96;
+    color: #00e600;
   }
   .lcars-atomic-tangerine-color.lcars-atomic-tangerine-color {
-    color: #f90;
+    color: #00e600;
   }
   .lcars-danub-color.lcars-danub-color {
-    color: #68c;
+    color: #00e600;
   }
   .lcars-indigo-color.lcars-indigo-color {
-    color: #45b;
+    color: #00e600;
   }
   .lcars-lavender-purple-color.lcars-lavender-purple-color {
-    color: #97a;
+    color: #00e600;
   }
   .lcars-cosmic-color.lcars-cosmic-color {
-    color: #746;
+    color: #00e600;
   }
   .lcars-red-damask-color.lcars-red-damask-color {
-    color: #d64;
+    color: #00e600;
   }
   .lcars-medium-carmine-color.lcars-medium-carmine-color {
-    color: #a53;
+    color: #00e600;
   }
   .lcars-bourbon-color.lcars-bourbon-color {
-    color: #b62;
+    color: #00e600;
   }
   .lcars-sandy-brown-color.lcars-sandy-brown-color {
-    color: #e95;
+    color: #00e600;
   }
   .lcars-periwinkle-color.lcars-periwinkle-color {
-    color: #cdf;
+    color: #00e600;
   }
   .lcars-dodger-blue-color.lcars-dodger-blue-color {
-    color: #59f;
+    color: #00e600;
   }
   .lcars-dodger-blue-alt-color.lcars-dodger-blue-alt-color {
-    color: #36f;
+    color: #00e600;
   }
   .lcars-blue-color.lcars-blue-color {
-    color: #01e;
+    color: #00e600;
   }
   .lcars-navy-blue-color.lcars-navy-blue-color {
-    color: #008;
+    color: #00e600;
   }
   .lcars-husk-color.lcars-husk-color {
-    color: #ba5;
+    color: #00e600;
   }
   .lcars-rust-color.lcars-rust-color {
-    color: #b41;
+    color: #00e600;
   }
   .lcars-tamarillo-color.lcars-tamarillo-color {
-    color: #821;
+    color: #00e600;
   }
 
   
   .lcars-tamarillo-color.lcars-tamarillo-color {
-    color: #821;
+    color: #00e600;
   }
   
-  html,
-  body {
-    font-family: "Arial", monospace;
-    color: #fff;
-  }
   h1 {
     font-size: 270%;
     font-weight: bold;
@@ -691,7 +687,7 @@ body {
     align-self: flex-end;
   }
   .lcars-bar .lcars-title {
-    color: #fff;
+    color: #00e600;
     background-color: #000;
     text-transform: uppercase;
     margin: 0;
@@ -710,9 +706,9 @@ body {
   .lcars-element {
     position: relative;
     font-weight: bold;
-    color: #000;
+    color: #00e600;
     text-align: right;
-    background: #fc6;
+    background: #000;
     height: 3rem;
     width: 7.5rem;
     box-sizing: border-box;
@@ -745,7 +741,7 @@ body {
     cursor: pointer;
   }
   .lcars-element.button.button:active {
-    background-color: #c69;
+    background-color: #009900;
   }
   .lcars-element .lcars-element-addition {
     display: flex;
@@ -792,7 +788,7 @@ body {
     right: unset;
   }
   path.button:active {
-    fill: #c69;
+    fill: #00e600;
   }
   .lcars-text-box,
   a.lcars-text-box {
@@ -877,7 +873,7 @@ body {
     }
   }
   .lcars-bracket {
-    background-color: #fc6;
+    background-color: #00e600;
   }
   .lcars-bracket.left {
     width: 1.5rem;
@@ -906,7 +902,7 @@ body {
   .lcars-bracket.hollow {
     background-color: #000;
     border-style: solid;
-    border-color: #fc6;
+    border-color: #00e600;
   }
   .lcars-u-1-1 {
     width: 7.5rem;
@@ -1825,25 +1821,25 @@ body {
     display: inline;
   }
   a:link {
-    color: #fc6;
+    color: #00e600;
     font-weight: 400;
   }
   a:visited {
-    color: #fc6;
+    color: #00e600;
     font-weight: normal;
   }
   a:focus {
-    color: #fc6;
+    color: #00e600;
     background-color: #080602;
     font-weight: 400;
   }
   a:hover {
-    color: #fc6;
+    color: #00e600;
     background-color: #090703;
     font-weight: 400;
   }
   a:active {
-    color: #ff9;
+    color: #00e600;
     font-weight: 500;
     background-color: #0c0806;
   }
@@ -2003,22 +1999,22 @@ body {
   textarea.lcars-text-box.lcars-pale-canary-color,
   textarea.lcars-text-input.lcars-pale-canary-color,
   textarea.lcars-pale-canary-color {
-    caret-color: #ff9;
+    caret-color: #00e600;
   }
   input.decorated.lcars-pale-canary-color,
   textarea.lcars-text-box.decorated.lcars-pale-canary-color,
   textarea.decorated.lcars-pale-canary-color,
   textarea.lcars-text-input.decorated.lcars-pale-canary-color {
-    border-left: 0.2rem solid #ff9;
+    border-left: 0.2rem solid #00e600;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    border-right: 0.2rem solid #ff9;
+    border-right: 0.2rem solid #00e600;
   }
   input.decorated.left-rounded.lcars-pale-canary-color,
   textarea.lcars-text-box.decorated.left-rounded.lcars-pale-canary-color,
   textarea.decorated.left-rounded.lcars-pale-canary-color,
   textarea.lcars-text-input.decorated.left-rounded.lcars-pale-canary-color {
-    border-left: 0.8em solid #ff9;
+    border-left: 0.8em solid #00e600;
     border-top-left-radius: 0.5em;
     border-bottom-left-radius: 0.5em;
   }
@@ -2026,7 +2022,7 @@ body {
   textarea.lcars-text-box.decorated.right-rounded.lcars-pale-canary-color,
   textarea.decorated.right-rounded.lcars-pale-canary-color,
   textarea.lcars-text-input.decorated.right-rounded.lcars-pale-canary-color {
-    border-right: 0.8em solid #ff9;
+    border-right: 0.8em solid #00e600;
     border-top-right-radius: 0.5em;
     border-bottom-right-radius: 0.5em;
   }
@@ -2034,14 +2030,14 @@ body {
   textarea.lcars-text-box.decorated.rounded.lcars-pale-canary-color,
   textarea.decorated.rounded.lcars-pale-canary-color,
   textarea.lcars-text-input.decorated.rounded.lcars-pale-canary-color {
-    border-right: 0.8em solid #ff9;
-    border-left: 0.8em solid #ff9;
+    border-right: 0.8em solid #00e600;
+    border-left: 0.8em solid #00e600;
     border-radius: 0.5em;
   }
   textarea.lcars-text-box.lcars-golden-tanoi-color,
   textarea.lcars-text-input.lcars-golden-tanoi-color,
   textarea.lcars-golden-tanoi-color {
-    caret-color: #fc6;
+    caret-color: #00e600;
   }
   input.decorated.lcars-golden-tanoi-color,
   textarea.lcars-text-box.decorated.lcars-golden-tanoi-color,
@@ -2155,22 +2151,22 @@ body {
   textarea.lcars-text-box.lcars-lilac-color,
   textarea.lcars-text-input.lcars-lilac-color,
   textarea.lcars-lilac-color {
-    caret-color: #c9c;
+    caret-color: #000;
   }
   input.decorated.lcars-lilac-color,
   textarea.lcars-text-box.decorated.lcars-lilac-color,
   textarea.decorated.lcars-lilac-color,
   textarea.lcars-text-input.decorated.lcars-lilac-color {
-    border-left: 0.2rem solid #c9c;
+    border-left: 0.2rem solid #000;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    border-right: 0.2rem solid #c9c;
+    border-right: 0.2rem solid #000;
   }
   input.decorated.left-rounded.lcars-lilac-color,
   textarea.lcars-text-box.decorated.left-rounded.lcars-lilac-color,
   textarea.decorated.left-rounded.lcars-lilac-color,
   textarea.lcars-text-input.decorated.left-rounded.lcars-lilac-color {
-    border-left: 0.8em solid #c9c;
+    border-left: 0.8em solid #000;
     border-top-left-radius: 0.5em;
     border-bottom-left-radius: 0.5em;
   }
@@ -2178,7 +2174,7 @@ body {
   textarea.lcars-text-box.decorated.right-rounded.lcars-lilac-color,
   textarea.decorated.right-rounded.lcars-lilac-color,
   textarea.lcars-text-input.decorated.right-rounded.lcars-lilac-color {
-    border-right: 0.8em solid #c9c;
+    border-right: 0.8em solid #000;
     border-top-right-radius: 0.5em;
     border-bottom-right-radius: 0.5em;
   }
@@ -2186,8 +2182,8 @@ body {
   textarea.lcars-text-box.decorated.rounded.lcars-lilac-color,
   textarea.decorated.rounded.lcars-lilac-color,
   textarea.lcars-text-input.decorated.rounded.lcars-lilac-color {
-    border-right: 0.8em solid #c9c;
-    border-left: 0.8em solid #c9c;
+    border-right: 0.8em solid #000;
+    border-left: 0.8em solid #000;
     border-radius: 0.5em;
   }
   textarea.lcars-text-box.lcars-anakiwa-color,
@@ -3322,17 +3318,17 @@ body {
   @media screen and (-webkit-min-device-pixel-ratio: 0) {
     input[type='range'].lcars-pale-canary-color::-webkit-slider-runnable-track {
       -webkit-appearance: none;
-      color: #ff9;
+      color: #00e600;
       margin-top: -1px;
     }
     input[type='range'].lcars-pale-canary-color::-webkit-slider-thumb {
       -webkit-appearance: none;
-      background: #ff9;
-      box-shadow: -80px 0 0 80px #ff9;
+      background: #00e600;
+      box-shadow: -80px 0 0 80px #00e600;
     }
   }
   input[type="range"].lcars-pale-canary-color::-moz-range-progress {
-    background-color: #ff9;
+    background-color: #00e600;
   }
   input[type="range"].lcars-pale-canary-color::-moz-range-track {
     background-color: transparent;
@@ -3340,13 +3336,13 @@ body {
   input[type="range"].lcars-pale-canary-color::-moz-range-thumb {
     border: none;
     border-radius: 0%;
-    background-color: #ff9;
+    background-color: #00e600;
   }
   input[type="range"].lcars-pale-canary-color::-ms-fill-lower {
-    background-color: #ff9;
+    background-color: #00e600;
   }
   input[type="range"].lcars-pale-canary-color::-ms-fill-upper {
-    background-color: #ff9;
+    background-color: #00e600;
   }
   .lcars-element-addition > input[type="range"] {
     height: 30%;
@@ -3450,17 +3446,17 @@ body {
   @media screen and (-webkit-min-device-pixel-ratio: 0) {
     input[type='range'].lcars-lilac-color::-webkit-slider-runnable-track {
       -webkit-appearance: none;
-      color: #c9c;
+      color: #000;
       margin-top: -1px;
     }
     input[type='range'].lcars-lilac-color::-webkit-slider-thumb {
       -webkit-appearance: none;
-      background: #c9c;
-      box-shadow: -80px 0 0 80px #c9c;
+      background: #000;
+      box-shadow: -80px 0 0 80px #000;
     }
   }
   input[type="range"].lcars-lilac-color::-moz-range-progress {
-    background-color: #c9c;
+    background-color: #000;
   }
   input[type="range"].lcars-lilac-color::-moz-range-track {
     background-color: transparent;
@@ -3468,13 +3464,13 @@ body {
   input[type="range"].lcars-lilac-color::-moz-range-thumb {
     border: none;
     border-radius: 0%;
-    background-color: #c9c;
+    background-color: #000;
   }
   input[type="range"].lcars-lilac-color::-ms-fill-lower {
-    background-color: #c9c;
+    background-color: #000;
   }
   input[type="range"].lcars-lilac-color::-ms-fill-upper {
-    background-color: #c9c;
+    background-color: #000;
   }
   .lcars-element-addition > input[type="range"] {
     height: 30%;
@@ -4673,7 +4669,7 @@ keyframes :
     $scan-fps: 60;
 
     // scanline-color (rgba)
-    $scan-color: rgba(#edd, .3);
+    $scan-color: rgba(#00e600, .3);
 
     // set z-index on 8, like in ♥ 8-bits ♥, or…
     // set z-index on 2147483648 or more to enable scanlines on Chrome fullscreen (doesn't work in Firefox or IE);
