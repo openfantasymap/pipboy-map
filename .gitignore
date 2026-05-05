@@ -11,6 +11,7 @@
 /node_modules
 /_cacache
 /_update-notifier-last-checked
+/.angular
 debug.log
 
 # profiling files

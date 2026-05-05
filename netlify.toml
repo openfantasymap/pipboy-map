@@ -1,0 +1,42 @@
+# Netlify build & deploy config — see CLAUDE.md "Netlify deploy" section
+# for the env-injection model and the mixed-content note.
+
+[build]
+  command  = "npm run build:netlify"
+  publish  = "dist/ohm-map/browser"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Single-page app fallback. Angular's router owns every route below the
+# domain root, so unknown paths must serve index.html with HTTP 200
+# (NOT 301 — the URL must stay intact for the router to read params).
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+# Hashed JS / CSS produced by the application builder are immutable;
+# safe to cache aggressively.
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# index.html and runtime config must NOT be cached long — they're how
+# every other asset gets discovered and how the EnvService picks up
+# rebuilds.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/env.json"
+  [headers.values]
+    Cache-Control = "public, max-age=60, must-revalidate"

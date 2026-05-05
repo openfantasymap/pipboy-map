@@ -77,6 +77,20 @@ The full design brief lives in `.impeccable.md` (project root); read it before a
 
 When implementing UI, default to refusing AI-design reflexes (rounded cards with icon+heading+text, gradient text, soft drop-shadows, ghost buttons with arrow icons). The Pip-Boy aesthetic is the brief — not a starting point to "modernize."
 
+## Netlify deploy
+
+`netlify.toml` and `scripts/build-env.mjs` make this app deployable as a static site on Netlify (or any static-CDN host with the same shape: build command + publish dir + SPA fallback redirect). Two things are different from the Docker path:
+
+1. **Env injection happens at build time, not container start.** The Docker image has `docker-entrypoint.sh` running `jq -n env > assets/env.json` at every container start; Netlify has no such hook. Instead, `npm run build:netlify` runs `scripts/build-env.mjs` first — it reads `TILESERVER` and `TAG` from `process.env` and merges them over the committed `src/assets/env.json` before `ng build` bundles the output. Set those vars in Netlify's site settings; changes require a rebuild (which Netlify does automatically on deploy).
+
+2. **SPA routing** is handled by the `[[redirects]]` block in `netlify.toml` (`/* → /index.html` with HTTP 200, not 301 — the URL must stay intact for Angular's router to read params).
+
+The publish directory is `dist/ohm-map/browser` (Angular's application builder nests the browser output one level deeper than the configured `outputPath`).
+
+**Mixed-content gotcha.** The committed default `TILESERVER` is `http://51.15.160.236:9034/`. Netlify serves over HTTPS, and browsers block HTTP subresources from HTTPS pages — so on a Netlify deploy the events / OHM endpoints will fail unless `TILESERVER` is overridden to an HTTPS URL. The map tiles themselves come from `https://static.fantasymaps.org` and work fine; the OHM events endpoint hardcoded in `OhmService` (`http://51.15.160.236:9034/events/...`) has the same problem and would need a TLS-fronted alternative or to be reached through a Netlify Edge Function proxy. Document on the deploy, don't paper over.
+
+`package-lock.json` is committed so Netlify runs `npm ci` (faster, stricter) instead of `npm install`. `.nvmrc` pins Node 22.
+
 ## Sibling apps
 
 When changing shared behavior, check whether the equivalent file exists in `../ofm-map-2/`, `../ohm-map/`, `../lcars-map*/`, etc. They drift independently (different Angular versions, different theme assets) — there is no shared library, so changes have to be ported by hand. The map.component, services, and pipes are the most likely to be near-duplicates across siblings.
