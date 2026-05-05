@@ -1,52 +1,156 @@
-<div id="header" class="lcars-row header">
+<div class="pb-shell" [class.is-tuning]="tuning">
 
-  <!-- BAR WITH TITLE -->
-  <div class="lcars-bar horizontal lcars-black-bg ">
-    <div class="lcars-title lcars-text right">
-      <span class="glitch layers" [attr.data-text]="'OpenFantasyMap'">
-        OpenFantasyMap
-      </span>
-      </div>
-  </div>
+  <!-- chassis tagline above the screen bezel -->
+  <header class="pb-chassis-top" aria-hidden="true">
+    <span class="pb-chassis-mark">ROBCO INDUSTRIES&trade; UNIFIED OPERATING SYSTEM</span>
+    <span class="pb-chassis-rule" aria-hidden="true"></span>
+    <span class="pb-chassis-serial">SN&nbsp;3000-{{ buildStamp }}</span>
+  </header>
 
-  <!-- ROUNDED EDGE DECORATED -->
-  <div class="lcars-bar horizontal lcars-black-bg right-end decorated">
-  </div>
+  <!-- the screen — bezel wraps the CRT -->
+  <main class="pb-screen" role="main">
 
-</div>
-<div class="lcars-row" style="position:relative; top: 20px; margin-top: 5px; width: 100vw">
-  <div class="lcars-column lcars-black-bg lcars-u-2">
-    <div class="info lcars-element lcars-black-bg lcars-golden-tanoi-color decorated lcars-text lcars-u-2-3">
-      OpenFantasyMap and FantasyMaps are a projects developed by OpenHistoryMap to create a non conventional use case
-      for Digital Humanities and Public History.
+    <!-- screen header line -->
+    <div class="pb-screenline">
+      <span class="pb-screenline-prompt">&gt;&gt;&gt;</span>
+      <span class="pb-screenline-title">PIP-BOY 3000 :: WORLD INDEX</span>
+      <span class="pb-screenline-sep">::</span>
+      <span class="pb-screenline-count" *ngIf="timelines as t">{{ pad(t.length, 3) }} ENTRIES ON FILE</span>
+      <span class="pb-screenline-cursor">_</span>
     </div>
-    <a class="lcars-element lcars-u-2-1 lcars-text lcars-cosmic-bg lcars-white-color" href="https://www.fantasymaps.org">MORE INFO</a>
-    <a class="lcars-element lcars-u-2-1 lcars-text lcars-indigo-bg button" href="https://www.patreon.com/openfantasymap"
-      target="_blank" title="Help us keep this project alive"><img
-        src="/assets/images/Digital-Patreon-Logo_FieryCoral.png"
-        style="width:36px; left:-6px; top: -6px; position: relative;"></a>
-    <a class="lcars-element  lcars-u-2-1  lcars-text lcars-indigo-bg button" href="https://foundryvtt.com/packages/ofm-map-canvas"
-      target="_blank" title="Use this and other OFM maps on FoundryVTT"><img src="/assets/images/fvtt-solid-512.png"
-        style="width:36px; left:-6px; top: -6px; position: relative;"></a>
 
-    <div class="lcars-bar  fill lcars-black-bg decorated"></div>
-    <div class="lcars-bar vertical spacer"></div>
-  </div>
-  <div class="lcars-column lcars-u-15">
-    <div id="padder" class="lcars-row">
+    <div class="pb-screen-rule" aria-hidden="true">
+      ════════════════════════════════════════════════════════════════════════════
+    </div>
 
-      <div class="lcars-row">
-          <div id="ohm_timelines">
-              <div class="lcars-column" style="margin-bottom: 10px">
-                  <div class="lcars-row"  *ngFor="let tl of timelines" >
-            <button class="lcars-element button lcars-text lcars-{{tl.color}}-bg lcars-black-color lcars-u-2-2"
-              target="_blank" [style.display]="block" [style.background]="tl.bg"
-              [style.color]="tl.color" [style.background-image]="tl.bgimg" [colspan]="tl.size" [rowspan]="tl.size"
-              [routerLink]="[tl.url, tl.date, tl.base.zoom, tl.base.lat, tl.base.lng]">{{tl.name}}</button>
-            </div>
-          </div>
+    <!-- two-pane: PROPERTY-OF plate on the left, world index on the right -->
+    <div class="pb-screen-body">
+
+      <!-- left: hand-stamped device info plate -->
+      <aside class="pb-plate" aria-label="Device information">
+        <div class="pb-plate-stamp">
+          <span class="pb-plate-stamp-line">PROPERTY OF</span>
+          <span class="pb-plate-stamp-line pb-plate-stamp-name">VAULT-TEC INDUSTRIES</span>
+          <span class="pb-plate-stamp-line pb-plate-stamp-tiny">— DO NOT REMOVE FROM PREMISES —</span>
         </div>
+
+        <div class="pb-plate-blurb" *ngIf="infoData">
+          <span class="pb-plate-label">[ TRANSMISSION ]</span>
+          <p class="pb-plate-text">{{ infoData.info }}</p>
+        </div>
+
+        <div class="pb-plate-readout" aria-hidden="true">
+          <div class="pb-plate-row"><span>PWR</span><span class="pb-bars">██████░░</span></div>
+          <div class="pb-plate-row"><span>SIG</span><span class="pb-bars pb-bars--hot">███████░</span></div>
+          <div class="pb-plate-row"><span>RAD</span><span class="pb-bars pb-bars--low">█░░░░░░░</span></div>
+          <div class="pb-plate-row"><span>SYS</span><span class="pb-ok">NOMINAL</span></div>
+        </div>
+
+        <nav class="pb-plate-nav" aria-label="External resources">
+          <a class="pb-keycap"
+             href="https://www.fantasymaps.org" target="_blank" rel="noopener">
+            <span class="pb-keycap-num">F1</span>
+            <span class="pb-keycap-label">PROJECT INFO</span>
+          </a>
+          <a class="pb-keycap"
+             href="https://www.patreon.com/openfantasymap" target="_blank" rel="noopener"
+             title="Help us keep this project alive">
+            <span class="pb-keycap-num">F2</span>
+            <span class="pb-keycap-label">PATREON · SUSTAIN POWER</span>
+          </a>
+          <a class="pb-keycap"
+             href="https://foundryvtt.com/packages/ofm-map-canvas" target="_blank" rel="noopener"
+             title="Use these maps on FoundryVTT">
+            <span class="pb-keycap-num">F3</span>
+            <span class="pb-keycap-label">FOUNDRYVTT MODULE</span>
+          </a>
+        </nav>
+
+        <div class="pb-plate-mark" aria-hidden="true">
+          <span class="pb-plate-mark-glyph">▣</span>
+          <span class="pb-plate-mark-text">REG. 047/B-21</span>
+        </div>
+      </aside>
+
+      <!-- right: the WORLD INDEX table -->
+      <section class="pb-index" aria-label="Known worlds index">
+
+        <div class="pb-colhead" aria-hidden="true">
+          <span class="pb-col-n">N&deg;</span>
+          <span class="pb-col-name">DESIGNATION</span>
+          <span class="pb-col-state">STATE</span>
+          <span class="pb-col-date">CIRCA</span>
+          <span class="pb-col-sig">SIG.</span>
+        </div>
+
+        <div class="pb-index-rule" aria-hidden="true">
+          ────────────────────────────────────────────────────────────────────
+        </div>
+
+        <ng-container *ngIf="timelines; else booting">
+          <a *ngFor="let tl of timelines; let i = index"
+             class="pb-row"
+             [class.is-hovered]="hovered === tl"
+             [class.is-tuning]="tuning === tl"
+             (mouseenter)="hover(tl)"
+             (mouseleave)="hover(null)"
+             (focus)="hover(tl)"
+             (blur)="hover(null)"
+             (click)="tuneTo(tl, $event)"
+             [routerLink]="['/' + tl.url, tl.date, tl.base.zoom, tl.base.lat, tl.base.lng]"
+             [attr.data-name]="tl.name">
+            <span class="pb-row-cursor" aria-hidden="true">▶</span>
+            <span class="pb-row-n">{{ pad(i + 1, 3) }}</span>
+            <span class="pb-row-name">{{ tl.name }}</span>
+            <span class="pb-row-state">[{{ rowStatus(i) }}]</span>
+            <span class="pb-row-date">{{ yearStamp(tl.date) }}</span>
+            <span class="pb-row-sig" aria-hidden="true">{{ signalBars(i) }}</span>
+            <span class="pb-row-locking" aria-hidden="true">▌LOCKING SIGNAL…</span>
+          </a>
+        </ng-container>
+
+        <ng-template #booting>
+          <div class="pb-booting" aria-live="polite">
+            <span class="pb-boot-line">&gt; INITIALISING DATA-LINK</span>
+            <span class="pb-boot-line">&gt; ENUMERATING WORLDS</span>
+            <span class="pb-boot-line pb-boot-blink">&gt; STANDBY_</span>
+          </div>
+        </ng-template>
+
+        <div class="pb-index-rule" aria-hidden="true">
+          ────────────────────────────────────────────────────────────────────
+        </div>
+
+        <div class="pb-statusbar" aria-hidden="true">
+          <span class="pb-status-cell">DATA-LINK :: <em class="pb-ok">ONLINE</em></span>
+          <span class="pb-status-cell">CRT @ 60HZ</span>
+          <span class="pb-status-cell" *ngIf="timelines">{{ pad(timelines.length, 3) }}/{{ pad(timelines.length, 3) }} ENTRIES</span>
+          <span class="pb-status-cell">REL. 0021.05.M</span>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- tuning overlay shown briefly on click -->
+    <div class="pb-tuning" *ngIf="tuning" role="status" aria-live="assertive">
+      <div class="pb-tuning-frame">
+        <div class="pb-tuning-line">&gt; LOCKING SIGNAL</div>
+        <div class="pb-tuning-line pb-tuning-name">{{ tuning.name }}</div>
+        <div class="pb-tuning-line pb-tuning-bar"><span></span></div>
+        <div class="pb-tuning-line pb-tuning-blink">▌STAND BY</div>
       </div>
     </div>
-  </div>
+
+  </main>
+
+  <!-- chassis bottom: credit + reg mark -->
+  <footer class="pb-chassis-bottom">
+    <span class="pb-chassis-credit">
+      FANTASYMAPS · BUILT IN BOLOGNA BY
+      <a href="https://www.openhistorymap.org" target="_blank" rel="noopener">OPENHISTORYMAP</a>
+    </span>
+    <span class="pb-chassis-rivets" aria-hidden="true">● ● ● ●</span>
+  </footer>
+
 </div>

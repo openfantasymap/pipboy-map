@@ -66,6 +66,17 @@ Components inject `OfmService` to get the union of both. If you add a new endpoi
 
 There's no `accessToken` on MapLibre (it's not Mapbox) — don't reintroduce one.
 
+## Design Context
+
+The full design brief lives in `.impeccable.md` (project root); read it before any design work. Summary:
+
+- **Users:** RPG players browsing fantasy worlds *between* sessions — at home, leisurely, no time pressure. Not GMs at the table. Job-to-be-done is "let me feel like I have a working artifact from inside the fiction."
+- **Personality:** Salvaged, stubborn, opinionated. Lived-in salvage tech — warm under the grime, decades of fingerprints, hand-typed labels.
+- **Aesthetic:** Authentic Pip-Boy 3000 — green phosphor on near-black, locked dark theme. References: VT100/IBM 3270 terminals, Vault-Tec posters, dot-matrix print, Dymo labels. Anti-references: sibling LCARS forks, the cbrpnk-map upstream's magenta/cyan, AI-dashboard/Stripe/Linear minimalism.
+- **Principles:** (1) it's a prop not a product; (2) phosphor green is the only chroma — hierarchy via luminance/weight/density; (3) texture earns its place; (4) monospace rhythm beats size jumps; (5) slow beats fast — this audience is browsing, not transacting; (6) lived-in beats clean — a handful of authored imperfections.
+
+When implementing UI, default to refusing AI-design reflexes (rounded cards with icon+heading+text, gradient text, soft drop-shadows, ghost buttons with arrow icons). The Pip-Boy aesthetic is the brief — not a starting point to "modernize."
+
 ## Sibling apps
 
 When changing shared behavior, check whether the equivalent file exists in `../ofm-map-2/`, `../ohm-map/`, `../lcars-map*/`, etc. They drift independently (different Angular versions, different theme assets) — there is no shared library, so changes have to be ported by hand. The map.component, services, and pipes are the most likely to be near-duplicates across siblings.

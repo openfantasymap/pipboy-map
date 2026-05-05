@@ -1,9 +1,66 @@
+/* ============================================================
+   PIP-BOY 3000 :: design tokens
+   Phosphor-on-black CRT. Hierarchy via luminance, weight, density.
+   No second chroma except --pb-warn (rare, alarm-only).
+   ============================================================ */
+
+:root {
+    /* Surfaces — near-black tinted toward phosphor hue */
+    --pb-bg-0:       oklch(0.13 0.012 142);
+    --pb-bg-1:       oklch(0.17 0.018 142);
+    --pb-bg-2:       oklch(0.21 0.024 142);
+    --pb-bg-deep:    oklch(0.08 0.008 142);
+
+    /* Phosphor luminance ladder */
+    --pb-fg:         oklch(0.88 0.18 142);
+    --pb-fg-bright:  oklch(0.95 0.20 142);
+    --pb-fg-dim:     oklch(0.66 0.14 142);
+    --pb-fg-faded:   oklch(0.46 0.09 142);
+    --pb-fg-ghost:   oklch(0.30 0.05 142);
+
+    /* The one allowed second hue — rare amber alarm */
+    --pb-warn:       oklch(0.83 0.16 80);
+
+    /* Halos / blooms */
+    --pb-halo:       oklch(0.88 0.18 142 / 0.50);
+    --pb-halo-soft:  oklch(0.88 0.18 142 / 0.20);
+    --pb-halo-hot:   oklch(0.95 0.22 142 / 0.65);
+
+    /* Type — VT323 for screen, Special Elite for chassis/printed */
+    --pb-screen:     'VT323', 'IBM Plex Mono', 'Courier New', monospace;
+    --pb-chassis:    'Special Elite', 'Courier New', monospace;
+
+    /* Type scale — narrow on purpose. Hierarchy via weight + density. */
+    --pb-step-0:     0.875rem;
+    --pb-step-1:     1rem;
+    --pb-step-2:     1.25rem;
+    --pb-step-3:     1.625rem;
+    --pb-step-4:     2.25rem;
+    --pb-step-5:     clamp(2.5rem, 5vw, 3.75rem);
+
+    /* 4pt spacing scale, semantic names */
+    --pb-space-1:    4px;
+    --pb-space-2:    8px;
+    --pb-space-3:    12px;
+    --pb-space-4:    16px;
+    --pb-space-6:    24px;
+    --pb-space-8:    32px;
+    --pb-space-12:   48px;
+    --pb-space-16:   64px;
+    --pb-space-24:   96px;
+
+    /* Chassis */
+    --pb-bezel:      18px;
+    --pb-rule:       1px;
+    --pb-rule-bold:  2px;
+}
+
 /* You can add global styles to this file, and also import other style files */
 
 html,
 body {
     height: 100%;
-    background-color: #000000;
+    background-color: var(--pb-bg-deep);
     margin: 0;
     font-family: "Roboto Condensed", "Helvetica Neue", sans-serif;
     font-weight: 700;
