@@ -78,6 +78,12 @@ a {
 
 .pb-screen {
   position: relative;
+  /* The CRT is a physical object — it has a screen size. On wider
+     monitors it sits centred like a Pip-Boy mounted on the wall, not
+     stretched edge to edge. */
+  max-width: 1180px;
+  margin-inline: auto;
+  width: 100%;
   border: var(--pb-rule-bold) solid var(--pb-fg-faded);
   border-radius: var(--pb-bezel);
   background:
@@ -401,13 +407,17 @@ a {
 .pb-colhead,
 .pb-row {
   display: grid;
+  /* Manifest-line layout: fixed-width columns flow tight from the left.
+     Without justify-content:start, browsers stretch grid tracks across
+     the container and the metadata floats off to the far right. */
   grid-template-columns:
     /* cursor */ 2ch
     /* N°    */  4ch
-    /* name  */  1fr
+    /* name  */  minmax(14ch, 22ch)
     /* state */  6ch
-    /* date  */  10ch
+    /* date  */  11ch
     /* sig   */  6ch;
+  justify-content: start;
   gap: var(--pb-space-4);
   align-items: baseline;
   padding: 4px var(--pb-space-2);
