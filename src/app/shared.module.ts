@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { FormsModule } from '@angular/forms';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,14 +33,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { MnDockerModule } from '@modalnodes/mn-docker';
-import { MnConfiguratorModule } from '@modalnodes/mn-configurator';
-
 
 const modules = [
-  MatCheckboxModule,
   MatCheckboxModule,
   MatButtonModule,
   MatInputModule,
@@ -72,22 +66,10 @@ const modules = [
   MatSortModule,
   MatPaginatorModule,
   MatTreeModule,
-
 ];
 
 @NgModule({
-  declarations: [
-
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ...modules,
-    HttpClientModule,
-    MnDockerModule,
-  ],
-  exports: [
-    ...modules,
-  ]
+  imports: [CommonModule, FormsModule, ...modules],
+  exports: [...modules],
 })
-export class SharedModule { }
+export class SharedModule {}

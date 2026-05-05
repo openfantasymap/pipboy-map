@@ -19,14 +19,11 @@ import {
   ViewChild
 } from '@angular/core';
 
-import {
-  MnDockerService
-} from '@modalnodes/mn-docker';
+import { EnvService } from '../env.service';
 import {
   HttpClient
 } from '@angular/common/http';
 
-import env from '../../assets/env.json';
 import {
   ActivatedRoute
 } from '@angular/router';
@@ -68,7 +65,8 @@ declare const turf;
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: ['./map.component.scss'],
+  standalone: false,
 })
 export class MapComponent implements OnInit, AfterContentInit {
   map;
@@ -163,7 +161,7 @@ export class MapComponent implements OnInit, AfterContentInit {
   }
 
   constructor(
-    private ds: MnDockerService,
+    private ds: EnvService,
     private ar: ActivatedRoute,
     private l: Location,
     private md: MatDialog,
@@ -325,7 +323,6 @@ export class MapComponent implements OnInit, AfterContentInit {
     this.http.get('assets/info.json').subscribe(data => {
       this.infoData = data;
     })
-    maplibregl.accessToken = 'pk.eyJ1IjoiYWJyaWNrbyIsImEiOiJjanRkajJ4dzYwZGcwNDNvOGQybnZ2aWU0In0.dHeKsAVs3BmZ0biKTOi7wg';
     this.ts = this.ds.getEnv('TILESERVER');
 
     this.atDate = this.ar.snapshot.params.year;

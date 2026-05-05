@@ -5,7 +5,8 @@ import { OfmService } from '../ofm.service';
 @Component({
   selector: 'app-timelines',
   templateUrl: './timelines.component.html',
-  styleUrls: ['./timelines.component.scss']
+  styleUrls: ['./timelines.component.scss'],
+  standalone: false,
 })
 export class TimelinesComponent implements OnInit {
 
