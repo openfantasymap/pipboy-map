@@ -87,7 +87,7 @@
           ────────────────────────────────────────────────────────────────────
         </div>
 
-        <ng-container *ngIf="timelines; else booting">
+        <ng-container *ngIf="timelines && timelines.length > 0; else booting">
           <a *ngFor="let tl of timelines; let i = index"
              class="pb-row"
              [class.is-hovered]="hovered === tl"
@@ -97,7 +97,7 @@
              (focus)="hover(tl)"
              (blur)="hover(null)"
              (click)="tuneTo(tl, $event)"
-             [routerLink]="['/' + tl.url, tl.date, tl.base.zoom, tl.base.lat, tl.base.lng]"
+             [routerLink]="[tl.url, tl.date, tl.base.zoom, tl.base.lat, tl.base.lng]"
              [attr.data-name]="tl.name">
             <span class="pb-row-cursor" aria-hidden="true">▶</span>
             <span class="pb-row-n">{{ pad(i + 1, 3) }}</span>
@@ -111,9 +111,16 @@
 
         <ng-template #booting>
           <div class="pb-booting" aria-live="polite">
-            <span class="pb-boot-line">&gt; INITIALISING DATA-LINK</span>
-            <span class="pb-boot-line">&gt; ENUMERATING WORLDS</span>
-            <span class="pb-boot-line pb-boot-blink">&gt; STANDBY_</span>
+            <ng-container *ngIf="timelines === null">
+              <span class="pb-boot-line">&gt; INITIALISING DATA-LINK</span>
+              <span class="pb-boot-line">&gt; ENUMERATING WORLDS</span>
+              <span class="pb-boot-line pb-boot-blink">&gt; STANDBY_</span>
+            </ng-container>
+            <ng-container *ngIf="timelines && timelines.length === 0">
+              <span class="pb-boot-line">&gt; DATA-LINK ESTABLISHED</span>
+              <span class="pb-boot-line">&gt; NO ENTRIES MATCH CURRENT FILTER</span>
+              <span class="pb-boot-line pb-boot-blink">&gt; CHECK TAG ENV VAR_</span>
+            </ng-container>
           </div>
         </ng-template>
 

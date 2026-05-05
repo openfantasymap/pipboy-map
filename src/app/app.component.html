@@ -1,5 +1,5 @@
 <div [ngClass]="{'scanlines':scanlines}">
-  <div class="lcars-app-container">
+  <div [class.lcars-app-container]="!isHome">
     <router-outlet></router-outlet>
     <footer *ngIf="!isHome">
       <div id="footer" class="lcars-row ">

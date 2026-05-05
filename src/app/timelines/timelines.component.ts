@@ -74,7 +74,7 @@ export class TimelinesComponent implements OnInit {
     this.tuning = tl;
     setTimeout(() => {
       this.router.navigate([
-        '/' + tl.url,
+        tl.url,
         tl.date,
         tl.base.zoom,
         tl.base.lat,
