@@ -1,47 +1,83 @@
-<!-- HEADER ==================================================== -->
-<div class="lcars-column">
-  <div id="header" class="lcars-row header">
-    <!-- BAR WITH TITLE -->
-    <div class="lcars-bar horizontal lcars-black-bg">
-      <div class="lcars-title lcars-text right"><span [ngClass]="{'glitch':title!== null, 'layers': title !== null}" [attr.data-text]="'OpenFantasyMap - ' + title">
-        OpenFantasyMap - {{ title }}
-    </span>
+<!-- ============================================================
+     PIP-BOY 3000 :: MAP VIEW
+     Structure preserves every event binding and ViewChild from the
+     original LCARS template; the lcars-* classes remain because
+     map.component.scss styles them. New pb-map-* wrappers add the
+     semantic sections that the polish layer hangs off.
+     ============================================================ -->
+
+<div class="lcars-column pb-map-shell">
+
+  <!-- ===== HEADER ============================================== -->
+  <div id="header" class="lcars-row header pb-map-header">
+    <div class="lcars-bar horizontal lcars-black-bg pb-map-header-bar">
+      <div class="lcars-title lcars-text right pb-map-title">
+        <span class="pb-map-title-prompt" aria-hidden="true">&gt;&gt;&gt;</span>
+        <span class="pb-map-title-tuned" aria-hidden="true">TUNED&nbsp;::</span>
+        <span
+          class="pb-map-title-name"
+          [ngClass]="{ glitch: title !== null, layers: title !== null }"
+          [attr.data-text]="title || 'NO SIGNAL'"
+        >{{ title || 'NO SIGNAL' }}</span>
+      </div>
+      <div class="pb-map-header-right" aria-hidden="true">
+        <span class="pb-map-header-stamp">CIR.&nbsp;{{ atDate | decimaldate | date : 'y' }}</span>
+        <span class="pb-map-header-sig">SIG&nbsp;<span class="pb-bars">████░</span></span>
       </div>
     </div>
-
-    <!-- ROUNDED EDGE DECORATED -->
     <div class="lcars-bar horizontal right-end decorated lcars-black-bg"></div>
   </div>
 
-  <div class="lcars-row" style="position: relative; top: 24px; width: 100vw">
-    <div class="lcars-column lcars-u-2">
+  <!-- ===== BODY: sidebar + map ================================ -->
+  <div class="lcars-row pb-map-body" style="position: relative; top: 24px; width: 100vw">
+
+    <!-- SIDEBAR ============================================== -->
+    <aside class="lcars-column lcars-u-2 pb-map-sidebar">
+
+      <!-- info blurb (top of the sidebar) -->
       <div
         *ngIf="infoData"
-        class="info lcars-element lcars-black-bg lcars-golden-tanoi-color decorated lcars-text lcars-u-2-3"
+        class="info lcars-element lcars-black-bg lcars-golden-tanoi-color decorated lcars-text lcars-u-2-3 pb-map-info"
         [innerHtml]="infoData?.info"
       ></div>
 
-      <div class="lcars-row lcars-black-bg">
+      <!-- CHANNELS ::: F1 / F2 / F3 -->
+      <div class="pb-map-section-cap" aria-hidden="true">[ CHANNELS ]</div>
+      <div class="lcars-row lcars-black-bg pb-map-keycap-row">
         <a
-          class="lcars-element lcars-text lcars-indigo-bg button"
+          class="lcars-element lcars-text lcars-indigo-bg button pb-map-keycap"
+          href="https://www.fantasymaps.org"
+          target="_blank"
+          rel="noopener"
+          title="Project information"
+        >
+          <span class="pb-map-keycap-num">F1</span>
+          <span class="pb-map-keycap-label">PROJECT</span>
+        </a>
+        <a
+          class="lcars-element lcars-text lcars-indigo-bg button pb-map-keycap"
           href="https://www.patreon.com/openfantasymap"
           target="_blank"
+          rel="noopener"
           title="Help us keep this project alive"
-          ><img
-            src="/assets/images/Digital-Patreon-Logo_FieryCoral.png"
-            style="width: 36px; left: -6px; top: -6px; position: relative"
-        /></a>
+        >
+          <span class="pb-map-keycap-num">F2</span>
+          <span class="pb-map-keycap-label">SUSTAIN</span>
+        </a>
         <a
-          class="lcars-element lcars-text lcars-indigo-bg button"
+          class="lcars-element lcars-text lcars-indigo-bg button pb-map-keycap"
           href="https://foundryvtt.com/packages/ofm-map-canvas"
           target="_blank"
+          rel="noopener"
           title="Use this and other OFM maps on FoundryVTT"
-          ><img
-            src="/assets/images/fvtt-solid-512.png"
-            style="width: 36px; left: -6px; top: -6px; position: relative"
-        /></a>
+        >
+          <span class="pb-map-keycap-num">F3</span>
+          <span class="pb-map-keycap-label">FOUNDRY</span>
+        </a>
       </div>
 
+      <!-- NAVIGATION ::: ALL MAPS / DECKS -->
+      <div class="pb-map-section-cap" aria-hidden="true">[ NAVIGATION ]</div>
       <div class="lcars-row lcars-black-bg">
         <button
           class="lcars-element lcars-u-1-1 lcars-text lcars-lilac-bg button"
@@ -50,21 +86,16 @@
           ALL MAPS
         </button>
         <div
-          *ngIf="ofm_meta.type === 'starbase'"
+          *ngIf="ofm_meta?.type === 'starbase'"
           class="lcars-element lcars-u-1-1 lcars-dodger-blue-bg"
           (click)="showDecks = !showDecks"
         >
-          Decks
+          DECKS
         </div>
       </div>
-      <div class="lcars-row lcars-black-bg">
-        <button
-          class="lcars-element lcars-lilac-bg lcars-text button"
-          (click)="copy_url()"
-        >
-          SHARE
-        </button>
-      </div>
+
+      <!-- READOUTS ::: SEARCH / INFO / LEGEND / TOOLS -->
+      <div class="pb-map-section-cap" aria-hidden="true">[ READOUTS ]</div>
       <div class="lcars-row lcars-black-bg">
         <div
           class="lcars-element lcars-text lcars-u-1-1"
@@ -117,42 +148,79 @@
           TOOLS
         </div>
       </div>
-    </div>
+
+      <!-- BROADCAST ::: SHARE -->
+      <div class="pb-map-section-cap" aria-hidden="true">[ BROADCAST ]</div>
+      <div class="lcars-row lcars-black-bg">
+        <button
+          class="lcars-element lcars-lilac-bg lcars-text button pb-map-share"
+          (click)="copy_url()"
+        >
+          ▌ SHARE COORDINATES
+        </button>
+      </div>
+
+      <div class="pb-map-sidebar-foot" aria-hidden="true">
+        <span class="pb-map-foot-glyph">▣</span>
+        <span class="pb-map-foot-text">REG. 047/B-21</span>
+      </div>
+    </aside>
 
     <div class="lcars-bar fill lcars-indigo-bg"></div>
     <div class="lcars-bar spacer"></div>
   </div>
-  <div class="lcars-column lcars-u-15">
+
+  <!-- MAP COLUMN =========================================== -->
+  <div class="lcars-column lcars-u-15 pb-map-stage">
     <div class="lcars-row">
       <div id="ohm_map" class="lcars-u-15" #screen></div>
       <div id="ofm_attribution" [innerHTML]="ofm_meta?.copyright"></div>
     </div>
 
-    <div id="timebar" class="lcars-row">
-      <button mat-button class="hidesmall" (click)="selectDate()">
-        {{ atDate | decimaldate | date : "d/M/y G - hh:mm:ss" | nicedate }}
+    <!-- TAPE TRANSPORT ===================================== -->
+    <div id="timebar" class="lcars-row pb-map-transport">
+      <span class="pb-map-transport-label" aria-hidden="true">TAPE</span>
+      <button
+        mat-button
+        class="hidesmall pb-map-transport-readout"
+        (click)="selectDate()"
+        title="Set date"
+      >
+        <span class="pb-map-readout-prompt">&gt;</span>
+        <span class="pb-map-readout-date">
+          {{ atDate | decimaldate | date : 'd/M/y G - hh:mm:ss' | nicedate }}
+        </span>
       </button>
       <button
         mat-button
-        class="hidesmall"
+        class="hidesmall pb-map-transport-play"
         mat-icon-button
         (click)="startstop()"
+        [attr.aria-label]="startstopstatus === 'play' ? 'Stop' : 'Play'"
       >
         <mat-icon>{{ startstopicon }}</mat-icon>
       </button>
-      <!--<button mat-button class="hidesmall" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>speed</mat-icon></button>-->
+      <span class="pb-map-transport-spool" aria-hidden="true">
+        <span class="pb-map-spool-tooth"></span>
+        <span class="pb-map-spool-tooth"></span>
+        <span class="pb-map-spool-tooth"></span>
+        <span class="pb-map-spool-tooth"></span>
+        <span class="pb-map-spool-tooth"></span>
+      </span>
     </div>
+
     <div id="visualization"></div>
   </div>
 </div>
 
-<div id="deckbox" class="lcars-row" [ngClass]="{ hidden: !showDecks }">
+<!-- ===== DECKBOX ============================================ -->
+<div id="deckbox" class="lcars-row pb-map-panel" [ngClass]="{ hidden: !showDecks }">
+  <div class="pb-map-panel-cap" aria-hidden="true">[ DECK SELECT ]</div>
   <div class="lcars-bracket left"></div>
-
   <div class="lcars-column">
     <button
       class="lcars-element lcars-text lcars-dodger-blue-bg button"
-      *ngFor="let o of ofm_meta.decks | keyvalue"
+      *ngFor="let o of (ofm_meta?.decks || {}) | keyvalue"
       (click)="setDeck(o.key)"
     >
       {{ o.value.name }}
@@ -160,55 +228,64 @@
   </div>
 </div>
 
+<!-- ===== INFOBOX (feature dossier) ========================= -->
 <div
   id="infobox"
-  class="lcars-row"
+  class="lcars-row pb-map-panel pb-map-panel--info"
   [ngClass]="{ hidden: !showInfo }"
   #infobox
   *ngIf="p"
 >
+  <div class="pb-map-panel-cap" aria-hidden="true">[ DOSSIER ]</div>
   <div class="lcars-column">
     <div class="lcars-row">
-      <div class="lcars-element lcars-danub-bg lcars-text lcars-u-1-1">
+      <div class="lcars-element lcars-danub-bg lcars-text lcars-u-1-1 pb-map-dossier-name">
         {{ p.name }}
       </div>
+    </div>
+
+    <div class="pb-map-dossier-fields" aria-hidden="true">
+      <span class="pb-map-dossier-field-label">DESIGNATION</span>
+      <span class="pb-map-dossier-field-value">{{ p.name }}</span>
+    </div>
+
+    <div class="lcars-row">
       <div
         (click)="warpTo(atDate, tl + '-' + p.name.toLowerCase())"
         class="lcars-element button lcars-text lcars-u-1-1"
       >
-        GO
+        ▶ WARP IN
       </div>
     </div>
     <div class="lcars-row" *ngIf="p.st_wiki">
       <a
-        class="lcars-element lcars-text lcars-u-2-1 lcars-black-color  button"
+        class="lcars-element lcars-text lcars-u-2-1 lcars-black-color button"
         target="_blank"
         href="{{ p.st_wiki }}"
-        >MEMORY ALPHA</a
-      >
+      >MEMORY ALPHA ↗</a>
     </div>
     <div class="lcars-row" *ngIf="p.wiki">
       <a
         class="lcars-element lcars-text lcars-u-2-1 lcars-black-color button"
         target="_blank"
         href="{{ p.wiki }}"
-        >WIKIPEDIA</a
-      >
+      >WIKIPEDIA ↗</a>
     </div>
   </div>
 </div>
 
+<!-- ===== SEARCHBOX ========================================== -->
 <div
   id="searchbox"
-  class="lcars-row"
+  class="lcars-row pb-map-panel pb-map-panel--search"
   [ngClass]="{ hidden: !showSearch }"
   #infobox
 >
+  <div class="pb-map-panel-cap" aria-hidden="true">[ QUERY ]</div>
   <div class="lcars-column">
-    <div class="lcars-row">
-      <div class="lcars-element lcars-text lcars-u-1-1">
-        <input type="text" placeholder="Search" #query />
-      </div>
+    <div class="lcars-row pb-map-search-input">
+      <span class="pb-map-search-prompt" aria-hidden="true">&gt;</span>
+      <input type="text" placeholder="QUERY..." #query (keyup.enter)="search(query.value)" />
       <button
         class="lcars-element button lcars-text"
         (click)="search(query.value)"
@@ -216,35 +293,35 @@
         SEARCH
       </button>
     </div>
-    <div class="lcars-column">
+    <div class="lcars-column pb-map-search-results">
       <div class="lcars-row" *ngFor="let row of searchResults">
-        <div class="lcars-element lcars-text lcars-u-2-1">
+        <div class="lcars-element lcars-text lcars-u-2-1 pb-map-result-name">
           {{ row.properties.name }}
         </div>
         <button
           class="lcars-element lcars-text button right-rounded"
           (click)="panTo(row.geometry.coordinates)"
         >
-          GO
+          ▶ GO
         </button>
+      </div>
+      <div class="pb-map-search-empty" *ngIf="searchResults.length === 0" aria-hidden="true">
+        &gt; NO RESULTS YET_
       </div>
     </div>
   </div>
 </div>
 
+<!-- ===== LEGENDBOX ========================================== -->
 <div
   id="legendbox"
-  class="lcars-row"
+  class="lcars-row pb-map-panel pb-map-panel--legend"
   [ngClass]="{ hidden: !showLegend }"
   #infobox
 >
+  <div class="pb-map-panel-cap" aria-hidden="true">[ LEGEND ]</div>
   <div class="lcars-column">
-    <div class="lcars-row">
-      <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">
-        legend
-      </div>
-    </div>
-    <div class="lcars-row" *ngFor="let t of ofm_meta.togglable">
+    <div class="lcars-row" *ngFor="let t of (ofm_meta?.togglable || [])">
       <div
         (click)="toggleLayer(t.name)"
         [ngClass]="{
@@ -254,6 +331,7 @@
         }"
         class="lcars-element button lcars-text"
       >
+        <span class="pb-map-toggle-mark" aria-hidden="true">{{ layers[t.name] ? '[●]' : '[ ]' }}</span>
         {{ t.label }}
       </div>
       <div
@@ -272,23 +350,31 @@
   </div>
 </div>
 
-<div id="toolbox" class="lcars-row" [ngClass]="{ hidden: !showTools }" #infobox>
+<!-- ===== TOOLBOX (instruments) ============================== -->
+<div id="toolbox" class="lcars-row pb-map-panel pb-map-panel--tools" [ngClass]="{ hidden: !showTools }" #infobox>
+  <div class="pb-map-panel-cap" aria-hidden="true">[ INSTRUMENTS ]</div>
   <div class="lcars-column">
     <div class="lcars-row">
-      <div class="lcars-element lcars-text lcars-u-1-1">
-        TOOLS
+      <div class="lcars-element lcars-text lcars-u-2 pb-map-tool-section">
+        DISPLAY
+      </div>
+    </div>
+    <div class="lcars-row">
+      <div class="lcars-element lcars-text lcars-u-2 pb-map-tool-button" (click)="toggleScanlines('#222')">
+        ▌ SCANLINES TOGGLE
+      </div>
+    </div>
+
+    <div class="lcars-row">
+      <div class="lcars-element lcars-text lcars-u-2 pb-map-tool-section">
+        MEASURE
       </div>
       <button
         (click)="clearDistance()"
-        class="lcars-element lcars-text lcars-u-1-1"
+        class="lcars-element lcars-text lcars-u-1-1 pb-map-tool-clear"
       >
-        CLEAR
+        ✕ CLEAR
       </button>
-    </div>
-    <div class="lcars-row">
-        <div class="lcars-element lcars-text lcars-u-2" (click)="toggleScanlines('#222');">
-            SCANLINES
-        </div>
     </div>
     <div class="lcars-row">
       <button
@@ -297,18 +383,17 @@
           'lcars-neon-carrot-bg': measuring,
           'lcars-black-bg': !measuring
         }"
-        class="lcars-element lcars-text button lcars-u-1-4"
+        class="lcars-element lcars-text button lcars-u-1-4 pb-map-tool-distance"
       >
-        DISTANCE
+        {{ measuring ? '◉ MEASURING…' : '◯ DISTANCE' }}
       </button>
-      <div class="lcars-column">
-        <div class="lcars-element lcars-text lcars-u-1-1">{{ measured }}</div>
+      <div class="lcars-column pb-map-tool-readout">
+        <div class="lcars-element lcars-text lcars-u-1-1 pb-map-tool-readout-main">{{ measured }}</div>
         <div class="lcars-element lcars-text lcars-u-1-3">
           <div class="lcars-column">
-            <div class="lcars-row" *ngFor="let r of times">
+            <div class="lcars-row pb-map-tool-time-row" *ngFor="let r of times">
               <div class="label">{{ r.l }}</div>
-              : <span>{{ r.v }}</span
-              ><span>{{ r.u }}</span>
+              <span class="pb-map-tool-time-value">{{ r.v }}</span><span class="pb-map-tool-time-unit">{{ r.u }}</span>
             </div>
           </div>
         </div>
@@ -317,20 +402,20 @@
   </div>
 </div>
 
+<!-- ===== SHAREBOX =========================================== -->
 <div
   id="sharebox"
-  class="lcars-row"
+  class="lcars-row pb-map-panel pb-map-panel--share"
   [ngClass]="{ hidden: !showShare }"
   #infobox
 >
+  <div class="pb-map-panel-cap" aria-hidden="true">[ BROADCAST ]</div>
   <div class="lcars-column">
-    <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">TOOLS</div>
-    <div class="lcars-row">
-      <div class="lcars-element lcars-text button lcars-u-1-3">DISTANCE</div>
-      <div class="lcars-column">
-        <div class="lcars-element lcars-text lcars-u-1-1"></div>
-        <div class="lcars-element lcars-text lcars-u-1-2"></div>
-      </div>
+    <div class="lcars-element lcars-danub-bg lcars-text lcars-u-2-1">SIGNAL TRANSMITTED</div>
+    <div class="lcars-row pb-map-share-line" *ngIf="share_link">
+      <span class="pb-map-share-label" aria-hidden="true">URL ::</span>
+      <a class="pb-map-share-link" [href]="share_link" target="_blank" rel="noopener">{{ share_link }}</a>
     </div>
+    <div class="pb-map-share-hint" aria-hidden="true">&gt; ADDRESS COPIED TO CLIPBOARD_</div>
   </div>
 </div>

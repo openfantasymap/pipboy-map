@@ -17,7 +17,10 @@ import {
   isDevMode,
   AfterContentInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  ChangeDetectorRef,
+  NgZone,
+  inject,
 } from '@angular/core';
 
 import { EnvService } from '../env.service';
@@ -88,7 +91,26 @@ export class MapComponent implements OnInit, AfterContentInit {
 
   @Input() style;
 
-  ofm_meta: any;
+  // Initialised with safe defaults so the template's *ngFor over togglable /
+  // decks / clickLayers and the load-time iterators don't bomb before
+  // getMap() resolves. getMap() replaces the whole object once metadata
+  // arrives.
+  ofm_meta: any = {
+    togglable: [],
+    clickLayers: [],
+    decks: {},
+    timed: [],
+    relatedLayers: [],
+    type: '',
+    copyright: '',
+    distance_multiplier: 1,
+    distance_unit: 'km',
+    speeds: [],
+  };
+
+  private cdr = inject(ChangeDetectorRef);
+  private zone = inject(NgZone);
+  private clickHandlersAttached = false;
 
   start = {
     center: [1.57, 43.67],
@@ -183,8 +205,11 @@ export class MapComponent implements OnInit, AfterContentInit {
 
   search(query) {
     this.ofm.search(this.tl, query).subscribe((data: any) => {
-      this.searchResults = data.features;
-    })
+      this.zone.run(() => {
+        this.searchResults = data?.features ?? [];
+        this.cdr.detectChanges();
+      });
+    });
   }
 
   currentDeck="d1";
@@ -226,70 +251,41 @@ export class MapComponent implements OnInit, AfterContentInit {
 
       this.map.on('load', () => {
         this.showRels();
-
+        this.showOverlays();
 
         this.map.on('zoomend', () => {
-          if (this.map.getZoom() == 22 && this.ofm_meta.relatedLayers) {
+          if (this.map.getZoom() == 22 && this.ofm_meta?.relatedLayers) {
             const features = this.map.queryRenderedFeatures({
-              layers: this.ofm_meta?.relatedLayers
+              layers: this.ofm_meta.relatedLayers,
             });
-            if (features.length == 1) {
-              const move_to = this.ar.snapshot.params.timeline + "-" + features[0].properties[this.ofm_meta.relatedField].toLowerCase();
+            if (features.length == 1 && this.ofm_meta.relatedField) {
+              const move_to =
+                this.ar.snapshot.params.timeline +
+                '-' +
+                features[0].properties[this.ofm_meta.relatedField].toLowerCase();
               this.warpTo(this.atDate, move_to);
             }
-          } else if (this.map.getZoom() < 1 && this.ofm_meta.parentMap) {
+          } else if (this.map.getZoom() < 1 && this.ofm_meta?.parentMap) {
             this.warpTo(this.atDate, this.ofm_meta.parentMap, 20, this.ofm_meta.parentLocation);
           }
-        })
-
-      });
-
-
-      this.map.on('load', () => {
-        this.showOverlays();
-        //this.map.setTerrain({source:'dem', 'exaggeration': 1.2})
-        //this.map.addLauer({
-        //  'id': 'sky',
-        //  'type': 'sky',
-        //  'paint': {
-        //  'sky-type': 'atmosphere',
-        //  'sky-atmosphere-sun': [0.0, 0.0],
-        //  'sky-atmosphere-sun-intensity': 15
-        //  }});
-
-
-        for (let layer of this.ofm_meta.clickLayers) {
-          this.map.on('click', layer, (e) => {
-            this.hideAll();
-            this.p = e.features[0].properties;
-            this.showInfo = true;
-          });
-          this.map.on('mouseenter', layer, () => {
-            this.map.getCanvas().style.cursor = this.measuring ? 'crosshair' : 'pointer';
-          });
-
-          // Change it back to a pointer when it leaves.
-          this.map.on('mouseleave', layer, () => {
-            this.map.getCanvas().style.cursor = '';
-          });
-        }
-
-        
-        this.map.addSource('geojson', {
-          'type': 'geojson',
-          'data': this.geojson
         });
 
-        // Add styles to the map
+        this.map.addSource('geojson', {
+          type: 'geojson',
+          data: this.geojson,
+        });
+
         this.map.addLayer({
           id: 'measure-points',
           type: 'circle',
           source: 'geojson',
           paint: {
             'circle-radius': 4,
-            'circle-color': 'rgba(245,245,245,0.5)'
+            // maplibre's paint parser doesn't accept oklch yet; phosphor
+            // green approximated in sRGB.
+            'circle-color': 'rgba(160, 255, 180, 0.55)',
           },
-          filter: ['in', '$type', 'Point']
+          filter: ['in', '$type', 'Point'],
         });
         this.map.addLayer({
           id: 'measure-lines',
@@ -297,16 +293,19 @@ export class MapComponent implements OnInit, AfterContentInit {
           source: 'geojson',
           layout: {
             'line-cap': 'round',
-            'line-join': 'round'
+            'line-join': 'round',
           },
           paint: {
-            'line-color': 'rgba(245,245,245,0.5)',
+            'line-color': 'rgba(140, 255, 160, 0.7)',
             'line-width': 2.5,
-            'line-dasharray': [2,2]
+            'line-dasharray': [2, 2],
           },
-          filter: ['in', '$type', 'LineString']
+          filter: ['in', '$type', 'LineString'],
         });
 
+        // Click handlers depend on ofm_meta.clickLayers — run iff metadata
+        // is already present, otherwise getMap() will call us when it lands.
+        this.maybeAttachClickHandlers();
       });
 
 
@@ -324,10 +323,42 @@ export class MapComponent implements OnInit, AfterContentInit {
     this.map.panTo(coords);
   }
 
+  /**
+   * Idempotent. Attaches feature-click / hover handlers as soon as both the
+   * map style is loaded AND ofm_meta.clickLayers is populated. Either side
+   * may arrive first depending on network ordering.
+   */
+  private maybeAttachClickHandlers() {
+    if (this.clickHandlersAttached) return;
+    if (!this.map || !this.map.loaded || !this.map.loaded()) return;
+    const layers: string[] = this.ofm_meta?.clickLayers ?? [];
+    if (!layers.length) return;
+    this.clickHandlersAttached = true;
+    for (const layer of layers) {
+      this.map.on('click', layer, (e: any) => {
+        this.zone.run(() => {
+          this.hideAll();
+          this.p = e.features[0].properties;
+          this.showInfo = true;
+          this.cdr.detectChanges();
+        });
+      });
+      this.map.on('mouseenter', layer, () => {
+        this.map.getCanvas().style.cursor = this.measuring ? 'crosshair' : 'pointer';
+      });
+      this.map.on('mouseleave', layer, () => {
+        this.map.getCanvas().style.cursor = '';
+      });
+    }
+  }
+
   ngOnInit(): void {
     this.http.get('assets/info.json').subscribe(data => {
-      this.infoData = data;
-    })
+      this.zone.run(() => {
+        this.infoData = data;
+        this.cdr.detectChanges();
+      });
+    });
     this.ts = this.ds.getEnv('TILESERVER');
 
     this.atDate = this.ar.snapshot.params.year;
@@ -338,13 +369,32 @@ export class MapComponent implements OnInit, AfterContentInit {
 
 
     this.ofm.getMap(this.ar.snapshot.params.timeline).subscribe((data: any) => {
-      this.title = data.name;
-      this.ofm_meta = data.metadata.ofm;
-
-      for (let l of this.ofm_meta.togglable) {
-        this.layers[l.name] = true;
-      }
-
+      this.zone.run(() => {
+        this.title = data?.name;
+        // Merge over the safe defaults so anything the upstream omits still
+        // has the expected shape downstream.
+        this.ofm_meta = {
+          togglable: [],
+          clickLayers: [],
+          decks: {},
+          timed: [],
+          relatedLayers: [],
+          type: '',
+          copyright: '',
+          distance_multiplier: 1,
+          distance_unit: 'km',
+          speeds: [],
+          ...(data?.metadata?.ofm ?? {}),
+        };
+        this.layers = {};
+        for (const l of this.ofm_meta.togglable ?? []) {
+          this.layers[l.name] = true;
+        }
+        this.cdr.detectChanges();
+        // Map style may have already loaded before metadata arrived — try
+        // attaching click handlers now.
+        this.maybeAttachClickHandlers();
+      });
     });
 
     const container = document.getElementById('visualization');

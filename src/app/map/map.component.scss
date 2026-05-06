@@ -148,13 +148,7 @@ app-map #header .lcars-title.lcars-text {
   text-shadow: 0 0 12px var(--pb-halo-hot);
 }
 
-/* the "OpenFantasyMap - {world}" title gets a left prompt prefix */
-app-map #header .lcars-title.lcars-text::before {
-  content: ">>> ";
-  color: var(--pb-fg-dim);
-  margin-right: 0.4ch;
-  text-shadow: none;
-}
+/* title prefix is now an explicit span in the template (.pb-map-title-prompt) */
 
 /* ====== sidebar elements ====== */
 
@@ -199,19 +193,8 @@ app-map .lcars-element.lcars-rust-bg {
   text-shadow: 0 0 10px var(--pb-halo-hot);
 }
 
-/* prefix toggle elements with [ ] / [●] indicator */
-app-map .lcars-element.lcars-rust-bg::before {
-  content: "[●] ";
-  color: var(--pb-fg);
-  text-shadow: 0 0 10px var(--pb-halo-hot);
-}
-
-/* the rest of the toggles get an empty bracket */
-app-map .lcars-row > .lcars-element[ngclass]:not(.lcars-rust-bg)::before,
-app-map .lcars-row > .lcars-element:not(.lcars-rust-bg):not(.lcars-danub-bg):not([href])::before {
-  content: "[ ] ";
-  color: var(--pb-fg-faded);
-}
+/* toggle indicators now use explicit .pb-map-toggle-mark spans where needed;
+   active-state still gets a faint inset glow from .lcars-rust-bg above */
 
 /* full-width "ALL MAPS" / "SHARE" buttons */
 app-map .lcars-element.lcars-lilac-bg,
@@ -518,10 +501,522 @@ app-map .mat-mdc-snack-bar-container,
   border-bottom-color: var(--pb-fg-faded) !important;
 }
 
-/* ====== reduced motion ====== */
+/* ============================================================
+   pb-map-* polish layer — wraps the existing LCARS structure with
+   semantic Pip-Boy chrome.
+   ============================================================ */
+
+.pb-map-shell {
+  font-family: var(--pb-screen);
+  color: var(--pb-fg);
+}
+
+/* ===== header chassis ===== */
+
+.pb-map-header-bar {
+  display: flex !important;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--pb-space-6);
+  padding: var(--pb-space-2) var(--pb-space-4);
+}
+
+.pb-map-title {
+  display: flex !important;
+  align-items: baseline;
+  gap: var(--pb-space-2);
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pb-map-title-prompt {
+  color: var(--pb-fg-dim);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-3);
+  text-shadow: none;
+  letter-spacing: 0;
+}
+
+.pb-map-title-tuned {
+  color: var(--pb-fg-faded);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-1);
+  letter-spacing: 0.18em;
+  text-shadow: none;
+  text-transform: uppercase;
+}
+
+.pb-map-title-name {
+  color: var(--pb-fg-bright);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-3);
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 14px var(--pb-halo-hot);
+  text-transform: uppercase;
+}
+
+.pb-map-header-right {
+  display: flex;
+  align-items: baseline;
+  gap: var(--pb-space-6);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-1);
+  letter-spacing: 0.08em;
+  color: var(--pb-fg-dim);
+  flex: 0 0 auto;
+}
+
+.pb-map-header-stamp {
+  font-variant-numeric: tabular-nums;
+  color: var(--pb-fg);
+}
+
+.pb-map-header-sig {
+  color: var(--pb-fg-faded);
+}
+
+.pb-map-header-sig .pb-bars {
+  color: var(--pb-fg);
+  text-shadow: 0 0 8px var(--pb-halo);
+  letter-spacing: -0.06em;
+  margin-left: 0.4ch;
+}
+
+/* ===== sidebar ===== */
+
+.pb-map-sidebar {
+  position: relative;
+}
+
+.pb-map-section-cap {
+  font-family: var(--pb-chassis);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  color: var(--pb-fg-faded);
+  text-transform: uppercase;
+  padding: var(--pb-space-3) var(--pb-space-2) var(--pb-space-1);
+  margin-top: var(--pb-space-2);
+  /* slightly crooked, like a stencilled tab divider */
+  transform: rotate(-0.3deg);
+}
+
+.pb-map-section-cap:first-of-type {
+  margin-top: var(--pb-space-1);
+}
+
+.pb-map-info {
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-1);
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--pb-fg);
+  background: var(--pb-bg-deep) !important;
+  border: var(--pb-rule) dashed var(--pb-fg-ghost) !important;
+  text-transform: none !important;
+  padding: var(--pb-space-3) var(--pb-space-3) !important;
+}
+
+/* keycap row (F1/F2/F3) */
+.pb-map-keycap-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  padding: 2px;
+}
+
+.pb-map-keycap {
+  display: grid !important;
+  grid-template-rows: auto auto;
+  align-items: stretch;
+  justify-items: center;
+  padding: var(--pb-space-2) var(--pb-space-1) !important;
+  background: var(--pb-bg-1) !important;
+  border: var(--pb-rule) solid var(--pb-fg-faded) !important;
+  text-decoration: none !important;
+  gap: 2px;
+  text-align: center;
+  /* the existing img inside the anchor is hidden — we replace with text */
+}
+
+.pb-map-keycap img {
+  display: none !important;
+}
+
+.pb-map-keycap-num {
+  font-family: var(--pb-chassis);
+  font-size: var(--pb-step-0);
+  padding: 1px 5px;
+  border: var(--pb-rule) solid var(--pb-fg-dim);
+  color: var(--pb-fg-dim);
+  letter-spacing: 0.12em;
+  background: oklch(0.10 0.012 142);
+}
+
+.pb-map-keycap-label {
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-0);
+  color: var(--pb-fg);
+  letter-spacing: 0.12em;
+}
+
+.pb-map-keycap:hover {
+  background: var(--pb-bg-2) !important;
+  border-color: var(--pb-fg) !important;
+}
+
+.pb-map-keycap:hover .pb-map-keycap-label {
+  color: var(--pb-fg-bright);
+  text-shadow: 0 0 8px var(--pb-halo);
+}
+
+/* SHARE button gets a chunky tape-leading edge */
+.pb-map-share {
+  width: 100%;
+  text-align: left !important;
+  padding-left: var(--pb-space-3) !important;
+  letter-spacing: 0.16em !important;
+}
+
+.pb-map-sidebar-foot {
+  display: flex;
+  align-items: baseline;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-3) var(--pb-space-2) var(--pb-space-1);
+  font-family: var(--pb-chassis);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  color: var(--pb-fg-ghost);
+  text-transform: uppercase;
+  transform: rotate(0.5deg);
+}
+
+.pb-map-foot-glyph {
+  font-size: var(--pb-step-2);
+  color: var(--pb-fg-faded);
+}
+
+/* ===== map stage ===== */
+
+.pb-map-stage {
+  position: relative;
+}
+
+/* ===== tape transport (timebar) ===== */
+
+#timebar.pb-map-transport {
+  /* override the earlier #timebar block — restructure for tape-deck feel */
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: var(--pb-space-3);
+  padding: var(--pb-space-2) var(--pb-space-4);
+  background: var(--pb-bg-1);
+  border: var(--pb-rule-bold) solid var(--pb-fg-faded);
+  width: clamp(360px, 50vw, 540px);
+  margin-left: calc(50vw - clamp(180px, 25vw, 270px));
+}
+
+.pb-map-transport::before,
+.pb-map-transport::after {
+  content: none;
+}
+
+.pb-map-transport-label {
+  font-family: var(--pb-chassis);
+  font-size: var(--pb-step-0);
+  letter-spacing: 0.22em;
+  color: var(--pb-fg-faded);
+  align-self: center;
+  padding: 0 var(--pb-space-2);
+  border-right: var(--pb-rule) dashed var(--pb-fg-ghost);
+}
+
+.pb-map-transport-readout {
+  background: oklch(0.08 0.008 142) !important;
+  border: var(--pb-rule) solid var(--pb-fg-ghost) !important;
+  padding: var(--pb-space-1) var(--pb-space-3) !important;
+  color: var(--pb-fg) !important;
+  font-family: var(--pb-screen) !important;
+  font-size: var(--pb-step-2) !important;
+  letter-spacing: 0.04em !important;
+  text-shadow: 0 0 10px var(--pb-halo);
+  font-variant-numeric: tabular-nums;
+  display: inline-flex !important;
+  align-items: baseline;
+  gap: var(--pb-space-2);
+}
+
+.pb-map-readout-prompt {
+  color: var(--pb-fg-dim);
+  text-shadow: none;
+}
+
+.pb-map-readout-date {
+  color: var(--pb-fg-bright);
+  text-shadow: 0 0 10px var(--pb-halo-hot);
+}
+
+.pb-map-transport-play {
+  background: var(--pb-bg-deep) !important;
+  border: var(--pb-rule-bold) solid var(--pb-fg-faded) !important;
+  padding: var(--pb-space-1) var(--pb-space-3) !important;
+}
+
+.pb-map-transport-play:hover {
+  border-color: var(--pb-fg) !important;
+  background: var(--pb-bg-2) !important;
+}
+
+.pb-map-transport-spool {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  padding: 0 var(--pb-space-2);
+  border-left: var(--pb-rule) dashed var(--pb-fg-ghost);
+}
+
+.pb-map-spool-tooth {
+  width: 4px;
+  height: 12px;
+  background: var(--pb-fg-faded);
+}
+
+.pb-map-spool-tooth:nth-child(odd) {
+  background: var(--pb-fg-ghost);
+  height: 8px;
+}
+
+/* during playback, slide the spool teeth */
+@keyframes pb-spool {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-7px); }
+}
+
+.pb-map-transport:has(.material-icons:where(:empty)) ~ * {
+  /* placeholder selector — :has() may not be supported, kept benign */
+}
+
+/* ===== panel chrome (caps) ===== */
+
+.pb-map-panel {
+  /* the existing #infobox / #searchbox / etc. base styles already apply
+     bezel + scanline overlay; this just tightens the pad */
+}
+
+.pb-map-panel-cap {
+  font-family: var(--pb-chassis);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  color: var(--pb-fg-faded);
+  text-transform: uppercase;
+  padding-bottom: var(--pb-space-2);
+  margin-bottom: var(--pb-space-2);
+  border-bottom: var(--pb-rule) dashed var(--pb-fg-ghost);
+  /* faint stencil tilt */
+  transform: rotate(-0.4deg);
+}
+
+/* ===== dossier (info panel) ===== */
+
+.pb-map-dossier-name {
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-2) !important;
+  letter-spacing: 0.04em !important;
+  text-shadow: 0 0 10px var(--pb-halo);
+}
+
+.pb-map-dossier-fields {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--pb-space-3);
+  row-gap: 2px;
+  padding: var(--pb-space-2);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-0);
+  letter-spacing: 0.04em;
+  border: var(--pb-rule) dashed var(--pb-fg-ghost);
+  margin-bottom: var(--pb-space-2);
+}
+
+.pb-map-dossier-field-label {
+  color: var(--pb-fg-faded);
+  text-transform: uppercase;
+}
+
+.pb-map-dossier-field-value {
+  color: var(--pb-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== search ===== */
+
+.pb-map-search-input {
+  display: grid !important;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--pb-space-2);
+  padding: var(--pb-space-1);
+  border: var(--pb-rule) dashed var(--pb-fg-ghost);
+}
+
+.pb-map-search-prompt {
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-2);
+  color: var(--pb-fg-bright);
+  text-shadow: 0 0 10px var(--pb-halo-hot);
+  animation: pb-blink 1.05s steps(2, jump-none) infinite;
+}
+
+.pb-map-search-results {
+  margin-top: var(--pb-space-2);
+}
+
+.pb-map-result-name {
+  text-align: left !important;
+}
+
+.pb-map-search-empty {
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-1);
+  color: var(--pb-fg-faded);
+  letter-spacing: 0.04em;
+  padding: var(--pb-space-3) var(--pb-space-2);
+  text-align: center;
+}
+
+@keyframes pb-blink {
+  0%, 49.999% { opacity: 1; }
+  50%, 100%   { opacity: 0; }
+}
+
+/* ===== legend toggle marks (explicit spans) ===== */
+
+.pb-map-toggle-mark {
+  font-family: var(--pb-screen);
+  color: var(--pb-fg-faded);
+  margin-right: 0.6ch;
+  letter-spacing: 0;
+}
+
+.lcars-element:not(.lcars-periwinkle-bg) .pb-map-toggle-mark {
+  color: var(--pb-fg-bright);
+  text-shadow: 0 0 8px var(--pb-halo);
+}
+
+/* ===== tools panel ===== */
+
+.pb-map-tool-section {
+  font-family: var(--pb-chassis);
+  font-size: var(--pb-step-0);
+  letter-spacing: 0.22em;
+  color: var(--pb-fg-faded);
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: var(--pb-rule) dashed var(--pb-fg-ghost) !important;
+  padding: var(--pb-space-2) 0 !important;
+  text-transform: uppercase;
+}
+
+.pb-map-tool-button {
+  letter-spacing: 0.12em !important;
+  text-align: left !important;
+}
+
+.pb-map-tool-clear {
+  color: var(--pb-fg-faded) !important;
+}
+
+.pb-map-tool-clear:hover {
+  color: var(--pb-warn) !important;
+  border-color: var(--pb-warn) !important;
+  text-shadow: 0 0 8px oklch(0.83 0.16 80 / 0.4);
+}
+
+.pb-map-tool-distance.lcars-neon-carrot-bg {
+  background: var(--pb-bg-2) !important;
+  color: var(--pb-fg-bright) !important;
+  border-color: var(--pb-fg) !important;
+  text-shadow: 0 0 12px var(--pb-halo-hot);
+}
+
+.pb-map-tool-readout-main {
+  font-size: var(--pb-step-3) !important;
+  letter-spacing: 0.04em !important;
+  color: var(--pb-fg-bright) !important;
+  text-shadow: 0 0 12px var(--pb-halo-hot);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  padding: var(--pb-space-3) var(--pb-space-2) !important;
+}
+
+.pb-map-tool-time-row {
+  display: grid !important;
+  grid-template-columns: 8ch 1fr auto;
+  gap: var(--pb-space-2);
+  align-items: baseline;
+  padding: 2px var(--pb-space-2) !important;
+  font-size: var(--pb-step-1) !important;
+}
+
+.pb-map-tool-time-row .label {
+  font-size: var(--pb-step-0);
+  letter-spacing: 0.12em;
+  color: var(--pb-fg-faded);
+  text-transform: uppercase;
+}
+
+.pb-map-tool-time-value {
+  text-align: right;
+  color: var(--pb-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.pb-map-tool-time-unit {
+  color: var(--pb-fg-faded);
+  margin-left: 0.4ch;
+}
+
+/* ===== share panel ===== */
+
+.pb-map-share-line {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--pb-space-2);
+  align-items: baseline;
+  padding: var(--pb-space-2);
+  font-family: var(--pb-screen);
+}
+
+.pb-map-share-label {
+  font-size: var(--pb-step-0);
+  letter-spacing: 0.12em;
+  color: var(--pb-fg-faded);
+}
+
+.pb-map-share-link {
+  font-size: var(--pb-step-1);
+  color: var(--pb-fg);
+  word-break: break-all;
+  text-shadow: 0 0 8px var(--pb-halo);
+}
+
+.pb-map-share-hint {
+  padding: var(--pb-space-2);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-0);
+  color: var(--pb-fg-faded);
+  letter-spacing: 0.04em;
+}
+
+/* ===== reduced motion ===== */
 
 @media (prefers-reduced-motion: reduce) {
   app-map .lcars-element {
     transition: none;
+  }
+  .pb-map-search-prompt {
+    animation: none;
+    opacity: 1;
   }
 }
