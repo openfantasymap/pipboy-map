@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { OfmService } from '../ofm.service';
 
@@ -23,9 +23,12 @@ export class TimelinesComponent implements OnInit {
   private ofm = inject(OfmService);
   private ht = inject(HttpClient);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
+  private zone = inject(NgZone);
 
   infoData: { info?: string } | null = null;
   timelines: TimelineRow[] | null = null;
+  fetchError: string | null = null;
 
   hovered: TimelineRow | null = null;
   tuning: TimelineRow | null = null;
@@ -35,8 +38,36 @@ export class TimelinesComponent implements OnInit {
     this.ht.get<{ info?: string }>('assets/info.json').subscribe(data => {
       this.infoData = data;
     });
-    this.ofm.getTimelines().subscribe((data: any) => {
-      this.timelines = data;
+    this.ofm.getTimelines().subscribe({
+      next: (data: any) => {
+        // belt-and-braces: re-enter the zone and force CD. Some upstream
+        // observable in OfmService is escaping the zone (likely the chained
+        // concatMap over /assets/env.json + cross-origin XHR), and without
+        // this wrapper the view never re-renders even though the property
+        // is set.
+        this.zone.run(() => {
+          if (Array.isArray(data)) {
+            this.timelines = data.filter(
+              (t: any) => t && t.url && t.base && typeof t.base.zoom !== 'undefined'
+            );
+          } else {
+            this.timelines = [];
+            this.fetchError = 'Upstream returned non-array payload';
+          }
+          this.cdr.detectChanges();
+        });
+      },
+      error: (err: any) => {
+        this.zone.run(() => {
+          this.timelines = [];
+          this.fetchError =
+            err?.status
+              ? `HTTP ${err.status} :: ${err.statusText || 'fetch failed'}`
+              : err?.message || 'fetch failed';
+          this.cdr.detectChanges();
+        });
+        console.error('[timelines] getTimelines failed:', err);
+      },
     });
   }
 

@@ -468,6 +468,12 @@ a {
   animation: pb-blink 1.05s steps(2, jump-none) infinite;
 }
 
+.pb-boot-error {
+  color: var(--pb-warn);
+  letter-spacing: 0.16em;
+  text-shadow: 0 0 10px oklch(0.83 0.16 80 / 0.5);
+}
+
 /* row */
 .pb-row {
   position: relative;

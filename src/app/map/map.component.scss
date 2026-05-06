@@ -1,149 +1,527 @@
+/* ============================================================
+   PIP-BOY 3000 :: MAP VIEW polish
+   Encapsulation: None — these rules apply globally while the map
+   component is mounted. Token references (--pb-*) come from the
+   :root block at the top of styles.scss.
+   ============================================================ */
+
+/* ====== preserved positioning (do not relocate, the LCARS template
+         depends on these magic numbers) ====== */
+
 #ohm_map {
-    position: absolute;
-    top: 38px;
-    left: 256px;
-    height: calc(100vh - 85px - 64px - 2px - 19px - 58px);
-    width: calc(100vw - 268px);
+  position: absolute;
+  top: 38px;
+  left: 256px;
+  height: calc(100vh - 85px - 64px - 2px - 19px - 58px);
+  width: calc(100vw - 268px);
 }
 
-#header{
-    border-bottom: 2px solid #00e600;
-    left: 250px;
-    width: calc(100vw - 265px);
+#header {
+  border-bottom: var(--pb-rule-bold) solid var(--pb-fg-faded);
+  left: 250px;
+  width: calc(100vw - 265px);
+  background: var(--pb-bg-deep);
 }
 
-#deckbox{
-    position: absolute;
-    left: 256px;
-    top: 184px;
-    background: black;
-    width: 151px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+#deckbox,
+#infobox,
+#searchbox,
+#legendbox,
+#toolbox,
+#sharebox {
+  position: absolute;
+  z-index: 200;
 }
 
-#infobox{
-    position: absolute;
-    top: 457px;
-    left: 8px;
-    z-index: 200;
-    width: 276px;
-}
-#searchbox{
-    position: absolute;
-    top: 457px;
-    left: 8px;
-    z-index: 200;
-    width: 276px;
-    
-}
-#legendbox{
-    position: absolute;
-    top: 457px;
-    left: 8px;
-    z-index: 200;
-    width: 276px;
-    
-}
-#toolbox{
-    position: absolute;
-    top: 457px;
-    left: 8px;
-    z-index: 200;
-    width: 276px;
-    
+#deckbox {
+  left: 256px;
+  top: 184px;
+  background: var(--pb-bg-1);
+  width: 151px;
+  padding: var(--pb-space-2) var(--pb-space-3);
 }
 
-input{
-    text-transform: uppercase;
-    width: 100%;
-    /* height: 100%; */
-    color: black;
-    font-family: "Antonio", "Helvetica Neue", sans-serif;
-    text-align: right;
-    top: -1px;
-    position: relative;
-    border: 0;
-    margin: 0;
-}
-
-input:focus{
-    outline:none;
+#infobox,
+#searchbox,
+#legendbox,
+#toolbox,
+#sharebox {
+  top: 457px;
+  left: 8px;
+  width: 276px;
 }
 
 #visualization {
-    width: calc(100vw - 271px);
-    max-height: 83px;
-    border: 1px solid lightgray;
-    position: absolute !important;
-    top: 848px;
-    z-index: 1000;
-    left: 254px;
+  width: calc(100vw - 271px);
+  max-height: 83px;
+  position: absolute !important;
+  top: 848px;
+  z-index: 1000;
+  left: 254px;
+  border: var(--pb-rule) solid var(--pb-fg-faded);
+  background: var(--pb-bg-deep);
 }
 
-.vis-item.politcs-rome {
-    background-color: red;
-}
-button{
-    border: 0;
-}
-
-.sidebar {
-    width: 256px;
-    background-color: #3f51b5;
-    color: white;
-}
-
-.info{
-    padding: 16px;
-    text-transform: uppercase;
-}
-
-#ofm_attribution{
-    position:absolute;    
-    bottom: 142px;
-    right: 0;
-    text-align: right;
-    background-color: rgba(200,200,200,0.5);
-    font-size: x-small;
-    padding-left: 2px;
-    padding-right: 2px;
-    border-radius: 3px;
+#timebar {
+  position: fixed;
+  margin-left: calc(50vw - 180px);
+  width: 360px;
+  bottom: 96px;
+  background: var(--pb-bg-1);
+  border: var(--pb-rule-bold) solid var(--pb-fg-faded);
+  border-radius: 0;
+  padding: var(--pb-space-2) var(--pb-space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pb-space-2);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-2);
+  color: var(--pb-fg);
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 8px var(--pb-halo);
+  box-shadow:
+    inset 0 0 0 var(--pb-rule) var(--pb-fg-ghost),
+    inset 0 0 30px 0 oklch(0 0 0 / 0.6);
 }
 
-.mat-subheader{
-    font-size: large;
-    color:white;
+#timebar::before,
+#timebar::after {
+  content: "";
+  flex: 0 0 12px;
+  height: 8px;
+  background:
+    repeating-linear-gradient(
+      to right,
+      var(--pb-fg-faded) 0 2px,
+      transparent 2px 4px);
 }
 
-.mat-list-item-content{
-    font-size: small;
-    color: white;
+#ofm_attribution {
+  position: absolute;
+  bottom: 142px;
+  right: 0;
+  text-align: right;
+  background: oklch(0.10 0.012 142 / 0.82);
+  color: var(--pb-fg-dim);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-0);
+  letter-spacing: 0.04em;
+  padding: 2px var(--pb-space-2);
+  border: var(--pb-rule) solid var(--pb-fg-ghost);
+  border-right: 0;
 }
 
-#timebar{
-    position:fixed;
-    margin-left:calc(50vw - 150px);
-    width: 300px;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
-    bottom: 104px;
-    background-color: #212121;
+mat-sidenav-container {
+  top: 80px;
+  height: calc(100vh - 200px);
+  background: transparent;
 }
 
-mat-sidenav-container{
-    top: 80px;
-    height: calc(100vh - 200px);
+.hidden {
+  display: none !important;
 }
 
-.hidden{
-    display: none;
+/* ====== chrome typography reset ====== */
+
+app-map {
+  display: block;
+  font-family: var(--pb-screen);
+  color: var(--pb-fg);
+  background: var(--pb-bg-deep);
 }
 
-.circle{
-    display: block;
-    border-radius: 100%;
-    width: 15px;
-    height: 15px;
-    margin: 1px;
+app-map .lcars-text,
+app-map button,
+app-map a.lcars-element {
+  font-family: var(--pb-screen);
+  letter-spacing: 0.04em;
+}
+
+/* ====== title bar ====== */
+
+app-map #header .lcars-title.lcars-text {
+  color: var(--pb-fg-bright);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-3);
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 12px var(--pb-halo-hot);
+}
+
+/* the "OpenFantasyMap - {world}" title gets a left prompt prefix */
+app-map #header .lcars-title.lcars-text::before {
+  content: ">>> ";
+  color: var(--pb-fg-dim);
+  margin-right: 0.4ch;
+  text-shadow: none;
+}
+
+/* ====== sidebar elements ====== */
+
+app-map .lcars-element {
+  background: var(--pb-bg-1);
+  border: var(--pb-rule) solid var(--pb-fg-faded);
+  color: var(--pb-fg);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-1);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: var(--pb-space-2) var(--pb-space-3);
+  transition:
+    background 120ms ease-out,
+    color 120ms ease-out,
+    border-color 120ms ease-out;
+}
+
+app-map .lcars-element.button,
+app-map button.lcars-element,
+app-map a.lcars-element {
+  cursor: pointer;
+}
+
+app-map .lcars-element:hover,
+app-map .lcars-element:focus-visible {
+  background: var(--pb-bg-2);
+  color: var(--pb-fg-bright);
+  border-color: var(--pb-fg);
+  text-shadow: 0 0 8px var(--pb-halo);
+  outline: none;
+}
+
+/* the panel-open indicators (when SEARCH/INFO/LEGEND/TOOLS is active) */
+app-map .lcars-element.lcars-rust-bg {
+  background: var(--pb-bg-2);
+  color: var(--pb-fg-bright);
+  border-color: var(--pb-fg);
+  box-shadow:
+    inset 0 0 0 var(--pb-rule) var(--pb-fg),
+    inset 0 0 20px 0 var(--pb-halo-soft);
+  text-shadow: 0 0 10px var(--pb-halo-hot);
+}
+
+/* prefix toggle elements with [ ] / [●] indicator */
+app-map .lcars-element.lcars-rust-bg::before {
+  content: "[●] ";
+  color: var(--pb-fg);
+  text-shadow: 0 0 10px var(--pb-halo-hot);
+}
+
+/* the rest of the toggles get an empty bracket */
+app-map .lcars-row > .lcars-element[ngclass]:not(.lcars-rust-bg)::before,
+app-map .lcars-row > .lcars-element:not(.lcars-rust-bg):not(.lcars-danub-bg):not([href])::before {
+  content: "[ ] ";
+  color: var(--pb-fg-faded);
+}
+
+/* full-width "ALL MAPS" / "SHARE" buttons */
+app-map .lcars-element.lcars-lilac-bg,
+app-map .lcars-element.lcars-cosmic-bg,
+app-map .lcars-element.lcars-indigo-bg {
+  background: var(--pb-bg-1);
+  border: var(--pb-rule) solid var(--pb-fg-faded);
+  color: var(--pb-fg);
+}
+
+app-map .lcars-element.lcars-lilac-bg:hover,
+app-map .lcars-element.lcars-cosmic-bg:hover,
+app-map .lcars-element.lcars-indigo-bg:hover {
+  background: var(--pb-bg-2);
+  color: var(--pb-fg-bright);
+  border-color: var(--pb-fg);
+  text-shadow: 0 0 10px var(--pb-halo);
+}
+
+/* the info/data block at the top of the sidebar */
+app-map .info {
+  padding: var(--pb-space-3) var(--pb-space-4);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-1);
+  color: var(--pb-fg);
+  background: var(--pb-bg-deep);
+  border: var(--pb-rule) dashed var(--pb-fg-ghost);
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  text-transform: none;
+}
+
+/* the danub-bg elements act as section headers in info panels */
+app-map .lcars-element.lcars-danub-bg {
+  background: var(--pb-bg-deep);
+  color: var(--pb-fg-bright);
+  border-color: var(--pb-fg-dim);
+  text-shadow: 0 0 8px var(--pb-halo);
+  font-weight: 400;
+  letter-spacing: 0.18em;
+}
+
+app-map .lcars-element.lcars-danub-bg::before {
+  content: "── ";
+  color: var(--pb-fg-faded);
+}
+
+app-map .lcars-element.lcars-danub-bg::after {
+  content: " ──";
+  color: var(--pb-fg-faded);
+}
+
+/* ====== panel boxes (info/search/legend/tools/share) ====== */
+
+#infobox,
+#searchbox,
+#legendbox,
+#toolbox,
+#sharebox,
+#deckbox {
+  background: var(--pb-bg-deep);
+  border: var(--pb-rule-bold) solid var(--pb-fg-faded);
+  box-shadow:
+    inset 0 0 0 var(--pb-rule) var(--pb-fg-ghost),
+    inset 0 0 40px 0 oklch(0 0 0 / 0.55),
+    0 0 0 var(--pb-rule) var(--pb-bg-deep);
+  padding: var(--pb-space-3);
+  position: relative;
+}
+
+#infobox::before,
+#searchbox::before,
+#legendbox::before,
+#toolbox::before,
+#sharebox::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    oklch(0 0 0 / 0.18) 2px,
+    oklch(0 0 0 / 0.18) 3px);
+  mix-blend-mode: multiply;
+}
+
+#infobox > *,
+#searchbox > *,
+#legendbox > *,
+#toolbox > *,
+#sharebox > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ====== search input ====== */
+
+app-map input[type="text"],
+app-map input:not([type]) {
+  background: var(--pb-bg-deep);
+  color: var(--pb-fg-bright);
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-2);
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+  border: 0;
+  border-bottom: var(--pb-rule) solid var(--pb-fg-faded);
+  padding: var(--pb-space-1) var(--pb-space-2);
+  width: 100%;
+  caret-color: var(--pb-fg-bright);
+  text-shadow: 0 0 8px var(--pb-halo);
+}
+
+app-map input::placeholder {
+  color: var(--pb-fg-faded);
+  text-shadow: none;
+}
+
+app-map input:focus {
+  outline: none;
+  border-bottom-color: var(--pb-fg);
+  background: oklch(0.10 0.012 142);
+}
+
+/* ====== legend swatches ====== */
+
+app-map .circle {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 var(--pb-space-1);
+  border: var(--pb-rule) solid var(--pb-fg-faded);
+  border-radius: 0; /* no rounded — phosphor sheet, not Material */
+  vertical-align: middle;
+}
+
+app-map .label {
+  font-family: var(--pb-screen);
+  font-size: var(--pb-step-1);
+  color: var(--pb-fg);
+}
+
+/* ====== timebar / play controls ====== */
+
+#timebar button {
+  background: transparent;
+  color: var(--pb-fg);
+  border: 0;
+  padding: 0 var(--pb-space-2);
+  font-family: var(--pb-screen);
+  font-size: inherit;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+#timebar button:hover {
+  color: var(--pb-fg-bright);
+  text-shadow: 0 0 10px var(--pb-halo-hot);
+}
+
+#timebar .mat-icon,
+#timebar mat-icon,
+#timebar .material-icons {
+  font-size: var(--pb-step-3);
+  line-height: 1;
+  color: var(--pb-fg);
+  text-shadow: 0 0 10px var(--pb-halo);
+}
+
+/* ====== vis-timeline phosphor reskin ======
+   vis-timeline ships its own DOM tree. Best-effort restyle. */
+
+#visualization {
+  font-family: var(--pb-screen);
+  color: var(--pb-fg-dim);
+  font-size: var(--pb-step-0);
+}
+
+#visualization .vis-time-axis .vis-text,
+#visualization .vis-labelset .vis-label,
+#visualization .vis-time-axis .vis-grid {
+  color: var(--pb-fg-faded);
+  font-family: var(--pb-screen);
+  letter-spacing: 0.04em;
+  border-color: var(--pb-fg-ghost);
+}
+
+#visualization .vis-panel.vis-center,
+#visualization .vis-panel.vis-left,
+#visualization .vis-panel.vis-right,
+#visualization .vis-panel.vis-top,
+#visualization .vis-panel.vis-bottom {
+  background: var(--pb-bg-deep);
+  border-color: var(--pb-fg-ghost);
+}
+
+#visualization .vis-time-axis .vis-grid.vis-vertical {
+  border-color: var(--pb-fg-ghost);
+}
+
+#visualization .vis-custom-time {
+  background: var(--pb-fg-bright);
+  width: 2px;
+  box-shadow: 0 0 8px var(--pb-halo-hot);
+}
+
+#visualization .vis-current-time {
+  background: var(--pb-warn);
+  width: 1px;
+}
+
+#visualization .vis-item {
+  background: var(--pb-bg-2);
+  border: var(--pb-rule) solid var(--pb-fg-faded);
+  color: var(--pb-fg);
+  font-family: var(--pb-screen);
+  border-radius: 0;
+}
+
+#visualization .vis-item.vis-selected {
+  background: var(--pb-fg);
+  color: var(--pb-bg-deep);
+  border-color: var(--pb-fg-bright);
+  box-shadow: 0 0 8px var(--pb-halo-hot);
+}
+
+/* ====== material snackbar / dialog overrides ====== */
+
+app-map .mat-mdc-snack-bar-container,
+.cdk-overlay-container .mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: var(--pb-bg-deep);
+  --mdc-snackbar-supporting-text-color: var(--pb-fg);
+  font-family: var(--pb-screen);
+}
+
+/* ====== map canvas frame ======
+   Faint phosphor border + corner registration marks around the map. */
+
+#ohm_map {
+  border: var(--pb-rule) solid var(--pb-fg-ghost);
+  background: var(--pb-bg-deep);
+  box-shadow:
+    inset 0 0 0 var(--pb-rule) oklch(0.20 0.02 142),
+    0 0 0 var(--pb-rule) var(--pb-bg-deep);
+}
+
+#ohm_map::before,
+#ohm_map::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  z-index: 50;
+  border: var(--pb-rule) solid var(--pb-fg-faded);
+}
+
+#ohm_map::before {
+  top: 4px;
+  left: 4px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+#ohm_map::after {
+  bottom: 4px;
+  right: 4px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* ====== maplibre attribution / controls reskin ====== */
+
+.maplibregl-ctrl-attrib {
+  background: oklch(0.10 0.012 142 / 0.7) !important;
+  color: var(--pb-fg-dim) !important;
+  font-family: var(--pb-screen) !important;
+  font-size: var(--pb-step-0) !important;
+}
+
+.maplibregl-ctrl-attrib a {
+  color: var(--pb-fg-dim) !important;
+}
+
+.maplibregl-ctrl button {
+  background: var(--pb-bg-1) !important;
+  border: var(--pb-rule) solid var(--pb-fg-faded) !important;
+  border-radius: 0 !important;
+}
+
+.maplibregl-popup-content {
+  background: var(--pb-bg-deep) !important;
+  color: var(--pb-fg) !important;
+  border: var(--pb-rule) solid var(--pb-fg-faded) !important;
+  border-radius: 0 !important;
+  font-family: var(--pb-screen) !important;
+}
+
+.maplibregl-popup-tip {
+  border-top-color: var(--pb-fg-faded) !important;
+  border-bottom-color: var(--pb-fg-faded) !important;
+}
+
+/* ====== reduced motion ====== */
+
+@media (prefers-reduced-motion: reduce) {
+  app-map .lcars-element {
+    transition: none;
+  }
 }

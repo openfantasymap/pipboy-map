@@ -111,12 +111,17 @@
 
         <ng-template #booting>
           <div class="pb-booting" aria-live="polite">
-            <ng-container *ngIf="timelines === null">
+            <ng-container *ngIf="fetchError">
+              <span class="pb-boot-line pb-boot-error">&gt;&gt;&gt; SIGNAL LOST</span>
+              <span class="pb-boot-line">&gt; {{ fetchError }}</span>
+              <span class="pb-boot-line pb-boot-blink">&gt; RETRYING NEVER_</span>
+            </ng-container>
+            <ng-container *ngIf="!fetchError && timelines === null">
               <span class="pb-boot-line">&gt; INITIALISING DATA-LINK</span>
               <span class="pb-boot-line">&gt; ENUMERATING WORLDS</span>
               <span class="pb-boot-line pb-boot-blink">&gt; STANDBY_</span>
             </ng-container>
-            <ng-container *ngIf="timelines && timelines.length === 0">
+            <ng-container *ngIf="!fetchError && timelines && timelines.length === 0">
               <span class="pb-boot-line">&gt; DATA-LINK ESTABLISHED</span>
               <span class="pb-boot-line">&gt; NO ENTRIES MATCH CURRENT FILTER</span>
               <span class="pb-boot-line pb-boot-blink">&gt; CHECK TAG ENV VAR_</span>

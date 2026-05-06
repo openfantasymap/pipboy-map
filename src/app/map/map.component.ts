@@ -16,7 +16,8 @@ import {
   Input,
   isDevMode,
   AfterContentInit,
-  ViewChild
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 
 import { EnvService } from '../env.service';
@@ -67,6 +68,10 @@ declare const turf;
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
   standalone: false,
+  // Pip-Boy polish needs to reach into LCARS classes, mat-button internals
+  // and vis-timeline DOM. Encapsulation::None lets map.component.scss act
+  // as a global stylesheet active only while the map component is mounted.
+  encapsulation: ViewEncapsulation.None,
 })
 export class MapComponent implements OnInit, AfterContentInit {
   map;

@@ -9,7 +9,7 @@ import { OhmService } from './ohm.service';
 })
 export class OfmService extends OhmService{
   search(name, query: any) {
-    return this.http.get('//static.fantasymaps.org/'+name+'/search?q='+query);
+    return this.http.get('https://static.fantasymaps.org/'+name+'/search?q='+query);
   }
 
   constructor(
@@ -25,7 +25,7 @@ export class OfmService extends OhmService{
         if (Object.keys(data).indexOf('TAG') >= 0){
           append = "?tag="+data.TAG;
         }
-        return this.http.get('//static.fantasymaps.org/timelines.json'+append);
+        return this.http.get('https://static.fantasymaps.org/timelines.json'+append);
       }));
   }
 
@@ -36,16 +36,16 @@ export class OfmService extends OhmService{
         if (Object.keys(data).indexOf('TAG') >= 0){
           append = "?tag="+data.TAG;
         }
-        return this.http.get('//static.fantasymaps.org/tags.json'+append);
+        return this.http.get('https://static.fantasymaps.org/tags.json'+append);
       }));
   }
 
   getEvents(name: string, date: any, amount?: number): Observable<any> {
-    return this.http.get('//static.fantasymaps.org/'+name+'/events.json?around='+date+"&n="+amount)
+    return this.http.get('https://static.fantasymaps.org/'+name+'/events.json?around='+date+"&n="+amount)
   }
   s: any;
 
   getMap(name: string){
-    return this.http.get('//static.fantasymaps.org/'+name+'/map.json');
+    return this.http.get('https://static.fantasymaps.org/'+name+'/map.json');
   }
 }
