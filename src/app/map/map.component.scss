@@ -587,7 +587,7 @@ app-map .mat-mdc-snack-bar-container,
 /* ===== sidebar ===== */
 
 .pb-map-sidebar {
-  position: relative;
+  /* no positioning context — see .pb-map-stage comment above */
 }
 
 .pb-map-section-cap {
@@ -697,11 +697,12 @@ app-map .mat-mdc-snack-bar-container,
   color: var(--pb-fg-faded);
 }
 
-/* ===== map stage ===== */
-
-.pb-map-stage {
-  position: relative;
-}
+/* ===== map stage =====
+   IMPORTANT: do not give .pb-map-stage `position: relative`. #ohm_map is
+   absolutely positioned with `top: 38px; left: 256px;` and expects to
+   anchor to the .scanlines wrapper (or viewport). Adding a positioning
+   context here would re-anchor the map to the bottom map-column and the
+   canvas would render below the fold. */
 
 /* ===== tape transport (timebar) ===== */
 
