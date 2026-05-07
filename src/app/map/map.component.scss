@@ -49,6 +49,10 @@
   top: 457px;
   left: 8px;
   width: 276px;
+  /* clamp panel height so it never extends below the timebar; if the
+     content is taller than the available space, scroll inside */
+  max-height: calc(100vh - 457px - 200px);
+  overflow-y: auto;
 }
 
 #visualization {
@@ -255,6 +259,12 @@ app-map .lcars-element.lcars-danub-bg::after {
 #toolbox,
 #sharebox,
 #deckbox {
+  /* position is `absolute` (from the earlier rule). DO NOT add
+     `position: relative` here — same-specificity selectors mean the
+     later rule wins and the panels collapse into document flow at the
+     bottom of the page. The `::before` scanline overlay below uses
+     `position: absolute; inset: 0` and anchors to this element via the
+     existing `position: absolute`. */
   background: var(--pb-bg-deep);
   border: var(--pb-rule-bold) solid var(--pb-fg-faded);
   box-shadow:
@@ -262,7 +272,6 @@ app-map .lcars-element.lcars-danub-bg::after {
     inset 0 0 40px 0 oklch(0 0 0 / 0.55),
     0 0 0 var(--pb-rule) var(--pb-bg-deep);
   padding: var(--pb-space-3);
-  position: relative;
 }
 
 #infobox::before,
@@ -621,9 +630,14 @@ app-map .mat-mdc-snack-bar-container,
 /* keycap row (F1/F2/F3) */
 .pb-map-keycap-row {
   display: grid !important;
-  grid-template-columns: 1fr 1fr 1fr;
+  /* minmax(0, 1fr) — without the 0 minimum, the grid tracks would size
+     to their content (label widths) and the row overflows the sidebar
+     to the right, putting F3 underneath the map canvas. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 4px;
   padding: 2px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .pb-map-keycap {
@@ -637,7 +651,13 @@ app-map .mat-mdc-snack-bar-container,
   text-decoration: none !important;
   gap: 2px;
   text-align: center;
-  /* the existing img inside the anchor is hidden — we replace with text */
+  /* the global .lcars-element rule hard-codes width: 7.5rem (120px)
+     and height: 3rem — must override or the keycap overflows the
+     1fr grid track and pushes F3 underneath the map canvas. */
+  width: auto !important;
+  height: auto !important;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .pb-map-keycap img {
@@ -658,7 +678,12 @@ app-map .mat-mdc-snack-bar-container,
   font-family: var(--pb-screen);
   font-size: var(--pb-step-0);
   color: var(--pb-fg);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
+  /* truncate gracefully if the sidebar is narrower than the label */
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .pb-map-keycap:hover {
