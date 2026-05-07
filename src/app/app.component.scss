@@ -3,3 +3,59 @@ router-outlet {
     width: 100vw;
     overflow: hidden;
 }
+
+/* ============================================================
+   App-shell footer for the map route. The home route has its own
+   chassis-bottom; this one matches that register but sits above
+   the visualization strip without colliding with the timebar.
+   ============================================================ */
+
+.pb-app-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 20px;
+    z-index: 1;
+
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: var(--pb-space-3);
+    padding: 0 var(--pb-space-4);
+
+    background: var(--pb-bg-deep);
+    border-top: var(--pb-rule) solid var(--pb-fg-ghost);
+
+    font-family: var(--pb-chassis);
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    color: var(--pb-fg-faded);
+    text-transform: uppercase;
+}
+
+.pb-app-footer-rule {
+    /* dashed leader line on the left so the credit reads as the right end
+       of a printed strip, not a centred sentence */
+    height: 0;
+    border-top: var(--pb-rule) dashed var(--pb-fg-ghost);
+}
+
+.pb-app-footer-credit a {
+    color: var(--pb-fg-dim);
+    text-decoration: none;
+    border-bottom: var(--pb-rule) solid var(--pb-fg-ghost);
+}
+
+.pb-app-footer-credit a:hover {
+    color: var(--pb-fg);
+    border-bottom-color: var(--pb-fg);
+    text-shadow: 0 0 8px var(--pb-halo);
+}
+
+.pb-app-footer-rivets {
+    color: var(--pb-fg-ghost);
+    letter-spacing: 0.5em;
+    font-family: var(--pb-screen);
+    font-size: 0.875rem;
+}
